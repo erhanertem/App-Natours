@@ -20,8 +20,9 @@
 
 #### Installed NPM packages and utilized APIs:
 
-| Package command        | Package link                          | Description                                                         |
-| ---------------------- | ------------------------------------- | ------------------------------------------------------------------- |
-| npm install -g nodemon | https://www.npmjs.com/package/nodemon | Nodemon is a helper tool for developing Node.js based applications. |
+| Package command  | Package link                          | Description                                                         |
+| ---------------- | ------------------------------------- | ------------------------------------------------------------------- |
+| npm i -g nodemon | https://www.npmjs.com/package/nodemon | Nodemon is a helper tool for developing Node.js based applications. |
+| npm i express    | https://www.npmjs.com/package/express | Fast, unopinionated, minimalist web framework for Node.js.          |
 
 &emsp;
