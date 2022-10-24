@@ -1,10 +1,8 @@
 ### 👋 **I am Erhan ERTEM**
 
-&emsp;
+### Udemy Node.js, Express, MongoDB & More The Complete Bootcamp 2022 by Jonas Schmedtmann
 
-## Udemy Node.js, Express, MongoDB & More The Complete Bootcamp 2022 by Jonas Schmedtmann
-
-### **Objective:** Create Natours API
+#### **Objective:** Create Natours API
 
 &emsp;
 
