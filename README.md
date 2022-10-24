@@ -16,13 +16,16 @@
 
 ---
 
-![JS](https://img.shields.io/badge/JavaScript-323330?style=for-the-badge&logo=javascript&logoColor=F7DF1E) ![NodeJS](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white) ![expressJS](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=Postman&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+![JS](https://img.shields.io/badge/JavaScript-323330?style=flat&logo=javascript&logoColor=F7DF1E) ![NodeJS](https://img.shields.io/badge/Node.js-339933?style=flat&logo=nodedotjs&logoColor=white) ![expressJS](https://img.shields.io/badge/Express.js-000000?style=flat&logo=express&logoColor=white) ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=flat&logo=Postman&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white)
 
-#### Installed NPM packages and utilized APIs:
+<details>
+<summary>Installed NPM packages and utilized APIs:</summary>
 
 | Package command  | Package link                          | Description                                                         |
 | ---------------- | ------------------------------------- | ------------------------------------------------------------------- |
 | npm i -g nodemon | https://www.npmjs.com/package/nodemon | Nodemon is a helper tool for developing Node.js based applications. |
 | npm i express    | https://www.npmjs.com/package/express | Fast, unopinionated, minimalist web framework for Node.js.          |
+
+</details>
 
 &emsp;
