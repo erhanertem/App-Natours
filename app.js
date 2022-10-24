@@ -7,11 +7,11 @@ app.get('/', (req, res) => {
   res
     .status(200)
     .json({ message: 'Hello from the server side!', app: 'Natours' });
-}); //Define route to send json object to root (/) address
+}); //Define route to send json object to root (/) address - READ - RECEIVE DATA FROM THE SERVER
 
 app.post('/', (req, res) => {
   res.send('You can post to this endpoint');
-}); //Define route to receive from this address
+}); //Define route to send to this address - CREATE - SEND DATA TO THE SERVER
 
 const port = 3000; //Declare port
 app.listen(port, () => {
