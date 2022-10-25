@@ -3,6 +3,7 @@ const fs = require('fs');
 //IMPORT EXPRESS
 //NOTE: Its a custom to have all express configurations in <app.js>.
 const express = require('express'); //Import express
+const { resourceLimits } = require('worker_threads');
 const app = express(); //Call express function to use its functions
 //IMPORT EXPRESS MIDDLEWARE
 app.use(express.json()); //USEFULL FOR POST REQ JSON HANDLING.
@@ -59,6 +60,7 @@ app.post('/api/v1/tours', (req, res) => {
 //NOTE: WE CREATE A VARIABLE CALLED id BY PUTTING A COLUMN <:> AFTER SLASH
 // app.get('/api/v1/tours/:id/:trial/:sample?', (req, res) => { //VERY IMPORTANT We can create multiple variables one after another. ? is used to mark it optional so it is upto the client to use it or not...
 app.get('/api/v1/tours/:id', (req, res) => {
+  // console.log(req);
   console.log(req.params); //returns { id: '5' }
 
   const id = +req.params.id; //Take the id value inside the req.params object and turn into a number from string
@@ -77,6 +79,24 @@ app.get('/api/v1/tours/:id', (req, res) => {
     data: {
       tour,
     },
+  });
+});
+
+//--->ROUTE HANDLER FOR PATCH REQUESTS - AMEND THE SPECIFIC PART OF THE DATA
+app.patch('/api/v1/tours/:id', (req, res) => {
+  console.log(req.params); //returns { id: '5' }
+  const id = +req.params.id; //Take the id value inside the req.params object and turn into a number from string
+  // console.log(typeof id);
+  const tour = tours.find(el => el.id === id);
+  console.log(tour); //for unmatching id tour returns undefined
+  //GUARD CLAUSE
+  if (!tour) {
+    return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: { tour: '<Updated tour here...>' },
   });
 });
 
