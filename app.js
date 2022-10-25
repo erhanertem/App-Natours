@@ -159,13 +159,24 @@ const deleteUser = (req, res) => {
 
 //-->#3. ROUTES
 
+//CREATE A SEPERATE CHILD ROUTE FOR TOURS UNDER APP.ROUTE
+const tourRouter = express.Router(); //IN ORDER TO SEPERATE USER AND TOUR ROUTERS WE MAKE USE OF EXPRESS ROUTER CONSTRUCTOR OBJECT TO MAKE TWO DISTINCT ROUTERS
+//MOUNTING A NEW ROUTER ON ROUTE
+app.use('/api/v1/tours', tourRouter); //WE TREATED tourRouter we created above as a middleware which would be not global but specific to '/api/v1/tours' routing
+
+//CREATE A SEPERATE CHILD ROUTE FOR USERS UNDER APP.ROUTE
+const userRouter = express.Router();
+//MOUNTING A NEW ROUTER ON ROUTE
+app.use('/api/v1/users', userRouter);
+
 // //--->ROUTE HANDLER FOR GET REQUESTS - RECEIVE TOURS INFO
 // app.get('/api/v1/tours', getAllTours); //Its a good practice to specify your API version
 // //--->ROUTE HANDLER FOR POST REQUESTS - CREATES NEW TOURS
 // //IMPORTANT: ON POST ROUTES DATA SEND BY THE CLIENT SHOULD BE INCLUDED IN THE REQ. HOWEVER, EXPRESS.JS DO NOT SUPPORT DATA IN REQ. THEREFORE, WE WOULD NEED MIDDLEWARE TO HANDLE THIS.
 // app.post('/api/v1/tours', createTour);
 //---> REFACTORED ROUTE HANDLERS IN ONE-GO
-app.route('/api/v1/tours').get(getAllTours).post(createTour);
+// tourRouter.route('/api/v1/tours').get(getAllTours).post(createTour);
+tourRouter.route('/').get(getAllTours).post(createTour); //We revise the route per the parent middleware route which form the basis --> '/' stands for  '/api/v1/tours
 
 // //NOTE: BY RELOCAITNG OUR CUSTOM MIDDLEWARE HERE, APPLIED ONLY TO ROUTES BELOW, ABOVE ROUTES DO NOT GET THIS MIDDLEWARE. LOCATION OF THIS MIDDLEWARE CODE PLAYS A CRUCIAL ROLE THEREBY.
 // app.use((req, res, next) => {
@@ -182,16 +193,19 @@ app.route('/api/v1/tours').get(getAllTours).post(createTour);
 // //--->ROUTE HANDLER FOR DELETE REQUESTS
 // app.delete('/api/v1/tours/:id', deleteTour);
 //---> REFACTORED ROUTE HANDLERS IN ONE-GO
-app
-  .route('/api/v1/tours/:id')
+tourRouter
+  // .route('/api/v1/tours/:id')
+  .route('/:id') //We revise the route per the parent middleware route which form the basis --> '/' stands for  '/api/v1/tours
   .get(getTour)
   .patch(updateTour)
   .delete(deleteTour);
 
-app.route('/api/v1/users').get(getAllUsers).post(createUser);
+// app.route('/api/v1/users').get(getAllUsers).post(createUser);
+userRouter.route('/').get(getAllUsers).post(createUser); //We revise the route per the parent middleware route which form the basis --> '/' stands for  '/api/v1/tours
 
-app
-  .route('/api/v1/users/:id')
+userRouter
+  // .route('/api/v1/users/:id')
+  .route('/:id') //We revise the route per the parent middleware route which form the basis --> '/' stands for  '/api/v1/tours
   .get(getUser)
   .patch(updateUser)
   .delete(deleteUser);
