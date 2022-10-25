@@ -51,6 +51,7 @@ app.post('/api/v1/tours', (req, res) => {
     `${__dirname}/dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     err => {
+      //SUCCESS RESPONSE
       res.status(201).json({ status: 'success', data: { tour: newTour } }); //code 201 means created - express.json() middleware is required for post requests to work
     }
   );
@@ -94,9 +95,29 @@ app.patch('/api/v1/tours/:id', (req, res) => {
     return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
   }
 
+  //PATCH RESPONSE
   res.status(200).json({
     status: 'success',
     data: { tour: '<Updated tour here...>' },
+  });
+});
+
+//--->ROUTE HANDLER FOR DELETE REQUESTS
+app.delete('/api/v1/tours/:id', (req, res) => {
+  // console.log(req.params); //returns { id: '5' }
+  const id = +req.params.id; //Take the id value inside the req.params object and turn into a number from string
+  // console.log(typeof id);
+  const tour = tours.find(el => el.id === id);
+  // console.log(tour); //for unmatching id tour returns undefined
+  //GUARD CLAUSE
+  if (!tour) {
+    return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
+  }
+
+  //DELETE RESPONSE
+  res.status(204).json({
+    status: 'success',
+    data: null,
   });
 });
 
