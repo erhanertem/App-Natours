@@ -6,6 +6,11 @@ const express = require('express');
 const morgan = require('morgan');
 
 const app = express(); //Call express function to use its functions
+//Read the file in sync mode and parse the JSON file as a variable into a string
+const tours = JSON.parse(
+  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+);
+// console.log(tours); //array
 
 //-->#1. IMPORT EXPRESS MIDDLEWARE
 app.use(morgan('dev')); // we used morgan with dev option
@@ -32,12 +37,6 @@ app.use(express.json()); //USEFULL FOR POST REQ JSON HANDLING.
 // app.post('/', (req, res) => {
 //   res.send('You can post to this endpoint');
 // }); //CREATE - SEND DATA TO THE SERVER
-
-//Read the file in sync mode and parse the JSON file as a variable into a string
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
-);
-// console.log(tours); //array
 
 //-->#2. ROUTE HANDLER CALLBACKS - CRUD
 const getAllTours = (req, res) => {
@@ -132,6 +131,32 @@ const deleteTour = (req, res) => {
   });
 };
 
+const getAllUsers = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not yet defined' });
+};
+const createUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not yet defined' });
+};
+const getUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not yet defined' });
+};
+const updateUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not yet defined' });
+};
+const deleteUser = (req, res) => {
+  res
+    .status(500)
+    .json({ status: 'error', message: 'This route is not yet defined' });
+};
+
 //-->#3. ROUTES
 
 // //--->ROUTE HANDLER FOR GET REQUESTS - RECEIVE TOURS INFO
@@ -163,7 +188,15 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
-//-->#4. ROUTES
+app.route('/api/v1/users').get(getAllUsers).post(createUser);
+
+app
+  .route('/api/v1/users/:id')
+  .get(getUser)
+  .patch(updateUser)
+  .delete(deleteUser);
+
+//-->#4. SERVER LISTENING
 const port = 3000; //Declare port
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
