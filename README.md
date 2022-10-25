@@ -19,10 +19,11 @@
 <details>
 <summary>Installed NPM packages and utilized APIs:</summary>
 
-| Package command  | Package link                          | Description                                                         |
-| ---------------- | ------------------------------------- | ------------------------------------------------------------------- |
-| npm i -g nodemon | https://www.npmjs.com/package/nodemon | Nodemon is a helper tool for developing Node.js based applications. |
-| npm i express    | https://www.npmjs.com/package/express | Fast, unopinionated, minimalist web framework for Node.js.          |
+| Package command  | Package link                          | Description                                                        |
+| ---------------- | ------------------------------------- | ------------------------------------------------------------------ |
+| npm i -g nodemon | https://www.npmjs.com/package/nodemon | Nodemon is a helper tool for developing Node.js based applications |
+| npm i express    | https://www.npmjs.com/package/express | Fast, unopinionated, minimalist web framework for Node.js          |
+| npm i morgan     | https://www.npmjs.com/package/morgan  | HTTP request logger middleware for node.js                         |
 
 </details>
 

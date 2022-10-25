@@ -1,23 +1,26 @@
-//IMPORT CORE MODULES
-const fs = require('fs');
-//IMPORT EXPRESS
 //NOTE: Its a custom to have all express configurations in <app.js>.
-const express = require('express'); //Import express
-const { resourceLimits } = require('worker_threads');
+
+//->IMPORT CORE MODULES
+const fs = require('fs');
+const express = require('express');
+const morgan = require('morgan');
+
 const app = express(); //Call express function to use its functions
-//IMPORT EXPRESS MIDDLEWARE
+
+//-->#1. IMPORT EXPRESS MIDDLEWARE
+app.use(morgan('dev')); // we used morgan with dev option
 app.use(express.json()); //USEFULL FOR POST REQ JSON HANDLING.
 
-//CREATE OUR CUSTOM MIDDLEWARE
-//NOTE: THEY ARE APPLIED TO EVERY ROUTE HANDLER UNLESS WE SPECIY A SPECIFIC ROUTE.
-app.use((req, res, next) => {
-  console.log('Hello from our custom middleware 👋');
-  next();
-});
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
+// //CREATE OUR CUSTOM MIDDLEWARE
+// //NOTE: THEY ARE APPLIED TO EVERY ROUTE HANDLER UNLESS WE SPECIY A SPECIFIC ROUTE.
+// app.use((req, res, next) => {
+//   console.log('Hello from our custom middleware 👋');
+//   next();
+// });
+// app.use((req, res, next) => {
+//   req.requestTime = new Date().toISOString();
+//   next();
+// });
 
 // app.get('/', (req, res) => {
 //   // res.status(200).send('Hello from the server side!'); //Send reqular txt response
@@ -36,7 +39,7 @@ const tours = JSON.parse(
 );
 // console.log(tours); //array
 
-//--> ROUTE HANDLER CALLBACKS - CRUD
+//-->#2. ROUTE HANDLER CALLBACKS - CRUD
 const getAllTours = (req, res) => {
   console.log(req.requestTime); //we can use our custom middleware output here
   res.status(200).json({
@@ -129,6 +132,8 @@ const deleteTour = (req, res) => {
   });
 };
 
+//-->#3. ROUTES
+
 // //--->ROUTE HANDLER FOR GET REQUESTS - RECEIVE TOURS INFO
 // app.get('/api/v1/tours', getAllTours); //Its a good practice to specify your API version
 // //--->ROUTE HANDLER FOR POST REQUESTS - CREATES NEW TOURS
@@ -158,6 +163,7 @@ app
   .patch(updateTour)
   .delete(deleteTour);
 
+//-->#4. ROUTES
 const port = 3000; //Declare port
 app.listen(port, () => {
   console.log(`App running on port ${port}...`);
