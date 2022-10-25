@@ -35,21 +35,24 @@ app.get('/api/v1/tours', (req, res) => {
 
 //ROUTE HANDLER FOR POST REQUESTS - CREATES NEW TOURS
 //IMPORTANT: ON POST ROUTES DATA SEND BY THE CLIENT SHOUDL BE INCLUDED IN THE REQ. HOWEVER, EXPRESS.JS DO NOT SUPPORT DATA IN REQ. THEREFORE, WE WOULD NEED MIDDLEWARE TO HANDLE THIS.
+
 app.post('/api/v1/tours', (req, res) => {
   // console.log(req.body);
+  // res.send('DONE'); //NOTE: IN ORDER TO COMPLETE POST REQUEST ONE NEED REQ AND RES HANDLED TO COMPLETE THE CYCLE.
+
   //Get the id of the last element in the dataset
   const newId = tours[tours.length - 1].id + 1;
   //Create a new object from an existing object
-  const newTour = Object.assign({ id: newId }, req.body);
+  const newTour = Object.assign({ id: newId }, req.body); // merges two objects together
   //Mutate the read tour database content and add to array this new tour object before we persist it physically to the database file
   tours.push(newTour);
 
-  //JSON.stringfy is used to change the array to a JSON file before we write this to JSON file.
+  //JSON.stringfy is used to change the array to a JSON file before we write/persist this to JSON file.
   fs.writeFile(
     `${__dirname}/dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
     err => {
-      res.status(201).json({ status: 'success', data: { tour: newTour } }); //code 201 means created
+      res.status(201).json({ status: 'success', data: { tour: newTour } }); //code 201 means created - express.json() middleware is required for post requests to work
     }
   );
 });
