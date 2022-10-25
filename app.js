@@ -8,6 +8,17 @@ const app = express(); //Call express function to use its functions
 //IMPORT EXPRESS MIDDLEWARE
 app.use(express.json()); //USEFULL FOR POST REQ JSON HANDLING.
 
+//CREATE OUR CUSTOM MIDDLEWARE
+//NOTE: THEY ARE APPLIED TO EVERY ROUTE HANDLER UNLESS WE SPECIY A SPECIFIC ROUTE.
+app.use((req, res, next) => {
+  console.log('Hello from our custom middleware 👋');
+  next();
+});
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString();
+  next();
+});
+
 // app.get('/', (req, res) => {
 //   // res.status(200).send('Hello from the server side!'); //Send reqular txt response
 //   res
@@ -27,20 +38,24 @@ const tours = JSON.parse(
 
 //--> ROUTE HANDLER CALLBACKS - CRUD
 const getAllTours = (req, res) => {
-  res
-    .status(200)
-    .json({ status: 'success', results: tours.length, data: { tours } }); //Upon success response, restructure a new response JSON file with status and data itself received earlier
+  console.log(req.requestTime); //we can use our custom middleware output here
+  res.status(200).json({
+    status: 'success',
+    requestedAt: req.requestTime, //we can even use the custom middleware output in the json output
+    results: tours.length,
+    data: { tours },
+  }); //Upon success response, restructure a new response JSON file with status and data itself received earlier
   // res.status(200).json({ status: 'success', data: { tours: tours } }); //same as above
 };
 
 const getTour = (req, res) => {
   // console.log(req);
-  console.log(req.params); //returns { id: '5' }
+  // console.log(req.params); //returns { id: '5' }
 
   const id = +req.params.id; //Take the id value inside the req.params object and turn into a number from string
   // console.log(typeof id);
   const tour = tours.find(el => el.id === id);
-  console.log(tour); //for unmatching id tour returns undefined
+  // console.log(tour); //for unmatching id tour returns undefined
 
   //GUARD CLAUSE
   if (!tour) {
@@ -79,11 +94,11 @@ const createTour = (req, res) => {
 };
 
 const updateTour = (req, res) => {
-  console.log(req.params); //returns { id: '5' }
+  // console.log(req.params); //returns { id: '5' }
   const id = +req.params.id; //Take the id value inside the req.params object and turn into a number from string
   // console.log(typeof id);
   const tour = tours.find(el => el.id === id);
-  console.log(tour); //for unmatching id tour returns undefined
+  // console.log(tour); //for unmatching id tour returns undefined
   //GUARD CLAUSE
   if (!tour) {
     return res.status(404).json({ status: 'fail', message: 'Invalid ID' });
@@ -121,6 +136,12 @@ const deleteTour = (req, res) => {
 // app.post('/api/v1/tours', createTour);
 //---> REFACTORED ROUTE HANDLERS IN ONE-GO
 app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
+// //NOTE: BY RELOCAITNG OUR CUSTOM MIDDLEWARE HERE, APPLIED ONLY TO ROUTES BELOW, ABOVE ROUTES DO NOT GET THIS MIDDLEWARE. LOCATION OF THIS MIDDLEWARE CODE PLAYS A CRUCIAL ROLE THEREBY.
+// app.use((req, res, next) => {
+//   console.log('Hello from our custom middleware 👋');
+//   next();
+// });
 
 // //--->ROUTE HANDLER FOR CUSTOM GET REQUESTS - RECEIVE A SPECIFIC TOUR INFO
 // //NOTE: WE CREATE A VARIABLE CALLED id BY PUTTING A COLUMN <:> AFTER SLASH
