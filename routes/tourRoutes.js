@@ -7,6 +7,9 @@ const tourController = require('../controllers/tourController');
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
 
+//-->#3.CUSTOM MIDDLEWARE
+router.param('id', tourController.checkID); //NOTE: SINCE THIS EXPRESS ROUTER METHOD(KINDA MIDDLEWARE) IS MADE AVAILABLE LOCALLY, IT CAN'T BE ASSESSED BY USERS....IT SIMPLY ACTS AS A LOCAL SUB APP. CHECKS AUTOMATICALLY 'ID' PARAMETER @ .route('/:id') INPUT WHETHER ITS VALID OR NOT..
+
 //-->#3.DEFINE ROUTES
 router
   .route('/')
