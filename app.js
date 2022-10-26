@@ -1,3 +1,5 @@
+//NOTE: ITS A GOOD PRACTICE TO ISOLATE CODES. HERE LAYS EVERYTHING RELATED TO EXPRESS
+
 //-->IMPORT CORE MODULES
 const express = require('express');
 const morgan = require('morgan');
@@ -25,8 +27,5 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
-//-->#3.START SERVER
-const port = 3000; //Declare port
-app.listen(port, () => {
-  console.log(`App running on port ${port}...`);
-});
+//-->#3.LINK EXPRESS TO SERVER AS CUSTOM MODULE
+module.exports = app;
