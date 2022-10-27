@@ -16,6 +16,7 @@ app.use(morgan('dev')); //GLOBAL MIDDLEWARE - We used morgan with dev option - C
 app.use(express.json()); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING.
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
+  console.log(req);
   next();
 });
 app.use((req, res, next) => {
