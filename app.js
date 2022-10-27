@@ -12,7 +12,11 @@ const userRouter = require('./routes/userRoutes');
 const app = express(); //Call express function to use its functions
 
 //-->#1.MIDDLEWARES
-app.use(morgan('dev')); //GLOBAL MIDDLEWARE - We used morgan with dev option - Console.log reporter @ node REPL
+//IF PROCESS.ENV SHOWS DEVELOPMENET FOR NODE_ENV THEN ONLY USE MORGAN.
+//NOTE: HOW DO WE HAVE ACCESS TO PROCESS.ENV IF ITS CALLED IN SERVER.JS. SERVER STARTS AND CALLS THE APP. PROCESS.ENV IS EALRLIER DEFINED ONCE BY THE DOTENV SO ITS AVAILABLE FOR EVERY FILE AFTER
+if (process.env.NODE_ENV === 'developement') {
+  app.use(morgan('dev')); //GLOBAL MIDDLEWARE - We used morgan with dev option - Console.log reporter @ node REPL
+}
 app.use(express.json()); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING.
 // app.use(express.static(`${__dirname}/public`)); //SERVING HTML CSS ETC STATIC FILES
 app.use((req, res, next) => {
