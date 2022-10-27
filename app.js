@@ -12,6 +12,7 @@ const userRouter = require('./routes/userRoutes');
 const app = express(); //Call express function to use its functions
 
 //-->#1.MIDDLEWARES
+// console.log(process.env.NODE_ENV);
 //IF PROCESS.ENV SHOWS DEVELOPMENET FOR NODE_ENV THEN ONLY USE MORGAN.
 //NOTE: HOW DO WE HAVE ACCESS TO PROCESS.ENV IF ITS CALLED IN SERVER.JS. SERVER STARTS AND CALLS THE APP. PROCESS.ENV IS EALRLIER DEFINED ONCE BY THE DOTENV SO ITS AVAILABLE FOR EVERY FILE AFTER
 if (process.env.NODE_ENV === 'developement') {

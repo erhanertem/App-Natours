@@ -21,12 +21,13 @@
 <details>
 <summary>Installed NPM packages and utilized APIs:</summary>
 
-| Package command  | Package link                          | Description                                                                                           |
-| ---------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| npm i -g nodemon | https://www.npmjs.com/package/nodemon | Nodemon is a helper tool for developing Node.js based applications                                    |
-| npm i express    | https://www.npmjs.com/package/express | Fast, unopinionated, minimalist web framework for Node.js                                             |
-| npm i morgan     | https://www.npmjs.com/package/morgan  | HTTP request logger middleware for node terminal.js                                                   |
-| npm i dotenv     | https://www.npmjs.com/package/dotenv  | Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env |
+| Package command       | Package link                               | Description                                                                                           |
+| --------------------- | ------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| npm i -g nodemon      | https://www.npmjs.com/package/nodemon      | Nodemon is a helper tool for developing Node.js based applications.                                   |
+| npm i -g win-node-env | https://www.npmjs.com/package/win-node-env | Run npm scripts on Windows (package.JSON) that set (common) environment variables.                    |
+| npm i dotenv          | https://www.npmjs.com/package/dotenv       | Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env |
+| npm i express         | https://www.npmjs.com/package/express      | Fast, unopinionated, minimalist web framework for Node.js                                             |
+| npm i morgan          | https://www.npmjs.com/package/morgan       | HTTP request logger middleware for node terminal.js                                                   |
 
 </details>
 
