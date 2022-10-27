@@ -14,9 +14,9 @@ const app = express(); //Call express function to use its functions
 //-->#1.MIDDLEWARES
 app.use(morgan('dev')); //GLOBAL MIDDLEWARE - We used morgan with dev option - Console.log reporter @ node REPL
 app.use(express.json()); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING.
+app.use(express.static(`${__dirname}/public`)); //SERVING HTML CSS ETC STATIC FILES
 app.use((req, res, next) => {
   console.log('Hello from the middleware 👋');
-  console.log(req);
   next();
 });
 app.use((req, res, next) => {
