@@ -25,33 +25,6 @@ mongoose.connect(DB).then(connection => {
 //   console.log('DB connection success');
 // }); //mongoose connect returns a promise and we then handle with then to log the promise.
 
-//->CREATE A BASIC MONGOOSE SCHEMA
-const tourSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'A tour must have a name'],
-    unique: true,
-  },
-  rating: { type: Number, default: 4.5 },
-  price: { type: Number, required: [true, 'A tour must have a price'] },
-});
-//->CREATE A MODEL OUT OF THE CREATED SCHEMA
-const Tour = mongoose.model('Tour', tourSchema); //Create a collection in the database to upload data per the schema
-
-const testTour = new Tour({
-  name: 'The Forest Hiker',
-  rating: 4.7,
-  price: 497,
-}); //testtour is an instance of tour model
-testTour
-  .save()
-  .then(doc => {
-    console.log(doc);
-  })
-  .catch(err => {
-    console.log('ERROR 🎃', err);
-  }); //mongoose save method returns a promise which requires catching err as well.
-
 //-->START SERVER
 const port = process.env.PORT || 8000; //Declare port first from process.env.PORT cfg or as a fallback manually set to 3000
 app.listen(port, () => {
