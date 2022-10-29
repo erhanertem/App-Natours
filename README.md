@@ -28,6 +28,7 @@
 | npm i dotenv          | https://www.npmjs.com/package/dotenv       | Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env |
 | npm i express         | https://www.npmjs.com/package/express      | Fast, unopinionated, minimalist web framework for Node.js                                             |
 | npm i morgan          | https://www.npmjs.com/package/morgan       | HTTP request logger middleware for node terminal.js                                                   |
+| npm i mongoose        | https://www.npmjs.com/package/mongoose     | Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.           |
 
 </details>
 
