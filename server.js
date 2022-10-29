@@ -2,7 +2,10 @@
 //-->IMPORT 3RD PARTY MODULE
 const mongoose = require('mongoose');
 
-const dotenv = require('dotenv'); //CONFIGURE THE ENVIRONMENT
+const dotenv = require('dotenv'); //FIRST CONFIGURE THE ENVIRONMENT
+
+//-->IMPORT EXPRESS APP MODULE
+const app = require('./app'); //LATER RUN THE APP SO THAT WE MAKE PROCESS VARIABLE AVAILABE TO APP
 
 dotenv.config({ path: './config.env' }); //dotenv module acquires env data from the config.env file and assings them to process.env
 // console.log(app.get('env')); //Shows current enviroment we are in.
@@ -22,9 +25,18 @@ mongoose.connect(DB).then(connection => {
 //   console.log('DB connection success');
 // }); //mongoose connect returns a promise and we then handle with then to log the promise.
 
-//LATER RUN THE APP SO THAT WE MAKE PROCESS VARIABLE AVAILABEL TO APP
-//-->IMPORT EXPRESS APP MODULE
-const app = require('./app');
+//CREATE A BASIC MONGOOSE SCHEMA
+const tourSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'A tour must have a name'],
+    unique: true,
+  },
+  rating: { type: Number, default: 4.5 },
+  price: { type: Number, required: [true, 'A tour must have a price'] },
+});
+//CREATE A MODEL OUT OF THE CREATED SCHEMA
+const Tour = mongoose.model('Tour', tourSchema);
 
 //-->START SERVER
 const port = process.env.PORT || 8000; //Declare port first from process.env.PORT cfg or as a fallback manually set to 3000
