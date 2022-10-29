@@ -1,11 +1,26 @@
 //NOTE: ITS A GOOD PRACTICE TO ISOLATE CODES. HERE LAYS EVERYTHING RELATED TO SERVER
 //-->IMPORT 3RD PARTY MODULE
-//FIRST CONFIGURE THE ENVIRONMENT
-const dotenv = require('dotenv');
+const mongoose = require('mongoose');
+
+const dotenv = require('dotenv'); //CONFIGURE THE ENVIRONMENT
 
 dotenv.config({ path: './config.env' }); //dotenv module acquires env data from the config.env file and assings them to process.env
 // console.log(app.get('env')); //Shows current enviroment we are in.
 // console.log(process.env); //Node enviroment...
+
+//--->MONGODB ATLAS HOSTED CONNECTION
+const DB = process.env.DATABASE.replace(
+  '<PASSWORD>',
+  process.env.DATABASE_PASSWORD
+);
+mongoose.connect(DB).then(connection => {
+  // console.log(connection.connections);
+  console.log('DB connection success');
+}); //mongoose connect returns a promise and we then handle with then to log the promise.
+// //--->MONGODB LOCAL HOSTED CONNECTION
+// mongoose.connect(process.env.DATABASE_LOCAL).then(() => {
+//   console.log('DB connection success');
+// }); //mongoose connect returns a promise and we then handle with then to log the promise.
 
 //LATER RUN THE APP SO THAT WE MAKE PROCESS VARIABLE AVAILABEL TO APP
 //-->IMPORT EXPRESS APP MODULE
