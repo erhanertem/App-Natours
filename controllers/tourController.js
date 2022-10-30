@@ -6,6 +6,7 @@ exports.getAllTours = async (req, res) => {
   try {
     const tours = await Tour.find(); //mongoose find() method
 
+    //SUCCESS RESPONSE
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -19,11 +20,21 @@ exports.getAllTours = async (req, res) => {
   }
 };
 
-exports.getTour = (req, res) => {
-  //SUCCESS RESPONSE
-  res.status(200).json({
-    status: 'success',
-  });
+exports.getTour = async (req, res) => {
+  try {
+    //->findOne() mongoose method
+    // const tour = await Tour.findOne({ _id: req.params.id });
+    //->findbyId() mongoose shorthand method
+    const tour = await Tour.findById(req.params.id); //@tourRoutes we had .route('/:id') which should be matched by req.params.id here....If it was name then this should print name too...params is an express.js method for responding named route mapping
+
+    //SUCCESS RESPONSE
+    res.status(200).json({
+      status: 'success',
+      data: { tour },
+    });
+  } catch (err) {
+    res.status(404).json({ status: 'fail', message: "Can't reach to server" });
+  }
 };
 
 exports.createTour = async (req, res) => {
