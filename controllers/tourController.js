@@ -1,12 +1,22 @@
 //-->#0.IMPORT CORE MODULE
-const Tour = require('./../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
+const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
 
 //-->#1.ROUTE HANDLERS
-exports.getAllTours = (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-  });
+exports.getAllTours = async (req, res) => {
+  try {
+    const tours = await Tour.find(); //mongoose find() method
+
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: tours.length,
+      data: {
+        tours,
+      },
+    });
+  } catch (err) {
+    res.status(404).json({ status: 'fail', message: "Can't reach to server" });
+  }
 };
 
 exports.getTour = (req, res) => {
