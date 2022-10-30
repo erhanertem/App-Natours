@@ -14,7 +14,7 @@ const router = express.Router();
 router
   .route('/')
   .get(tourController.getAllTours)
-  .post(tourController.checkBody, tourController.createTour); //Middleware chaining - First precheck inputs and later crete tour
+  .post(tourController.createTour); //Middleware chaining - First precheck inputs and later crete tour
 router
   .route('/:id')
   .get(tourController.getTour)

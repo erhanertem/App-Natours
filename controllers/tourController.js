@@ -1,16 +1,6 @@
 //-->#0.IMPORT CORE MODULE
 const Tour = require('./../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
 
-exports.checkBody = (req, res, next) => {
-  if (!req.body.name || !req.body.price) {
-    //req.body contains key-value pairs of data submitted in the request body.
-    return res
-      .status(400)
-      .json({ status: 'fail', message: 'Missing name or price' });
-  }
-  next();
-};
-
 //-->#1.ROUTE HANDLERS
 exports.getAllTours = (req, res) => {
   res.status(200).json({
@@ -26,9 +16,22 @@ exports.getTour = (req, res) => {
   });
 };
 
-exports.createTour = (req, res) => {
-  //SUCCESS RESPONSE
-  res.status(201).json({ status: 'success', data: { tour: newTour } });
+exports.createTour = async (req, res) => {
+  try {
+    // //->First way - indirect of creating mongoose document from the instance of the model obj via save() method
+    // const newTour = new Tour({})
+    // newTour.save()
+    //->Second way - direct way of creating mongoose document from the model obj via create() method
+    // Tour.create({}).then(); //promise then.... however we can go about the other way which is async..await...
+    const newTour = await Tour.create(req.body); //save the returned promise in the newTour variable from the request data which is req.body
+
+    //SUCCESS RESPONSE
+    res.status(201).json({ status: 'success', data: { tour: newTour } });
+  } catch (err) {
+    //Rejected promise is sent here.
+    // res.status(400).json({ status: 'fail', message: err.message });
+    res.status(400).json({ status: 'fail', message: 'Invalid data sent' });
+  }
 };
 
 exports.updateTour = (req, res) => {
