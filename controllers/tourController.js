@@ -51,7 +51,7 @@ exports.createTour = async (req, res) => {
   } catch (err) {
     //Rejected promise is sent here.
     // res.status(400).json({ status: 'fail', message: err.message });
-    res.status(400).json({ status: 'fail', message: 'Invalid data sent' });
+    res.status(400).json({ status: 'fail', message: [err, err.message] });
   }
 };
 
