@@ -5,6 +5,7 @@ const Tour = require('../models/tourModel'); //Mongoose tour model needs to be i
 //-->#1.ROUTE HANDLERS
 exports.getAllTours = async (req, res) => {
   try {
+    //BUILD QUERY
     const queryObj = { ...req.query }; //Create a shallow copy of the query object
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
@@ -12,13 +13,17 @@ exports.getAllTours = async (req, res) => {
     console.log(req.query, queryObj);
 
     //--->1ST METHOD OF FILTERING DATA WITH FILTER OBJECT
-    const tours = await Tour.find(queryObj); //mongoose find() method with filter object {}
-    // //--->2ND METHOD OF FILTERING DATA with MONGOOSE QUERY API METHODS
-    // const tours = await Tour.find()
+    const query = Tour.find(queryObj); //mongoose find() method with filter object {}
+
+    //--->2ND METHOD OF FILTERING DATA with MONGOOSE QUERY API METHODS
+    // const query = await Tour.find()
     //   .where('duration')
     //   .equals(5)
     //   .where('difficulty')
     //   .equals('easy'); //mongoose find() method with mongoose chained filter moethods
+
+    //EXECUTE QUERY
+    const tours = await query;
 
     //SUCCESS RESPONSE
     res.status(200).json({
