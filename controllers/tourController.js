@@ -5,14 +5,14 @@ const Tour = require('../models/tourModel'); //Mongoose tour model needs to be i
 //-->#1.ROUTE HANDLERS
 exports.getAllTours = async (req, res) => {
   try {
-    console.log(req.query);
-    //BUILD QUERY
-    //#1.Primary off-scope Filtering
+    // console.log(req.query);
+    //#1.BUILD QUERY
+    //#1A.Primary off-scope Filtering
     const queryObj = { ...req.query }; //Create a shallow copy of the query object
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
 
-    //#2.Secondary Advanced Filtering
+    //#1B.Secondary Advanced Filtering
     // { duration: { $gte: '5' }, difficulty: 'easy' }-->mongoDB query
     // { duration: { gte: '5' }, difficulty: 'easy' } -->queryObj output
     let queryStr = JSON.stringify(queryObj); //We change JSON obj to a string in order to add $ sign to gte, gt, lte, lt
@@ -20,7 +20,7 @@ exports.getAllTours = async (req, res) => {
     // console.log(JSON.parse(queryStr));
 
     //--->1ST METHOD OF FILTERING DATA WITH FILTER OBJECT
-    const query = Tour.find(JSON.parse(queryStr)); //mongoose find() method with filter object {}
+    let query = Tour.find(JSON.parse(queryStr)); //mongoose find() method with filter object {}
 
     //--->2ND METHOD OF FILTERING DATA with MONGOOSE QUERY API METHODS
     // const query = await Tour.find()
@@ -28,6 +28,23 @@ exports.getAllTours = async (req, res) => {
     //   .equals(5)
     //   .where('difficulty')
     //   .equals('easy'); //mongoose find() method with mongoose chained filter moethods
+
+    //#2.SORTING QUERY/WITH FALLBACK CRITERIA
+    //127.0.0.1:3000/api/v1/tours?sort=price               --> sort by price as fired from postman have re.query return -> { sort: 'price' } - ascending order
+    //127.0.0.1:3000/api/v1/tours?sort=-price               --> sort by price as fired from postman have re.query return -> { sort: 'price' } - descending order
+    //127.0.0.1:3000/api/v1/tours?sort=price,ratingAverage --> sort by price then if its a tie sort by ratingAverage as a fallback sort criteria --> { sort: 'price,ratingAverage' } - ascending order
+    //127.0.0.1:3000/api/v1/tours?sort=price,-ratingAverage --> sort by price then if its a tie sort by ratingAverage as a fallback sort criteria --> { sort: 'price,ratingAverage' } - descending order ratingAvg
+    //127.0.0.1:3000/api/v1/tours?sort=-price,-ratingAverage --> sort by price then if its a tie sort by ratingAverage as a fallback sort criteria --> { sort: 'price,ratingAverage' } - descending order ratingAvg & price
+    if (req.query.sort) {
+      //if request includes sort field ..then....
+      const sortBy = req.query.sort.split(',').join(' ');
+      // console.log(sortBy);
+      query = query.sort(sortBy); //mongoose query sort() method ascending order
+      // query = query.sort('-' + req.query.sort); //mongoose query sort() method descending order
+    } else {
+      // 127.0.0.1:3000/api/v1/tours --> if the user do not specify any sorting criteria sort by createdAt in desc order so that newer ones appears first
+      query = query.sort('-createdAt');
+    }
 
     //EXECUTE QUERY
     const tours = await query;
