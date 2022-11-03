@@ -1,11 +1,18 @@
 //-->#0.IMPORT CORE MODULE
+const { query } = require('express');
 const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
 
 //-->#1.ROUTE HANDLERS
 exports.getAllTours = async (req, res) => {
   try {
+    const queryObj = { ...req.query }; //Create a shallow copy of the query object
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach(el => delete queryObj[el]);
+
+    console.log(req.query, queryObj);
+
     //--->1ST METHOD OF FILTERING DATA WITH FILTER OBJECT
-    const tours = await Tour.find({ duration: '5', difficulty: 'easy' }); //mongoose find() method with filter object {}
+    const tours = await Tour.find(queryObj); //mongoose find() method with filter object {}
     // //--->2ND METHOD OF FILTERING DATA with MONGOOSE QUERY API METHODS
     // const tours = await Tour.find()
     //   .where('duration')
