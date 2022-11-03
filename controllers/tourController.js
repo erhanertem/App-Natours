@@ -57,6 +57,21 @@ exports.getAllTours = async (req, res) => {
       query = query.select('-__v'); //exclude this field - mongoDB by default internally uses this __v field for its operations which is of no use to end-user.
     }
 
+    //--->#4.PAGINATION
+    //127.0.0.1:3000/api/v1/tours?page=2&limit=10 --> page 1 (1-10) , page 2 (11-20), page 3 (21-30)
+
+    const page = +req.query.page || 1; //we stringfy the number input for the page query property
+    const limit = +req.query.limit || 100; //we stringfy the number input for the limit query property
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
+
+    //GUARD CLAUSE
+    if (req.query.page) {
+      const numTours = await Tour.countDocuments(); //mongoose model api function that counts all the available docs in a database collection
+      if (skip >= numTours) throw new Error('This page does not exist');
+    }
+
     //EXECUTE QUERY
     const tours = await query;
 
