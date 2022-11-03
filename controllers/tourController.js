@@ -5,15 +5,22 @@ const Tour = require('../models/tourModel'); //Mongoose tour model needs to be i
 //-->#1.ROUTE HANDLERS
 exports.getAllTours = async (req, res) => {
   try {
+    console.log(req.query);
     //BUILD QUERY
+    //#1.Filtering
     const queryObj = { ...req.query }; //Create a shallow copy of the query object
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
 
-    console.log(req.query, queryObj);
+    //#2.Advanced Filtering
+    // { duration: { $gte: '5' }, difficulty: 'easy' }-->mongoDB query
+    // { duration: { gte: '5' }, difficulty: 'easy' } -->queryObj output
+    let queryStr = JSON.stringify(queryObj); //We change JSON obj to a string in order to add $ sign to gte, gt, lte, lt
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`); //b flag matches the excat objects as listed inside the (...|...|...|...) wrapped by g flag which finds multiple copies of the same element(regx global override)
+    console.log(JSON.parse(queryStr));
 
     //--->1ST METHOD OF FILTERING DATA WITH FILTER OBJECT
-    const query = Tour.find(queryObj); //mongoose find() method with filter object {}
+    const query = Tour.find(JSON.parse(queryStr)); //mongoose find() method with filter object {}
 
     //--->2ND METHOD OF FILTERING DATA with MONGOOSE QUERY API METHODS
     // const query = await Tour.find()
@@ -25,7 +32,7 @@ exports.getAllTours = async (req, res) => {
     //EXECUTE QUERY
     const tours = await query;
 
-    //SUCCESS RESPONSE
+    //SEND SUCCESS RESPONSE
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
