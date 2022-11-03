@@ -42,6 +42,7 @@ const tourSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now(),
+    select: false, // field limiting by default (permenantly hides from the output...so the client.can not see it.)
   },
   startDates: [Date], //in order to have different start dates for the same tour
 });

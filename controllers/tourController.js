@@ -6,7 +6,7 @@ const Tour = require('../models/tourModel'); //Mongoose tour model needs to be i
 exports.getAllTours = async (req, res) => {
   try {
     // console.log(req.query);
-    //#1.BUILD QUERY
+    //--->#1.BUILD QUERY
     //#1A.Primary off-scope Filtering
     const queryObj = { ...req.query }; //Create a shallow copy of the query object
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
@@ -19,17 +19,17 @@ exports.getAllTours = async (req, res) => {
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`); //b flag matches the excat objects as listed inside the (...|...|...|...) wrapped by g flag which finds multiple copies of the same element(regx global override)
     // console.log(JSON.parse(queryStr));
 
-    //--->1ST METHOD OF FILTERING DATA WITH FILTER OBJECT
+    //->1ST METHOD OF FILTERING DATA WITH FILTER OBJECT
     let query = Tour.find(JSON.parse(queryStr)); //mongoose find() method with filter object {}
 
-    //--->2ND METHOD OF FILTERING DATA with MONGOOSE QUERY API METHODS
+    //->2ND METHOD OF FILTERING DATA with MONGOOSE QUERY API METHODS
     // const query = await Tour.find()
     //   .where('duration')
     //   .equals(5)
     //   .where('difficulty')
     //   .equals('easy'); //mongoose find() method with mongoose chained filter moethods
 
-    //#2.SORTING QUERY/WITH FALLBACK CRITERIA
+    //--->#2.SORTING QUERY/WITH FALLBACK CRITERIA
     //127.0.0.1:3000/api/v1/tours?sort=price               --> sort by price as fired from postman have re.query return -> { sort: 'price' } - ascending order
     //127.0.0.1:3000/api/v1/tours?sort=-price               --> sort by price as fired from postman have re.query return -> { sort: 'price' } - descending order
     //127.0.0.1:3000/api/v1/tours?sort=price,ratingAverage --> sort by price then if its a tie sort by ratingAverage as a fallback sort criteria --> { sort: 'price,ratingAverage' } - ascending order
@@ -44,6 +44,17 @@ exports.getAllTours = async (req, res) => {
     } else {
       // 127.0.0.1:3000/api/v1/tours --> if the user do not specify any sorting criteria sort by createdAt in desc order so that newer ones appears first
       query = query.sort('-createdAt');
+    }
+
+    //--->#3.FIELD LIMITING
+    //127.0.0.1:3000/api/v1/tours?fields=name,duration,difficulty,price --> include only these information fields
+    //127.0.0.1:3000/api/v1/tours?fields=-name,-duration,-difficulty,-price --> exclude only these information fields
+
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select(fields);
+    } else {
+      query = query.select('-__v'); //exclude this field - mongoDB by default internally uses this __v field for its operations which is of no use to end-user.
     }
 
     //EXECUTE QUERY
