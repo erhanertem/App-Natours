@@ -7,17 +7,17 @@ exports.getAllTours = async (req, res) => {
   try {
     console.log(req.query);
     //BUILD QUERY
-    //#1.Filtering
+    //#1.Primary off-scope Filtering
     const queryObj = { ...req.query }; //Create a shallow copy of the query object
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
 
-    //#2.Advanced Filtering
+    //#2.Secondary Advanced Filtering
     // { duration: { $gte: '5' }, difficulty: 'easy' }-->mongoDB query
     // { duration: { gte: '5' }, difficulty: 'easy' } -->queryObj output
     let queryStr = JSON.stringify(queryObj); //We change JSON obj to a string in order to add $ sign to gte, gt, lte, lt
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`); //b flag matches the excat objects as listed inside the (...|...|...|...) wrapped by g flag which finds multiple copies of the same element(regx global override)
-    console.log(JSON.parse(queryStr));
+    // console.log(JSON.parse(queryStr));
 
     //--->1ST METHOD OF FILTERING DATA WITH FILTER OBJECT
     const query = Tour.find(JSON.parse(queryStr)); //mongoose find() method with filter object {}
