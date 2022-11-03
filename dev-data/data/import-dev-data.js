@@ -1,9 +1,11 @@
-//-->IMPORT 3RD PARTY MODULES FOR OPERATIONS
+//-->IMPORT CORE MODULES FOR OPERATIONS
 const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-dotenv.config({ path: './config.env' }); //FIRST CONFIGURE THE ENVIRONMENT
+//-->IMPORT 3RD PARTY MODULES FOR OPERATIONS
 const Tour = require('../../models/tourModel');
+
+dotenv.config({ path: './config.env' }); //FIRST CONFIGURE THE ENVIRONMENT
 
 //--->ESTABLISH MONGODB ATLAS HOSTED CONNECTION
 const DB = process.env.DATABASE.replace(
@@ -17,12 +19,12 @@ mongoose.connect(DB).then(() => {
 //--->READ JSON FILE AND PARSE TO JS OBJECT
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8')
-); // we have to convert the JSON file content to javascipt object to call in our JS code.
+); // we have to convert the JSON file content to javascipt object (array) to call in our JS code.
 
 //--->IMPORT DATA INTO DB
 const importData = async () => {
   try {
-    await Tour.create(tours);
+    await Tour.create(tours); //mongoose model.create() method
     console.log('Data succesfully loaded');
   } catch (err) {
     console.log(err);
@@ -38,10 +40,10 @@ const deleteData = async () => {
   } catch (err) {
     console.log(err);
   }
-  process.exit();
+  process.exit(); //node.js process method that terminate the process synchronously
 };
 
-console.log(process.argv);
+console.log(process.argv); //argv is a node.js process property that returns an array of node processes...3rd argument would be our option passed on the process
 
 if (process.argv[2] === '--import') {
   importData();
