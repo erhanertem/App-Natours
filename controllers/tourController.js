@@ -3,9 +3,19 @@ const { query } = require('express');
 const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
 
 //-->#1.ROUTE HANDLERS
+
+//->A MIDDLEWARE THAT MANIPULATES THE REQ BEFORE SENT TO GETALLTOURS ROUTE HANDLER...
+// 127.0.0.1:3000/api/v1/tours?limit=5&sort=-ratingsAverage,price --> custom route handling for listing 5 highest rated desc order and pricing asc order tours
+exports.aliasTopTours = (req, res, next) => {
+  req.query.limit = '5';
+  req.query.sort = '-ratingsAverage,price';
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+  next();
+};
+
 exports.getAllTours = async (req, res) => {
   try {
-    // console.log(req.query);
+    console.log('🎁', req, req.query);
     //--->#1.BUILD QUERY
     //#1A.Primary off-scope Filtering
     const queryObj = { ...req.query }; //Create a shallow copy of the query object

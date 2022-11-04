@@ -1,7 +1,7 @@
 //-->#0.IMPORT CORE MODULE
 const express = require('express');
 
-//-->#1.IMPORT CUSTOM MODULE
+//-->#1.IMPORT CUSTOM MODULES
 const tourController = require('../controllers/tourController');
 
 //-->#2.CREATE CHILD ROUTER
@@ -15,6 +15,11 @@ router
   .route('/')
   .get(tourController.getAllTours)
   .post(tourController.createTour); //Middleware chaining - First precheck inputs and later crete tour
+
+router
+  .route('/top-5-cheap')
+  .get(tourController.aliasTopTours, tourController.getAllTours); //responding to 127.0.0.1:3000/api/v1/tours/top-5-cheap route request from postman
+
 router
   .route('/:id')
   .get(tourController.getTour)
