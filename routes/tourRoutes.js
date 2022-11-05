@@ -17,8 +17,8 @@ router
   .post(tourController.createTour); //Middleware chaining - First precheck inputs and later crete tour
 
 router
-  .route('/top-5-cheap')
-  .get(tourController.aliasTopTours, tourController.getAllTours); //responding to 127.0.0.1:3000/api/v1/tours/top-5-cheap route request from postman
+  .route('/top-5-cheap') //Route aliasing --> Responding to 127.0.0.1:3000/api/v1/tours/top-5-cheap route request from postman
+  .get(tourController.aliasTopTours, tourController.getAllTours);
 
 router
   .route('/:id')
