@@ -110,3 +110,41 @@ exports.deleteTour = async (req, res) => {
       .json({ status: 'fail', message: 'Problem with the data provided' });
   }
 };
+
+exports.getTourStats = async (req, res) => {
+  try {
+    const stats = await Tour.aggregate([
+      {
+        $match: { ratingAverage: { $gte: 4.5 } },
+      }, //match pipeline operator
+      {
+        $group: {
+          // _id: null,
+          // _id: '$difficulty', //group by difficulty field types
+          _id: { $toUpper: '$difficulty' }, //group by difficulty field types with uppercase operator
+          // _id: '$ratingAverage', //group by difficulty field types
+          numTours: { $sum: 1 }, //for each count 1 added
+          numRatings: { $sum: '$ratingQuantity' },
+          avgRating: { $avg: '$ratingAverage' }, //i.e. groups by no specific field (_id: null) [this got to be mentioned first in $group method] - Lets assign a new field which takes the average of ratingsAverage field of the documents and more if needed....
+          avgPrice: { $avg: '$price' },
+          minPrice: { $min: '$price' },
+          maxPrice: { $max: '$price' },
+        },
+      }, //group pipeline operator
+      {
+        $sort: { avgPrice: 1 }, //1 for ascending order for the output of the group pipeline operator....whatever field available we sort that!!!
+      }, //sort pipeline operator
+      {
+        $match: {
+          _id: { $ne: 'EASY' }, //EXCLUDE EASY FROM THE OUTPUT with not equal operator..
+        },
+      }, //match pipeline operator
+    ]);
+
+    res.status(200).json({ status: 'success', data: { stats } });
+  } catch (err) {
+    res
+      .status(404)
+      .json({ status: 'fail', message: 'Problem with the data provided' });
+  }
+};

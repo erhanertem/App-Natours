@@ -20,6 +20,8 @@ router
   .route('/top-5-cheap') //Route aliasing --> Responding to 127.0.0.1:3000/api/v1/tours/top-5-cheap route request from postman
   .get(tourController.aliasTopTours, tourController.getAllTours);
 
+router.route('/tour-stats').get(tourController.getTourStats);
+
 router
   .route('/:id')
   .get(tourController.getTour)
