@@ -1,5 +1,6 @@
 //-->IMPORT 3RD PARTY MODULE
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 //->CREATE A BASIC MONGOOSE SCHEMA
 const tourSchema = new mongoose.Schema(
@@ -10,6 +11,7 @@ const tourSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
+    slug: String, //MONGOOSE PRE DOCUMENT MIDDLEWARE PROPERTY
     duration: {
       type: Number,
       required: [true, 'A tour must have a duration'],
@@ -22,6 +24,7 @@ const tourSchema = new mongoose.Schema(
       type: String,
       required: [true, 'A tour mush have a difficulty'],
     },
+
     ratingAverage: { type: Number, default: 4.5 },
     ratingQunatity: { type: Number, default: 0 },
     price: { type: Number, required: [true, 'A tour must have a price'] },
@@ -60,10 +63,21 @@ tourSchema.virtual('durationWeeks').get(function () {
 }); //In queries the virtuals could not be used...as they re not part of the real database....They are runtime data...
 
 //NOTE THERE ARE 4 TYPES OF MIDDLEWARE IN MONGOOSE: DOCUMENT, QUERY, AGGREGATE & MODEL MIDDLEWARES
-//DOCUMENT MIDDLEWARE - IT RUNS BEFORE .save() and .create() commands..
-tourSchema.pre('save', function () {
-  console.log('🏀', this);
+//MONGOOSE PRESAVE DOCUMENT MIDDLEWARE/HOOK - IT RUNS BEFORE .save() and .create() commands..
+tourSchema.pre('save', function (next) {
+  // console.log('🏀', this);
+  this.slug = slugify(this.name, { lower: true });
+  next(); //WE WOULD NEED THIS TO MOVE ON WITH THE NEXT MIDDLEWARE
 });
+// tourSchema.pre('save', function (next) {
+//   console.log('Will save document...');
+//   next();
+// });
+// //MONGOOSE POSTSAVE DOCUMENT MIDDLEWARE/HOOK
+// tourSchema.post('save', function (doc, next) {
+//   console.log(doc);
+//   next();
+// });
 
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA
 const Tour = mongoose.model('Tour', tourSchema); //Create a collection in the database to upload data per the schema
