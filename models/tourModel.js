@@ -59,6 +59,12 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7; //we got to use a regular function declaration as we would need this keyword to point to tourSchema upon which we called Schema.prototype.virtual() method to declare a temporary field on the mongoose schema object.
 }); //In queries the virtuals could not be used...as they re not part of the real database....They are runtime data...
 
+//NOTE THERE ARE 4 TYPES OF MIDDLEWARE IN MONGOOSE: DOCUMENT, QUERY, AGGREGATE & MODEL MIDDLEWARES
+//DOCUMENT MIDDLEWARE - IT RUNS BEFORE .save() and .create() commands..
+tourSchema.pre('save', function () {
+  console.log('🏀', this);
+});
+
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA
 const Tour = mongoose.model('Tour', tourSchema); //Create a collection in the database to upload data per the schema
 
