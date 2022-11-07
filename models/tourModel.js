@@ -66,6 +66,7 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7; //we got to use a regular function declaration as we would need this keyword to point to tourSchema upon which we called Schema.prototype.virtual() method to declare a temporary field on the mongoose schema object.
 }); //In queries the virtuals could not be used...as they re not part of the real database....They are runtime data...
 
+//--->MONGOOSE DOCUMENT MIDDLEWARE
 //NOTE THERE ARE 4 TYPES OF MIDDLEWARE IN MONGOOSE: DOCUMENT, QUERY, AGGREGATE & MODEL MIDDLEWARES
 //->MONGOOSE PRESAVE DOCUMENT MIDDLEWARE/HOOK - IT RUNS BEFORE .save() and .create() commands..
 tourSchema.pre('save', function (next) {
@@ -83,10 +84,13 @@ tourSchema.pre('save', function (next) {
 //   next();
 // });
 
-//->MONGOOSE PREFIND QUERY MIDDLEWARE/HOOK for both find & findOne Tours
+//--->MONGOOSE QUERY MIDDLEWARE
+//-->MONGOOSE PREFIND QUERY MIDDLEWARE/HOOK for both find & findOne Tours
 //NOTE THIS MIDDLEWARE APPLIES BEFORE const tours = await features.query; @ tourcontroller.js GETS EXECUTED...WE FILTEROUT A SPECIFIC CRITERIA BEFORE features.query execution...
 tourSchema.pre(/^find/, function (next) {
-  this.find({ secretTour: { $ne: true } });
+  this.find({ secretTour: { $ne: true } }); //this points to our request
+
+  this.start = Date.now();
   next();
 }); //Regxpression here says that apply to any that starts with find which would include 'find', 'findOne' , etc..
 // //->MONGOOSE PREFIND QUERY MIDDLEWARE/HOOK
@@ -99,6 +103,13 @@ tourSchema.pre(/^find/, function (next) {
 //   this.find({ secretTour: { $ne: true } });
 //   next();
 // }); //NOTE THIS MIDDLEWARE APPLIES BEFORE const tours = await features.query; @ tourcontroller.js GETS EXECUTED...WE FILTEROUT A SPECIFIC CRITERIA BEFORE features.query execution...
+//-->MONGOOSE POSTFIND QUERY MIDDLEWARE/HOOK
+tourSchema.post(/^find/, function (docs, next) {
+  console.log(`Query took ${Date.now() - this.start} miliseconds!`);
+  // console.log(tourSchema);
+  console.log(docs);
+  next();
+});
 
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA
 const Tour = mongoose.model('Tour', tourSchema); //Create a collection in the database to upload data per the schema
