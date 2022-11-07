@@ -31,6 +31,7 @@
 | npm i mongoose        | https://www.npmjs.com/package/mongoose     | Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.           |
 | npm i slugify         | https://www.npmjs.com/package/slugify      | Slugifies the strings                                                                                 |
 | npm i validator       | https://www.npmjs.com/package/validator    | A library of string validators and sanitizers                                                         |
+| npm i -g ndb          | https://www.npmjs.com/package/ndb          | An improved debugging experience for Node.js thru ChromeDevTools                                      |
 
 </details>
 
