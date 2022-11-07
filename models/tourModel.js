@@ -49,6 +49,10 @@ const tourSchema = new mongoose.Schema(
       select: false, // field limiting by default (permenantly hides from the output...so the client.can not see it.)
     },
     startDates: [Date], //in order to have different start dates for the same tour
+    secretTour: {
+      type: Boolean,
+      default: false,
+    },
   }, //SCHEMA DEFINITIONS
 
   {
@@ -63,7 +67,7 @@ tourSchema.virtual('durationWeeks').get(function () {
 }); //In queries the virtuals could not be used...as they re not part of the real database....They are runtime data...
 
 //NOTE THERE ARE 4 TYPES OF MIDDLEWARE IN MONGOOSE: DOCUMENT, QUERY, AGGREGATE & MODEL MIDDLEWARES
-//MONGOOSE PRESAVE DOCUMENT MIDDLEWARE/HOOK - IT RUNS BEFORE .save() and .create() commands..
+//->MONGOOSE PRESAVE DOCUMENT MIDDLEWARE/HOOK - IT RUNS BEFORE .save() and .create() commands..
 tourSchema.pre('save', function (next) {
   // console.log('🏀', this);
   this.slug = slugify(this.name, { lower: true });
@@ -73,11 +77,28 @@ tourSchema.pre('save', function (next) {
 //   console.log('Will save document...');
 //   next();
 // });
-// //MONGOOSE POSTSAVE DOCUMENT MIDDLEWARE/HOOK
+// //->MONGOOSE POSTSAVE DOCUMENT MIDDLEWARE/HOOK
 // tourSchema.post('save', function (doc, next) {
 //   console.log(doc);
 //   next();
 // });
+
+//->MONGOOSE PREFIND QUERY MIDDLEWARE/HOOK for both find & findOne Tours
+//NOTE THIS MIDDLEWARE APPLIES BEFORE const tours = await features.query; @ tourcontroller.js GETS EXECUTED...WE FILTEROUT A SPECIFIC CRITERIA BEFORE features.query execution...
+tourSchema.pre(/^find/, function (next) {
+  this.find({ secretTour: { $ne: true } });
+  next();
+}); //Regxpression here says that apply to any that starts with find which would include 'find', 'findOne' , etc..
+// //->MONGOOSE PREFIND QUERY MIDDLEWARE/HOOK
+// tourSchema.pre('find', function (next) {
+//   this.find({ secretTour: { $ne: true } });
+//   next();
+// }); //NOTE THIS MIDDLEWARE APPLIES BEFORE const tours = await features.query; @ tourcontroller.js GETS EXECUTED...WE FILTEROUT A SPECIFIC CRITERIA BEFORE features.query execution...
+// //->MONGOOSE PREFIND QUERY MIDDLEWARE/HOOK
+// tourSchema.pre('findOne', function (next) {
+//   this.find({ secretTour: { $ne: true } });
+//   next();
+// }); //NOTE THIS MIDDLEWARE APPLIES BEFORE const tours = await features.query; @ tourcontroller.js GETS EXECUTED...WE FILTEROUT A SPECIFIC CRITERIA BEFORE features.query execution...
 
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA
 const Tour = mongoose.model('Tour', tourSchema); //Create a collection in the database to upload data per the schema
