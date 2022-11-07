@@ -1,6 +1,7 @@
 //-->IMPORT 3RD PARTY MODULE
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const validator = require('validator');
 
 //->CREATE A BASIC MONGOOSE SCHEMA
 const tourSchema = new mongoose.Schema(
@@ -12,6 +13,11 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxlength: [40, 'A tour name must have less or equal 40 characters'], //its a built-in validator available on strings
       minlength: [10, 'A tour name must have more or equal 10 characters'],
+      // validate: validator.isAlpha, //without err message
+      validate: [
+        validator.isAlpha,
+        'Tour names should only contain characters',
+      ], //validator library validation with custom err message
     },
     slug: String, //MONGOOSE PRE DOCUMENT MIDDLEWARE PROPERTY
     duration: {
