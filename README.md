@@ -30,6 +30,7 @@
 | npm i morgan          | https://www.npmjs.com/package/morgan       | HTTP request logger middleware for node terminal.js                                                   |
 | npm i mongoose        | https://www.npmjs.com/package/mongoose     | Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment.           |
 | npm i slugify         | https://www.npmjs.com/package/slugify      | Slugifies the strings                                                                                 |
+| npm i validator       | https://www.npmjs.com/package/validator    | A library of string validators and sanitizers                                                         |
 
 </details>
 
