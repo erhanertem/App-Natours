@@ -88,7 +88,7 @@ tourSchema.pre('save', function (next) {
 //-->MONGOOSE PREFIND QUERY MIDDLEWARE/HOOK for both find & findOne Tours
 //NOTE THIS MIDDLEWARE APPLIES BEFORE const tours = await features.query; @ tourcontroller.js GETS EXECUTED...WE FILTEROUT A SPECIFIC CRITERIA BEFORE features.query execution...
 tourSchema.pre(/^find/, function (next) {
-  this.find({ secretTour: { $ne: true } }); //this points to our request
+  this.find({ secretTour: { $ne: true } }); //this points to our query object
 
   this.start = Date.now();
   next();
@@ -106,8 +106,16 @@ tourSchema.pre(/^find/, function (next) {
 //-->MONGOOSE POSTFIND QUERY MIDDLEWARE/HOOK
 tourSchema.post(/^find/, function (docs, next) {
   console.log(`Query took ${Date.now() - this.start} miliseconds!`);
-  // console.log(tourSchema);
-  console.log(docs);
+  // console.log(this);
+  // console.log(docs);
+  next();
+});
+
+//--->MONGOOSE AGGREGATION MIDDLEWARE
+//NOTE: We wanted to exclude the secretTour from the aggregation pipeline..The aggregate pipeline method returns an array object. So we add to the front of the array out extra line of match pieline stage that eliminates the data that bears secretTour true
+tourSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+  console.log(this.pipeline()); //<this> points out to aggregation object
   next();
 });
 
