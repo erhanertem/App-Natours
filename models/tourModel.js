@@ -7,9 +7,11 @@ const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, 'A tour must have a name'],
+      required: [true, 'A tour must have a name'], //it is one of the validators available to use thru mongoose
       unique: true,
       trim: true,
+      maxlength: [40, 'A tour name must have less or equal 40 characters'], //its a built-in validator available on strings
+      minlength: [10, 'A tour name must have more or equal 10 characters'],
     },
     slug: String, //MONGOOSE PRE DOCUMENT MIDDLEWARE PROPERTY
     duration: {
@@ -23,9 +25,17 @@ const tourSchema = new mongoose.Schema(
     difficulty: {
       type: String,
       required: [true, 'A tour mush have a difficulty'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+        message: 'Diffuculty is either: easy, medium,difficult',
+      }, //its a built-in validator available on strings for limiting options with an array of strings
     },
-
-    ratingAverage: { type: Number, default: 4.5 },
+    ratingAverage: {
+      type: Number,
+      default: 4.5,
+      min: [1, 'Rating must be above 1.0'], //its a built-in validator available on both numbers and dates
+      max: [5, 'Rating must be below 5.0'],
+    },
     ratingQunatity: { type: Number, default: 0 },
     price: { type: Number, required: [true, 'A tour must have a price'] },
     priceDiscount: Number,

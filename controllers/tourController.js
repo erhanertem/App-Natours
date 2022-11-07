@@ -80,7 +80,7 @@ exports.updateTour = async (req, res) => {
   try {
     const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
       new: true, //if the replacement document is any different than the original document. go ahed and replace it
-      runValidators: true, // we tell that the validators shoul,d be run again as prescribed in the tourmodel.js. Any incompliant data would trigger err.
+      runValidators: true, // IMPORTANT We tell that the validators should be run again as prescribed in the tourmodel.js (tourschema). Any incompliant data would trigger err.
     }); //mongoose findByIdAndUpdate() query method ..options are in mongoose api...
 
     //PATCH RESPONSE
@@ -89,9 +89,7 @@ exports.updateTour = async (req, res) => {
       data: { tour },
     });
   } catch (err) {
-    res
-      .status(404)
-      .json({ status: 'fail', message: 'Problem with the data provided' });
+    res.status(404).json({ status: 'fail', message: err });
   }
 };
 
