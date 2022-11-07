@@ -36,9 +36,18 @@ const tourSchema = new mongoose.Schema(
       min: [1, 'Rating must be above 1.0'], //its a built-in validator available on both numbers and dates
       max: [5, 'Rating must be below 5.0'],
     },
-    ratingQunatity: { type: Number, default: 0 },
+    ratingQuantity: { type: Number, default: 0 },
     price: { type: Number, required: [true, 'A tour must have a price'] },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+      validate: {
+        validator: function (priceValue) {
+          // VERY IMPORTANT this only points to current doc on NEW document creation..
+          return priceValue < this.price;
+        },
+        message: 'Discount price ({VALUE}) should be below the regular price',
+      },
+    }, //doc field with custom validator setup
     summary: {
       type: String,
       trim: true,
