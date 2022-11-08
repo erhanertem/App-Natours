@@ -1,8 +1,9 @@
 //-->#0.IMPORT CORE MODULE
 const { query } = require('express');
 
-const APIFeatures = require('../utils/apiFeatures.js');
 const Tour = require('../models/tourModel.js'); //Mongoose tour model needs to be imported here for tour controller operations.
+const APIFeatures = require('../utils/apiFeatures.js');
+const catchAsync = require('../utils/catchAsync.js');
 
 //-->#1.ROUTE HANDLERS
 
@@ -58,23 +59,16 @@ exports.getTour = async (req, res) => {
   }
 };
 
-exports.createTour = async (req, res) => {
-  try {
-    // //->First way - indirect of creating mongoose document from the instance of the model obj via save() method
-    // const newTour = new Tour({})
-    // newTour.save()
-    //->Second way - direct way of creating mongoose document from the model obj via create() method
-    // Tour.create({}).then(); //promise then.... however we can go about the other way which is async..await...
-    const newTour = await Tour.create(req.body); //save the returned promise in the newTour variable from the request data which is req.body
-
-    //SUCCESS RESPONSE
-    res.status(201).json({ status: 'success', data: { tour: newTour } });
-  } catch (err) {
-    //Rejected promise is sent here.
-    // res.status(400).json({ status: 'fail', message: err.message });
-    res.status(400).json({ status: 'fail', message: [err, err.message] });
-  }
-};
+exports.createTour = catchAsync(async (req, res, next) => {
+  // //->First way - indirect of creating mongoose document from the instance of the model obj via save() method
+  // const newTour = new Tour({})
+  // newTour.save()
+  //->Second way - direct way of creating mongoose document from the model obj via create() method
+  // Tour.create({}).then(); //promise then.... however we can go about the other way which is async..await...
+  const newTour = await Tour.create(req.body); //save the returned promise in the newTour variable from the request data which is req.body
+  //SUCCESS RESPONSE
+  res.status(201).json({ status: 'success', data: { tour: newTour } });
+});
 
 exports.updateTour = async (req, res) => {
   try {
