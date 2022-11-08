@@ -72,6 +72,11 @@ exports.updateTour = catchAsync(async (req, res, next) => {
     runValidators: true, // IMPORTANT We tell that the validators should be run again as prescribed in the tourmodel.js (tourschema). Any incompliant data would trigger err.
   }); //mongoose findByIdAndUpdate() query method ..options are in mongoose api...
 
+  //GUARD CLAUSE
+  if (!tour) {
+    return next(new AppError('No tour found with that ID', 404));
+  } //if tour returns null value, create a new error object with a message and err code
+
   //PATCH RESPONSE
   res.status(200).json({
     status: 'success',
