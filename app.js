@@ -35,12 +35,26 @@ app.use('/api/v1/users', userRouter); //watch for this route
 
 //If all above routes not matched then apply to rest of the HTTP routes with this callback function....
 app.all('*', (req, res, next) => {
-  res.status(404).json({
-    status: 'fail',
-    message: `Can't find ${req.originalUrl} on this server!`,
-  });
-  next();
+  // res.status(404).json({
+  //   status: 'fail',
+  //   message: `Can't find ${req.originalUrl} on this server!`,
+  // });
+
+  const err = new Error(`Can't find ${req.originalUrl} on this server!`); //We create a new error object with custom message
+  err.status = 'fail'; //We define status for centrilized handling
+  err.statusCode = 404; //We define statuscode for centrilized handling
+  next(err); //anything passed inside next() is assumed err always...
 });
 
-//-->#3.LINK EXPRESS TO SERVER AS CUSTOM MODULE
+//-->#3.CENTRILIZED Typical error handling express middleware
+app.use((err, req, res, next) => {
+  err.statusCode = err.statusCode || 500; //Defines the error code. Default 500 means internal server err
+  err.status = err.status || 'error'; //Defines the error message. Default is set to 'error' string
+  res.status(err.statusCode).json({
+    status: err.status,
+    message: err.message,
+  });
+});
+
+//-->#4.LINK EXPRESS TO SERVER AS CUSTOM MODULE
 module.exports = app;
