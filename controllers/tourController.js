@@ -85,7 +85,12 @@ exports.updateTour = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteTour = catchAsync(async (req, res, next) => {
-  await Tour.findByIdAndRemove(req.params.id);
+  const tour = await Tour.findByIdAndRemove(req.params.id);
+
+  //GUARD CLAUSE
+  if (!tour) {
+    return next(new AppError('No tour found with that ID', 404));
+  } //if tour returns null value, create a new error object with a message and err code
 
   //DELETE RESPONSE
   res.status(204).json({
