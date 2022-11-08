@@ -5,6 +5,7 @@ const express = require('express');
 const morgan = require('morgan');
 
 //-->IMPORT CUSTOM MODULES
+const AppError = require('./utils/appError');
 const tourRouter = require('./routes/tourRoutes'); //for require, ${__dirname} is not necessary
 const userRouter = require('./routes/userRoutes');
 
@@ -40,10 +41,12 @@ app.all('*', (req, res, next) => {
   //   message: `Can't find ${req.originalUrl} on this server!`,
   // });
 
-  const err = new Error(`Can't find ${req.originalUrl} on this server!`); //We create a new error object with custom message
-  err.status = 'fail'; //We define status for centrilized handling
-  err.statusCode = 404; //We define statuscode for centrilized handling
-  next(err); //anything passed inside next() is assumed err always...
+  // const err = new Error(`Can't find ${req.originalUrl} on this server!`); //We create a new error object with custom message
+  // err.status = 'fail'; //We define status for centrilized handling
+  // err.statusCode = 404; //We define statuscode for centrilized handling
+  // next(err); //anything passed inside next() is assumed err always...
+
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404)); //anything passed inside next() is assumed err always...
 });
 
 //-->#3.CENTRILIZED Typical error handling express middleware
