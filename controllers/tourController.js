@@ -3,6 +3,7 @@ const { query } = require('express');
 
 const Tour = require('../models/tourModel.js'); //Mongoose tour model needs to be imported here for tour controller operations.
 const APIFeatures = require('../utils/apiFeatures.js');
+const AppError = require('../utils/appError.js');
 const catchAsync = require('../utils/catchAsync.js');
 
 //-->#1.ROUTE HANDLERS
@@ -16,7 +17,7 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = catchAsync(async (req, res) => {
+exports.getAllTours = catchAsync(async (req, res, next) => {
   //EXECUTE QUERY
   const features = new APIFeatures(Tour.find(), req.query) //(query object, express query string)
     .filter()
@@ -36,11 +37,16 @@ exports.getAllTours = catchAsync(async (req, res) => {
   });
 });
 
-exports.getTour = catchAsync(async (req, res) => {
+exports.getTour = catchAsync(async (req, res, next) => {
   //->findOne() mongoose method
   // const tour = await Tour.findOne({ _id: req.params.id });
   //->findbyId() mongoose shorthand method
   const tour = await Tour.findById(req.params.id); //@tourRoutes we had .route('/:id') which should be matched by req.params.id here....If it was name then this should print name too...params is an express.js method for responding named route mapping
+
+  //GUARD CLAUSE
+  if (!tour) {
+    return next(new AppError('No tour found with that ID', 404));
+  } //if tour returns null value, create a new error object with a message and err code
 
   //SUCCESS RESPONSE
   res.status(200).json({
@@ -60,7 +66,7 @@ exports.createTour = catchAsync(async (req, res, next) => {
   res.status(201).json({ status: 'success', data: { tour: newTour } });
 });
 
-exports.updateTour = catchAsync(async (req, res) => {
+exports.updateTour = catchAsync(async (req, res, next) => {
   const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
     new: true, //if the replacement document is any different than the original document. go ahed and replace it
     runValidators: true, // IMPORTANT We tell that the validators should be run again as prescribed in the tourmodel.js (tourschema). Any incompliant data would trigger err.
@@ -73,7 +79,7 @@ exports.updateTour = catchAsync(async (req, res) => {
   });
 });
 
-exports.deleteTour = catchAsync(async (req, res) => {
+exports.deleteTour = catchAsync(async (req, res, next) => {
   await Tour.findByIdAndRemove(req.params.id);
 
   //DELETE RESPONSE
@@ -83,7 +89,7 @@ exports.deleteTour = catchAsync(async (req, res) => {
   });
 });
 
-exports.getTourStats = catchAsync(async (req, res) => {
+exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
       $match: { ratingAverage: { $gte: 4.5 } },
@@ -115,7 +121,7 @@ exports.getTourStats = catchAsync(async (req, res) => {
   res.status(200).json({ status: 'success', data: { stats } });
 });
 
-exports.getMonthlyPlan = catchAsync(async (req, res) => {
+exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   // console.log(req.params);
   const year = req.params.year * 1; // 2021 --- loook up to route --> router.route('/monthly-plan/:year').ge.....
 

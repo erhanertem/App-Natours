@@ -3,6 +3,7 @@
 const mongoose = require('mongoose');
 
 const dotenv = require('dotenv'); //FIRST CONFIGURE THE ENVIRONMENT
+
 dotenv.config({ path: './config.env' }); //dotenv module acquires env data from the config.env file and assings them to process.env
 // console.log(app.get('env')); //Shows current enviroment we are in.
 // console.log(process.env); //Node enviroment...
