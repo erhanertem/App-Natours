@@ -30,8 +30,17 @@ app.use((req, res, next) => {
 });
 
 //-->#2.ROUTES
-app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/tours', tourRouter); //watch for this route
+app.use('/api/v1/users', userRouter); //watch for this route
+
+//If all above routes not matched then apply to rest of the HTTP routes with this callback function....
+app.all('*', (req, res, next) => {
+  res.status(404).json({
+    status: 'fail',
+    message: `Can't find ${req.originalUrl} on this server!`,
+  });
+  next();
+});
 
 //-->#3.LINK EXPRESS TO SERVER AS CUSTOM MODULE
 module.exports = app;
