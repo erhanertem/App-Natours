@@ -7,7 +7,13 @@ const handleCastErrorDB = error => {
 
 const handleDublicateFieldsDB = error => {
   const message = `Duplicate field value: '${error.keyValue.name}'. Please use another value!`;
-  return new AppError(message, 404);
+  return new AppError(message, 400);
+};
+
+const handleValidationErrorDB = error => {
+  const errList = Object.values(error.errors).map(el => el.message);
+  const message = `Invalid input data. ${errList.join('; ')}`;
+  return new AppError(message, 400);
 };
 
 const sendErrorDev = (err, res) => {
@@ -48,13 +54,16 @@ module.exports = (err, req, res, next) => {
   if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
-    //->HANDLE BAD TOUR NAME ERR
+    //->HANDLE BAD GET TOUR NAME ERR
     //1. 127.0.0.1:3000/api/v1/tours/wwww creates an invalid id GET req which causes internal mongoose error which we need to respond in production
     let error;
     if (err.name === 'CastError') error = handleCastErrorDB(err); //this will create a custom appErr - err.name CastError caused by mongoose
-    //->HANDLE UNIQUE FIELD ERR
+    //->HANDLE UNIQUE FIELD POST INPUT ERR
     //127.0.0.1:3000/api/v1/tours with already allocated unique value via POST method
     if (err.code === 11000) error = handleDublicateFieldsDB(err); //this will create a custom appErr - err.code 11000 caused by MongoDB
+    //->HANDLE IRRELEVANT FIELD/VALIDATOR VIOLATOR PATCH INPUT ERR
+    //127.0.0.1:3000/api/v1/tours/63692be1ddf2bad76f5b8398
+    if (err.name === 'ValidationError') error = handleValidationErrorDB(err); //this will create a custom appErr - err.name ValidationError caused by mongoose
 
     sendErrorProd(error, res); //send custom err in production
   }
