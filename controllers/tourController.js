@@ -1,10 +1,10 @@
 //-->#0.IMPORT CORE MODULE
 const { query } = require('express');
 
-const Tour = require('../models/tourModel.js'); //Mongoose tour model needs to be imported here for tour controller operations.
-const APIFeatures = require('../utils/apiFeatures.js');
-const AppError = require('../utils/appError.js');
-const catchAsync = require('../utils/catchAsync.js');
+const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
+const APIFeatures = require('../utils/apiFeatures');
+const AppError = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync');
 
 //-->#1.ROUTE HANDLERS
 
