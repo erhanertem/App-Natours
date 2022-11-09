@@ -14,7 +14,7 @@ const sendErrorProd = (err, res) => {
       message: err.message,
     });
 
-    //Programming or other unknown error: dont want to leak the details to the client
+    //Programming or other unknown errors details shouldn't be leaked to the client
   } else {
     //Log the err to the console
     console.log('ERROR 💥', err);
