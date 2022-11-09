@@ -6,7 +6,7 @@ const morgan = require('morgan');
 
 //-->IMPORT CUSTOM MODULES
 const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController');
+const errorController = require('./controllers/errorController'); //global error handler
 const tourRouter = require('./routes/tourRoutes'); //for require, ${__dirname} is not necessary
 const userRouter = require('./routes/userRoutes');
 
@@ -17,7 +17,7 @@ const app = express(); //Call express function to use its functions
 // console.log(process.env.NODE_ENV);
 //IF PROCESS.ENV SHOWS DEVELOPMENET FOR NODE_ENV THEN ONLY USE MORGAN.
 //NOTE: HOW DO WE HAVE ACCESS TO PROCESS.ENV IF ITS CALLED IN SERVER.JS. SERVER STARTS AND CALLS THE APP. PROCESS.ENV IS EALRLIER DEFINED ONCE BY THE DOTENV SO ITS AVAILABLE FOR EVERY FILE AFTER
-if (process.env.NODE_ENV === 'developement') {
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev')); //GLOBAL MIDDLEWARE - We used morgan with dev option - Console.log reporter @ node REPL
 }
 app.use(express.json()); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING.
@@ -51,7 +51,7 @@ app.all('*', (req, res, next) => {
 });
 
 //-->#3.CENTRILIZED Typical error handling express middleware
-app.use(globalErrorHandler);
+app.use(errorController); //run global error handler
 
 //-->#4.LINK EXPRESS TO SERVER AS CUSTOM MODULE
 module.exports = app;

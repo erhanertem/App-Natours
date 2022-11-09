@@ -31,7 +31,7 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error'; //Defines the error message. Default is set to 'error' string
 
   //NOTE: WE WOULD LIKE TO SEND AS MINIMAL ERRORS AS POSSIBLE TO THE CLIENT IN PRODUCTION MODE AND SEND AS MUCH ERRORS AS WE CAN IN DEVELOPMENT PHASE SO WE NEED TO ESTABLISH CONDITIONS FOR BOTH PROCESS ENVIROMENTS
-  if (process.env.NODE_ENV === 'developement') {
+  if (process.env.NODE_ENV === 'development') {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     sendErrorProd(err, res);

@@ -46,7 +46,8 @@ exports.getTour = catchAsync(async (req, res, next) => {
   //GUARD CLAUSE
   if (!tour) {
     return next(new AppError('No tour found with that ID', 404));
-  } //if tour returns null value, create a new error object with a message and err code
+  } //if tour returns null value, create a new error object with a message and err code.
+  //We use return here so that we can terminate immediately otherwise the code will run along.
 
   //SUCCESS RESPONSE
   res.status(200).json({
@@ -76,6 +77,7 @@ exports.updateTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError('No tour found with that ID', 404));
   } //if tour returns null value, create a new error object with a message and err code
+  //We use return here so that we can terminate immediately otherwise the code will run along.
 
   //PATCH RESPONSE
   res.status(200).json({
@@ -91,6 +93,7 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
   if (!tour) {
     return next(new AppError('No tour found with that ID', 404));
   } //if tour returns null value, create a new error object with a message and err code
+  //We use return here so that we can terminate immediately otherwise the code will run along.
 
   //DELETE RESPONSE
   res.status(204).json({
