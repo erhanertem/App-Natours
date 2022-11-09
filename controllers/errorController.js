@@ -5,6 +5,11 @@ const handleCastErrorDB = error => {
   return new AppError(message, 400);
 };
 
+const handleDublicateFieldsDB = error => {
+  const message = `Duplicate field value: '${error.keyValue.name}'. Please use another value!`;
+  return new AppError(message, 404);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -44,10 +49,13 @@ module.exports = (err, req, res, next) => {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === 'production') {
     //->HANDLE BAD TOUR NAME ERR
-    //1. 127.0.0.1:3000/api/v1/tours/wwww creates an invalid id req which causes internal mongoose error which we need to respond in production
+    //1. 127.0.0.1:3000/api/v1/tours/wwww creates an invalid id GET req which causes internal mongoose error which we need to respond in production
     let error;
-    if (err.name === 'CastError') error = handleCastErrorDB(err); //this will create a custom appErr
+    if (err.name === 'CastError') error = handleCastErrorDB(err); //this will create a custom appErr - err.name CastError caused by mongoose
+    //->HANDLE UNIQUE FIELD ERR
+    //127.0.0.1:3000/api/v1/tours with already allocated unique value via POST method
+    if (err.code === 11000) error = handleDublicateFieldsDB(err); //this will create a custom appErr - err.code 11000 caused by MongoDB
 
-    sendErrorProd(error, res); //send err in production
+    sendErrorProd(error, res); //send custom err in production
   }
 };
