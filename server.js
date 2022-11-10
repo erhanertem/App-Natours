@@ -16,11 +16,14 @@ const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
-mongoose.connect(DB).then(() => {
-  // mongoose.connect(DB).then(connection => {
-  // console.log(connection.connections);
-  console.log('DB connection success');
-}); //mongoose connect returns a promise and we then handle with then to log the promise.
+mongoose
+  .connect(DB)
+  .then(() => {
+    // mongoose.connect(DB).then(connection => {
+    // console.log(connection.connections);
+    console.log('DB connection success');
+  }) //mongoose connect returns a promise and we then handle with then to log the promise.
+  .catch(err => console.log('ERROR')); //Unhandled rejection err handling
 // //--->MONGODB LOCAL HOSTED CONNECTION
 // mongoose.connect(process.env.DATABASE_LOCAL).then(() => {
 //   console.log('DB connection success');
