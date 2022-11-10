@@ -42,3 +42,14 @@ process.on('unhandledRejection', err => {
   }); //gracefully closes the server
   // process.exit(1); //abruptly ends all operations..not preferable..
 });
+
+//--> GLOBAL NODE.JS EVENT LISTENER FOR UNHANDLED EXCEPTIONS ERR
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+console.log(x); //An example of an unhandled exception..Logging something that does not exist!
