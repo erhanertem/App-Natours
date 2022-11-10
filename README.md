@@ -33,6 +33,7 @@
 | npm i slugify         | https://www.npmjs.com/package/slugify      | Slugifies the strings                                                                                 |
 | npm i validator       | https://www.npmjs.com/package/validator    | A library of string validators and sanitizers                                                         |
 | npm i bcryptjs        | https://www.npmjs.com/package/bcryptjs     | Optimized bcrypt in JavaScript with zero dependencies                                                 |
+| npm i jsonwebtoken    | https://www.npmjs.com/package/jsonwebtoken | An implementation of JSON Web Tokens                                                                  |
 
 </details>
 
