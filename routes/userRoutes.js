@@ -3,11 +3,15 @@ const express = require('express');
 
 //-->#1.IMPORT CUSTOM MODULE
 const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
 
 //-->#3.DEFINE ROUTES
+
+router.post('/signup', authController.signup);
+
 router
   .route('/')
   .get(userController.getAllUsers)
