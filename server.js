@@ -7,10 +7,11 @@ const dotenv = require('dotenv'); //FIRST CONFIGURE THE ENVIRONMENT
 dotenv.config({ path: './config.env' }); //dotenv module acquires env data from the config.env file and assings them to process.env
 // console.log(app.get('env')); //Shows current enviroment we are in.
 // console.log(process.env); //Node enviroment...
+
 //--> GLOBAL NODE.JS EVENT LISTENER FOR UNHANDLED EXCEPTIONS ERR
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
+  console.log(err.name);
   process.exit(1);
 }); //HANDLING HERE BEFORE ALL HELPS TO CATCH A MAJORITY OF UNHANDLED EXCEPTIONS
 
@@ -49,4 +50,4 @@ process.on('unhandledRejection', err => {
   // process.exit(1); //abruptly ends all operations..not preferable..
 });
 
-console.log(x); //An example of an unhandled exception..Logging something that does not exist!
+// console.log(x); //An example of an unhandled exception..Logging something that does not exist!

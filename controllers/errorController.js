@@ -56,7 +56,9 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     //->HANDLE BAD GET TOUR NAME ERR
     //1. 127.0.0.1:3000/api/v1/tours/wwww creates an invalid id GET req which causes internal mongoose error which we need to respond in production
-    let error;
+
+    let error = Object.create(err); // let error = { ...err };
+
     if (err.name === 'CastError') error = handleCastErrorDB(err); //this will create a custom appErr - err.name CastError caused by mongoose
     //->HANDLE UNIQUE FIELD POST INPUT ERR
     //127.0.0.1:3000/api/v1/tours with already allocated unique value via POST method
