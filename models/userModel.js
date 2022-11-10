@@ -24,6 +24,14 @@ const userSchema = new mongoose.Schema({
   passwordConfirm: {
     type: String,
     required: [true, 'Please confirm your password'],
+    validate: {
+      //custom validator that checks if password input is equal to confirm password input..
+      //NOTE: THIS ONLY WORKS ON CREATE AND SAVE!!
+      validator: function (el) {
+        return el === this.password;
+      },
+      message: 'Passwords are no the same.',
+    },
   },
 });
 
