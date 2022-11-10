@@ -7,6 +7,12 @@ const dotenv = require('dotenv'); //FIRST CONFIGURE THE ENVIRONMENT
 dotenv.config({ path: './config.env' }); //dotenv module acquires env data from the config.env file and assings them to process.env
 // console.log(app.get('env')); //Shows current enviroment we are in.
 // console.log(process.env); //Node enviroment...
+//--> GLOBAL NODE.JS EVENT LISTENER FOR UNHANDLED EXCEPTIONS ERR
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+}); //HANDLING HERE BEFORE ALL HELPS TO CATCH A MAJORITY OF UNHANDLED EXCEPTIONS
 
 //-->IMPORT EXPRESS APP MODULE
 const app = require('./app'); //LATER RUN THE APP SO THAT WE MAKE PROCESS VARIABLE AVAILABE TO APP
@@ -41,15 +47,6 @@ process.on('unhandledRejection', err => {
     process.exit(1);
   }); //gracefully closes the server
   // process.exit(1); //abruptly ends all operations..not preferable..
-});
-
-//--> GLOBAL NODE.JS EVENT LISTENER FOR UNHANDLED EXCEPTIONS ERR
-process.on('uncaughtException', err => {
-  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
-  console.log(err.name, err.message);
-  server.close(() => {
-    process.exit(1);
-  });
 });
 
 console.log(x); //An example of an unhandled exception..Logging something that does not exist!
