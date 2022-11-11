@@ -49,6 +49,15 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined; //Erase this unnecessary data after the validation....Does not persist to the user database...
 });
 
+//--->MONGOOSE MODEL INSTANCE METHOD FOR LOGIN AUTHENTICATION
+//NOTE: INSTANCE METHOD ADDS A FUNCTION AND MAKES IT AVAILABLE TO ALL DOCS IN THE DATABASE
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  userPassword
+) {
+  return await bcrypt.compare(candidatePassword, userPassword); //bcrypt compare function is an async operation per its API documentation
+};
+
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA FOR A USER
 const User = mongoose.model('User', userSchema);
 
