@@ -55,7 +55,7 @@ userSchema.methods.correctPassword = async function (
   candidatePassword,
   userPassword
 ) {
-  return await bcrypt.compare(candidatePassword, userPassword); //bcrypt compare function is an async operation per its API documentation
+  return await bcrypt.compare(candidatePassword, userPassword); //bcrypt compare function is an async Boolean output operation per its API documentation
 };
 
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA FOR A USER

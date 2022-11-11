@@ -36,6 +36,7 @@ exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   //->1.Check if email and password exist
+  // if !(email && password) {
   if (!email || !password) {
     return next(new AppError('Please provide email and password!', 400));
   }
@@ -47,11 +48,10 @@ exports.login = catchAsync(async (req, res, next) => {
   // We have to check if typed-in pass1234 === '$2a$12$QqRQD.PbDT3ez08SXBYsseLja98oDl4T6K7tq5Sa/yRgVbStKfcnm' password for the matching user...
   // const correct = await user.correctPassword(password, user.password); //Have bcrypt check if typed-in password checks with the one in the database...
 
-  // if (!user || !correct) {
   if (
     // !(user && (await user.correctPassword(password, user.password))) //correctPassword instance method is a async function which returns a promise which here we need to await for...
     !user ||
-    !(await user.correctPassword(password, user.password)) //correctPassword instance method is a async function which returns a promise which here we need to await for...
+    !(await user.correctPassword(password, user.password)) //correctPassword instance method is a async function which returns a promise which here we need to await for...(bcrypt.compare returns boolean value so does correctPassword eventually)
   ) {
     return next(new AppError('Incorrect email or password', 401)); //NOTE: We gather the error of either an incorrect user or a password in one go which is a vague information for the hacker. Have we handle the errors seperately, hacker would have a better understanding of whats the err.
   }
