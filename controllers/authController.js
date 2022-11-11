@@ -3,12 +3,11 @@ const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-const signToken = id => {
-  // return jwt.sign({ id: id }, process.env.JWT_SECRET, {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
+const signToken = id =>
+  // jwt.sign({ id: id }, process.env.JWT_SECRET, {
+  jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   }); //payload,secretkey,{option}
-};
 
 exports.signup = catchAsync(async (req, res, next) => {
   // const newUser = await User.create(req.body); //VERY IMPORTANT! USING re.body AS AN INPUT ENTAILS SECURITY PROBLEM.
@@ -50,6 +49,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // if (!user || !correct) {
   if (
+    // !(user && (await user.correctPassword(password, user.password))) //correctPassword instance method is a async function which returns a promise which here we need to await for...
     !user ||
     !(await user.correctPassword(password, user.password)) //correctPassword instance method is a async function which returns a promise which here we need to await for...
   ) {
