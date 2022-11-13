@@ -49,7 +49,7 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined; //Erase this unnecessary data after the validation....Does not persist to the user database...
 });
 
-//--->MONGOOSE MODEL INSTANCE METHOD FOR LOGIN AUTHENTICATION
+//--->MONGOOSE MODEL INSTANCE METHOD FOR LOGIN AUTHENTICATION (CUSTOM MONGOOSE DCUMENT MIDDLEWARE)
 //NOTE: INSTANCE METHOD ADDS A FUNCTION AND MAKES IT AVAILABLE TO ALL DOCS IN THE DATABASE
 userSchema.methods.correctPassword = async function (
   candidatePassword,

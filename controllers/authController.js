@@ -1,3 +1,5 @@
+// const util = require('util');
+const { promisify } = require('util'); //We owuld only need the promisify function from the util
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
@@ -43,11 +45,10 @@ exports.login = catchAsync(async (req, res, next) => {
 
   //->2.Check if user(via email) exists && password is correct
   // const user = User.findOne({email: email})
-  const user = await User.findOne({ email }).select('+password'); //Find the typed-in user from the database and retrieve its hashed password along with it if it exists...
-  console.log(user);
+  const user = await User.findOne({ email }).select('+password'); //Find the typed-in user from the database and retrieve its hashed password along with it if it exists...(+) means include (-) means exclude. Withoud (+), user's email will be dropped and only password will be returned in the promise.
+  console.log('🎪', user);
   // We have to check if typed-in pass1234 === '$2a$12$QqRQD.PbDT3ez08SXBYsseLja98oDl4T6K7tq5Sa/yRgVbStKfcnm' password for the matching user...
   // const correct = await user.correctPassword(password, user.password); //Have bcrypt check if typed-in password checks with the one in the database...
-
   if (
     // !(user && (await user.correctPassword(password, user.password))) //correctPassword instance method is a async function which returns a promise which here we need to await for...
     !user ||
@@ -57,7 +58,37 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   //->3.If everything ok, send token to client
-  const token = signToken(user._id);
+  const token = signToken(user._id); //(Synchronous) Returns the JsonWebToken as string
 
   res.status(200).json({ status: 'success', token });
+});
+
+exports.protect = catchAsync(async (req, res, next) => {
+  //->1.Check if we have a token for access
+  //NOTE: req.headers is a Web HTTP API. The headers may carry token information in either GET or POST operations. You can send the token in the body if you want, there's nothing preventing you from doing that. However, GET requests don't have a body and so the only way to send the token there is via a header or a query parameter and now on the server you'd have to check the body and the header separately depending on the route. It's better to just keep it consistent and send the token in the header.
+  //IMPORTANT JWT implementation on the headers is bind by standards. As such key/value pair in the header should be 'authorization' / 'Bearer token_cryptic_code...'
+  let token;
+  if (
+    req.headers.authorization && //if we GET a header with a key of Authorization and value starting with Bearer...
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1]; //We strip Bearer from the actual JWToken string..
+  }
+  // console.log(token);
+
+  if (!token) {
+    return next(
+      new AppError('You are not logged in! Please login to get access', 401)
+    ); //We stop the user to proceed further if he is missing a token first... Token created @ login...
+  }
+
+  //->2.Verify token
+  // const decoded = jwt.verify(token, process.env.JWT_SECRET); //Sync version
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); //Async version - By default ( jwt.verify ) is synchronous, but we made it asynchronous by Promisifying it via node.js util library so it doesn't block the event loop as hashing tends to take a fairly significant amount of time.
+  console.log('🎁', decoded);
+  //->3.If token verified, check if user still exists(not expired)
+
+  //->4.Check if user changed password after the token was issued
+
+  next();
 });
