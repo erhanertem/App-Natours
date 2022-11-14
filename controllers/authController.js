@@ -88,8 +88,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); //Async version - By default ( jwt.verify ) is synchronous, but we made it asynchronous by Promisifying it via node.js util library so it doesn't block the event loop as hashing tends to take a fairly significant amount of time.
   // console.log('🎁', decoded);
   //->3.Check if the user still exists(not deleted) - This stage is responsible to check if the payload is not tempered and matches the user supplied
-  const matchUser = await User.findById(decoded.id);
-  if (!matchUser) {
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
     return next(
       new AppError(
         'The user belonging to this token does no longer exist.',
@@ -98,13 +98,13 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   }
   //->4.Check if user changed password after the token was issued
-  if (matchUser.changedPasswordAfter(decoded.iat)) {
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('User recently changed password! Please log in again.', 401)
     );
   } //IF TRUE (PASSWORD CHANGED)
 
   //GRANT ACCESS TO THE PROTECTED ROUTE
-  req.user = matchUser;
+  req.user = currentUser;
   next();
 });
