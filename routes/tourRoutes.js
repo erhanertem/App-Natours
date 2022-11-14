@@ -29,7 +29,11 @@ router
   .route('/:id')
   .get(tourController.getTour)
   .patch(tourController.updateTour)
-  .delete(tourController.deleteTour);
+  .delete(
+    authController.protect, //check for correct token with matching user and password, clear out security
+    authController.restrictTo('admin', 'lead-guide'), //restrict the deletion of tour to admin or lead-guide middleware call
+    tourController.deleteTour
+  );
 
 //-->#4.EXPORT MODULE
 module.exports = router;
