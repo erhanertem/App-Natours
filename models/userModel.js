@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema({
       message: 'Passwords are no the same.',
     },
   },
+  passwordChangedAt: Date,
 });
 
 //--->MONGOOSE DOCUMENT MIDDLEWARE
@@ -56,6 +57,18 @@ userSchema.methods.correctPassword = async function (
   userPassword
 ) {
   return await bcrypt.compare(candidatePassword, userPassword); //bcrypt compare function is an async Boolean output operation per its API documentation
+};
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = this.passwordChangedAt.getTime() / 1000; //revert to miliseconds format for comparison to JWTTimestamp
+    console.log(changedTimestamp, JWTTimestamp); //1556582400 1668416110
+
+    //FALSE MEANS NOT CHANGED
+    return JWTTimestamp < changedTimestamp; // 1668416110 < 1556582400
+  }
+
+  //FALSE MEANS NOT CHANGED
+  return false;
 };
 
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA FOR A USER
