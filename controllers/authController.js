@@ -85,9 +85,17 @@ exports.protect = catchAsync(async (req, res, next) => {
   //->2.Verify token
   // const decoded = jwt.verify(token, process.env.JWT_SECRET); //Sync version
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET); //Async version - By default ( jwt.verify ) is synchronous, but we made it asynchronous by Promisifying it via node.js util library so it doesn't block the event loop as hashing tends to take a fairly significant amount of time.
-  console.log('🎁', decoded);
-  //->3.If token verified, check if user still exists(not expired)
-
+  // console.log('🎁', decoded);
+  //->3.Check if the user still exists(not deleted) - This stage is responsible to check if the payload is not tempered and matches the user supplied
+  const matchUser = await User.findById(decoded.id);
+  if (!matchUser) {
+    return next(
+      new AppError(
+        'The user belonging to this token does no longer exist.',
+        401
+      )
+    );
+  }
   //->4.Check if user changed password after the token was issued
 
   next();

@@ -72,8 +72,10 @@ module.exports = (err, req, res, next) => {
     //->HANDLE IRRELEVANT FIELD/VALIDATOR VIOLATOR PATCH INPUT ERR
     //127.0.0.1:3000/api/v1/tours/63692be1ddf2bad76f5b8398
     if (err.name === 'ValidationError') error = handleValidationErrorDB(err); //this will create a custom appErr - err.name ValidationError caused by mongoose
-    if (err.name === 'JsonWebTokenError') error = handleJWTError(err); // err if no token available
-    if (err.name === 'TokenExpiredError') error = handleJWTExpiredError(err); //err if token is not valid anymore
+    // if (err.name === 'JsonWebTokenError') error = handleJWTError(err); // err if no token available
+    if (err.name === 'JsonWebTokenError') error = handleJWTError(); // err if no token available
+    // if (err.name === 'TokenExpiredError') error = handleJWTExpiredError(err); //err if token is not valid anymore
+    if (err.name === 'TokenExpiredError') error = handleJWTExpiredError(); //err if token is not valid anymore
 
     sendErrorProd(error, res); //send custom err in production
   }
