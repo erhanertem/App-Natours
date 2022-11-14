@@ -104,5 +104,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
   } //IF TRUE (PASSWORD CHANGED)
 
+  //GRANT ACCESS TO THE PROTECTED ROUTE
+  req.user = matchUser;
   next();
 });
