@@ -3,6 +3,8 @@ const crypto = require('crypto'); //built-in node.js module
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const { nextTick } = require('process');
+const { runInThisContext } = require('vm');
 
 //->CREATE A BASIC MONGOOSE SCHEMA FOR USERS
 const userSchema = new mongoose.Schema({
@@ -56,6 +58,14 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);
   //->Delete the confirm-password field
   this.passwordConfirm = undefined; //Erase this unnecessary data after the validation....Does not persist to the user database...
+  next();
+});
+
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next(); //IF WE DID NOT CHANGE THE PASSWORD OR THE DOCUMENT IS NEW, DO NOT MANIPULATE THE PASSWORDCHANGEDAT FIELD VALUE..ISNEW MONGOOSE DOCUMENT PROPERTY IS A BOOLEAN FLAG THAT DECLARES DOC AS NEW OR NOT
+
+  this.passwordChangedAt = Date.now() - 1000; //ISSUING JWT TAKES SHORTER THAN SAVING TO DATABASE. IN ORDER TO AVOID INVALID TOKEN DUE TO TIMESTAMP DELAY, WE DIRTY FIX IT BY SUBSTRACTING 1s
+  next();
 });
 
 //--->MONGOOSE MODEL INSTANCE METHODS FOR LOGIN AUTHENTICATION (CUSTOM MONGOOSE DCUMENT MIDDLEWARE)
@@ -78,7 +88,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   return false;
 };
 userSchema.methods.createPasswordResetToken = function () {
-  const resetToken = crypto.randomBytes(36).toString('hex'); //This creates a 72 characters long, cryptographically strong (very random) password using hexadecimal encoding (numbers 0-9, letters A-F).
+  const resetToken = crypto.randomBytes(32).toString('hex'); //This creates a 64 characters long, cryptographically strong (very random) password using hexadecimal encoding (numbers 0-9, letters A-F).
 
   this.passwordResetToken = crypto
     .createHash('sha256')

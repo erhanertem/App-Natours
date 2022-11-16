@@ -14,7 +14,7 @@ router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
 router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.forgotPassword); //resetpassword with the temp passtoken
+router.patch('/resetPassword/:token', authController.resetPassword); //resetpassword with the temp passtoken
 
 router
   .route('/') //Instead of repeating the HTTP verb for every single route, we define a common HTTP verb from which multiple HTTP methods do share
