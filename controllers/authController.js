@@ -145,13 +145,32 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}. \nIf you didn't forget your password, please ignore this email.`;
 
-  await sendEmail({
-    email: user.email, //email:req.body.email -- same as --
-    subject: 'Your password reset token (valid for 10 min)',
-    message,
-  });
+  try {
+    await sendEmail({
+      email: user.email, //email:req.body.email -- same as --
+      subject: 'Your password reset token (valid for 10 min)',
+      message,
+    });
 
-  res.status(200).json({ status: 'success', message: 'Token sent to email!' });
+    res
+      .status(200)
+      .json({ status: 'success', message: 'Token sent to email!' });
+  } catch (err) {
+    //modify data
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    //Save the changes to data
+    await user.save({ validateModifiedOnly: true });
+
+    return next(
+      new AppError(
+        'There was an error sending the email. Try again later!',
+        500
+      )
+    );
+  }
+
+  // res.status(200).json({ status: 'success', message: 'Token sent to email!' });
 });
 
-exports.resetPassword = (req, res, next) => {};
+// exports.resetPassword = (req, res, next) => {};
