@@ -1,4 +1,5 @@
 //-->IMPORT 3RD PARTY MODULE
+const crypto = require('crypto'); //built-in node.js module
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -41,6 +42,8 @@ const userSchema = new mongoose.Schema({
     },
   },
   passwordChangedAt: Date,
+  passwordResetToken: String,
+  passwordResetExpires: Date, //define token expiration timeframe for accessing resetToken
 });
 
 //--->MONGOOSE DOCUMENT MIDDLEWARE
@@ -55,7 +58,7 @@ userSchema.pre('save', async function (next) {
   this.passwordConfirm = undefined; //Erase this unnecessary data after the validation....Does not persist to the user database...
 });
 
-//--->MONGOOSE MODEL INSTANCE METHOD FOR LOGIN AUTHENTICATION (CUSTOM MONGOOSE DCUMENT MIDDLEWARE)
+//--->MONGOOSE MODEL INSTANCE METHODS FOR LOGIN AUTHENTICATION (CUSTOM MONGOOSE DCUMENT MIDDLEWARE)
 //NOTE: INSTANCE METHOD ADDS A FUNCTION AND MAKES IT AVAILABLE TO ALL DOCS IN THE DATABASE
 userSchema.methods.correctPassword = async function (
   candidatePassword,
@@ -71,10 +74,22 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
     //FALSE MEANS NOT CHANGED
     return JWTTimestamp < changedTimestamp; // 1668416110 < 1556582400
   }
-
   //FALSE MEANS NOT CHANGED
   return false;
 };
+userSchema.methods.createPasswordResetToken = function () {
+  const resetToken = crypto.randomBytes(36).toString('hex'); //This creates a 72 characters long, cryptographically strong (very random) password using hexadecimal encoding (numbers 0-9, letters A-F).
+
+  this.passwordResetToken = crypto
+    .createHash('sha256')
+    .update(resetToken)
+    .digest('hex'); //Update the resetToken with a sha256 hashing and then store it as a hexadecimal...
+  // console.log('👚', { resetToken }, this.passwordResetToken);
+
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000; //10 minutes from now password token expires
+
+  return resetToken;
+}; //It creates a use with a temp password to change his password
 
 //->CREATE A MODEL OUT OF THE CREATED SCHEMA FOR A USER
 const User = mongoose.model('User', userSchema);

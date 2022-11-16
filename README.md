@@ -34,6 +34,7 @@
 | npm i validator       | https://www.npmjs.com/package/validator    | A library of string validators and sanitizers                                                         |
 | npm i bcryptjs        | https://github.com/dcodeIO/bcrypt.js       | Optimized bcrypt in JavaScript with zero dependencies                                                 |
 | npm i jsonwebtoken    | https://www.npmjs.com/package/jsonwebtoken | An implementation of JSON Web Tokens                                                                  |
+| npm i nodemailer      | https://nodemailer.com/about/              | Send emails from Node.js                                                                              |
 
 </details>
 

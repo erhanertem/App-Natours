@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const sendEmail = require('../utils/email');
 
 const signToken = id =>
   // jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -19,6 +20,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
     passwordChangedAt: req.body.passwordChangedAt,
+    passwordResetToken: req.body.passwordResetToken,
+    passwordResetExpires: req.body.passwordResetExpires,
     role: req.body.role,
   });
 
@@ -48,7 +51,7 @@ exports.login = catchAsync(async (req, res, next) => {
   //->2.Check if user(via email) exists && password is correct
   // const user = User.findOne({email: email})
   const user = await User.findOne({ email }).select('+password'); //Find the typed-in user from the database and retrieve its hashed password along with it if it exists...(+) means include (-) means exclude. Withoud (+), user's email will be dropped and only password will be returned in the promise.
-  console.log('🎪', user);
+  // console.log('🎪', user);
   // We have to check if typed-in pass1234 === '$2a$12$QqRQD.PbDT3ez08SXBYsseLja98oDl4T6K7tq5Sa/yRgVbStKfcnm' password for the matching user...
   // const correct = await user.correctPassword(password, user.password); //Have bcrypt check if typed-in password checks with the one in the database...
   if (
@@ -121,3 +124,34 @@ exports.restrictTo =
     }
     next(); //Moveon to the next middleware
   };
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+  //->#1.Get user based on POSTed email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new AppError('There is no user with this email address', 404));
+  }
+
+  //->#2.Generate the random reset token
+  const resetToken = user.createPasswordResetToken();
+  // await user.save({ validateBeforeSave: false }); //Temporarily  disables all the validators before saving the data - MONGOOSE document SAVE() method async to save all changes and get it updated on the database
+  await user.save({ validateModifiedOnly: true }); //Temporarily  bypass all the validators except for the one modified before saving the data - MONGOOSE document SAVE() method async to save all changes and get it updated on the database
+
+  //->#3.Send it to user's email
+  //Create a resetURL hyperlink with
+  const resetURL = `${req.protocol}://${req.get(
+    'host'
+  )}/api/v1/users/resetPassword/${resetToken}`;
+
+  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL}. \nIf you didn't forget your password, please ignore this email.`;
+
+  await sendEmail({
+    email: user.email, //email:req.body.email -- same as --
+    subject: 'Your password reset token (valid for 10 min)',
+    message,
+  });
+
+  res.status(200).json({ status: 'success', message: 'Token sent to email!' });
+});
+
+exports.resetPassword = (req, res, next) => {};
