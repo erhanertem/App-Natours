@@ -1,3 +1,4 @@
+//-->IMPORT 3RD PARTY MODULE
 const crypto = require('crypto'); //built-in node.js module
 const { promisify } = require('util'); //We would only need the promisify function from the util module. // const util = require('util');
 const jwt = require('jsonwebtoken');
@@ -7,11 +8,22 @@ const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
 const { nextTick } = require('process');
 
+//-->HELPER FUNCTIONS
 const signToken = id =>
   // jwt.sign({ id: id }, process.env.JWT_SECRET, {
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   }); //payload,secretkey,{option}
+const createSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user, //user: user,
+    },
+  });
+};
 
 exports.signup = catchAsync(async (req, res, next) => {
   // const newUser = await User.create(req.body); //VERY IMPORTANT! USING re.body AS AN INPUT ENTAILS SECURITY PROBLEM.
@@ -29,15 +41,15 @@ exports.signup = catchAsync(async (req, res, next) => {
   // const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
   //   expiresIn: process.env.JWT_EXPIRES_IN,
   // }); //payload,secretkey,{option}
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser,
-    },
-  });
+  createSendToken(newUser, 201, res);
+  // const token = signToken(newUser._id);
+  // res.status(201).json({
+  //   status: 'success',
+  //   token,
+  //   data: {
+  //     user: newUser,
+  //   },
+  // });
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -64,9 +76,9 @@ exports.login = catchAsync(async (req, res, next) => {
   }
 
   //->3.If everything ok, send token to client
-  const token = signToken(user._id); //(Synchronous) Returns the JsonWebToken as string
-
-  res.status(200).json({ status: 'success', token });
+  createSendToken(user, 200, res);
+  // const token = signToken(user._id); //(Synchronous) Returns the JsonWebToken as string
+  // res.status(200).json({ status: 'success', token });
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -195,9 +207,31 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordResetExpires = undefined;
   await user.save(); //save with validators with no exceptions
 
-  //->#3.Update changedPasswordAt property for the user thru premiddleware
+  //->#3.Update changedPasswordAt property for the user
+  // Thru pre - save middleware @usermodel.js
   //->#4.Log the user in, send JWT
-  const token = signToken(user._id);
+  createSendToken(user, 200, res);
+  // const token = signToken(user._id);
+  // res.status(200).json({ status: 'success', token });
+});
 
-  res.status(200).json({ status: 'success', token });
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  //->#1.Get user from the database with its password
+  console.log('🩳', req, req.user);
+  const user = await User.findById(req.user.id).select('+password');
+
+  //->#2.Check if POSTed current password is correct
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password is wrong.', 401));
+  }
+
+  //->#3.If so, update password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save(); //save with validators with no exceptions
+
+  //->#4.Log user in, send JWT
+  createSendToken(user, 200, res);
+  // const token = signToken(user._id);
+  // res.status(200).json({ status: 'success', token });
 });

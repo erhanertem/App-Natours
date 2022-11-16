@@ -68,7 +68,7 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-//--->MONGOOSE MODEL INSTANCE METHODS FOR LOGIN AUTHENTICATION (CUSTOM MONGOOSE DCUMENT MIDDLEWARE)
+//--->MONGOOSE MODEL INSTANCE METHODS FOR LOGIN AUTHENTICATION (CUSTOM MONGOOSE DOCUMENT MIDDLEWARE)
 //NOTE: INSTANCE METHOD ADDS A FUNCTION AND MAKES IT AVAILABLE TO ALL DOCS IN THE DATABASE
 userSchema.methods.correctPassword = async function (
   candidatePassword,
@@ -76,6 +76,7 @@ userSchema.methods.correctPassword = async function (
 ) {
   return await bcrypt.compare(candidatePassword, userPassword); //bcrypt compare function is an async Boolean output operation per its API documentation
 };
+
 userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = this.passwordChangedAt.getTime() / 1000; //revert to miliseconds format for comparison to JWTTimestamp
@@ -87,6 +88,7 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   //FALSE MEANS NOT CHANGED
   return false;
 };
+
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex'); //This creates a 64 characters long, cryptographically strong (very random) password using hexadecimal encoding (numbers 0-9, letters A-F).
 
