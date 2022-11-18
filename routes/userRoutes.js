@@ -20,7 +20,9 @@ router.patch(
   '/updateMyPassword',
   authController.protect,
   authController.updatePassword
-); //update password of logged in user
+); //Update password of logged in user
+
+router.patch('/updateMe', authController.protect, userController.updateMe); //Let the user update his own data
 
 router
   .route('/') //Instead of repeating the HTTP verb for every single route, we define a common HTTP verb from which multiple HTTP methods do share
