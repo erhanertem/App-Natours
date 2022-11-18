@@ -5,6 +5,7 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 
 //-->IMPORT CUSTOM MODULES
 const AppError = require('./utils/appError');
@@ -39,6 +40,11 @@ app.use('/api', limiter); //WE APPLY THIS MIDDLEWARE WHICH EFFECTS ALL ROUTES ST
 
 //->BODY PARSER, READING DATA FROM BODY INTO REQ.BODY
 app.use(express.json({ limit: '10kb' })); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING. Anything larger than 10kb is not be accepted.
+
+//->DATA SANITIZATION AGAINST NOSQL QUERY INJECTIONS
+app.use(mongoSanitize());
+
+//->DATA SANITIZATION AGAINST XSS
 
 //->SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
