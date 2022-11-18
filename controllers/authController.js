@@ -14,8 +14,27 @@ const signToken = id =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   }); //payload,secretkey,{option}
+
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
+
+  //WE PACK THE JSON WEB TOKEN WITHIN A COOKIE TO PROTECT IT
+  //Express.js res.cookie() method for sending a cookie
+  //nameofthecookie, datatobesendwiththecookie,{options}
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ), //COOKIE EXPIRES IN 90 DAYS FROM THE DAY ITS ISSUED
+    // secure: true, //cookie is only sent tru https connection
+    httpOnly: true, //cookie could not be accessed or changed via browser in any way SUCH AS CROSS-SITE SCRIPT ATTACKS
+  };
+
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //cookie is only sent tru https connection
+  res.cookie('jwt', token, cookieOptions);
+
+  //Remove password from the output
+  user.password = undefined;
+
   res.status(statusCode).json({
     status: 'success',
     token,

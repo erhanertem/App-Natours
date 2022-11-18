@@ -76,7 +76,7 @@ userSchema.pre(/^find/, function (next) {
   //this points to the current query
   this.find({ active: { $ne: false } });
   next();
-}); //getAllUsers with active marked not false gets listed due to this pre-find middle
+}); //getAllUsers with active marked not false gets listed due to this pre-find*** middle
 
 //--->MONGOOSE MODEL INSTANCE METHODS FOR LOGIN AUTHENTICATION (CUSTOM MONGOOSE DOCUMENT MIDDLEWARE)
 //NOTE: INSTANCE METHOD ADDS A FUNCTION AND MAKES IT AVAILABLE TO ALL DOCS IN THE DATABASE
