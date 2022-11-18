@@ -44,7 +44,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   //   req.user,
   //   JSON.parse(JSON.stringify({ name, email, photo }))
   // );
-  const filteredReqBody = filterObj(req.body, 'name', 'email');
+  const filteredReqBody = filterObj(req.body, 'name', 'email'); //Allow only name and email to be passed onto user data for updating
   const user = Object.assign(req.user, filteredReqBody);
   await user.save({ validateModifiedOnly: true }); //save with validators with no exceptions
   // console.log('🎀', req.user, '🎁', req.body);
