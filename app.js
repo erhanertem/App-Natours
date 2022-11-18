@@ -3,6 +3,7 @@
 //-->IMPORT CORE MODULES
 const express = require('express');
 const morgan = require('morgan');
+const rateLimit = require('express-rate-limit');
 
 //-->IMPORT CUSTOM MODULES
 const AppError = require('./utils/appError');
@@ -13,13 +14,22 @@ const userRouter = require('./routes/userRoutes');
 //-->START EXPRESS.JS
 const app = express(); //Call express function to use its functions
 
-//-->#1.MIDDLEWARES
+//-->#1.GLOBAL MIDDLEWARES
 // console.log(process.env.NODE_ENV);
 //IF PROCESS.ENV SHOWS DEVELOPMENET FOR NODE_ENV THEN ONLY USE MORGAN.
 //NOTE: HOW DO WE HAVE ACCESS TO PROCESS.ENV IF ITS CALLED IN SERVER.JS. SERVER STARTS AND CALLS THE APP. PROCESS.ENV IS EALRLIER DEFINED ONCE BY THE DOTENV SO ITS AVAILABLE FOR EVERY FILE AFTER
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev')); //GLOBAL MIDDLEWARE - We used morgan with dev option - Console.log reporter @ node REPL
 }
+
+//IMPORTANT REQUEST LIMITER MIDDLEWARE TO COPE WITH D-O-S AND BRUTEFORCE ATTACKS
+const limiter = rateLimit({
+  windowMs: 60 * 60 * 1000, //60mins
+  max: 100, // Limit 100 requests per 60mins
+  message: 'Too many requests from this IP, please try again in an hour',
+});
+app.use('/api', limiter); //WE APPLY THIS MIDDLEWARE WHICH EFFECTS ALL ROUTES STARTING WITH /API...
+
 app.use(express.json()); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING.
 // app.use(express.static(`${__dirname}/public`)); //SERVING HTML CSS ETC STATIC FILES
 app.use((req, res, next) => {
