@@ -23,6 +23,7 @@ router.patch(
 ); //Update password of logged in user
 
 router.patch('/updateMe', authController.protect, userController.updateMe); //Let the user update his own data
+router.delete('/deleteMe', authController.protect, userController.deleteMe); //Let the user delete himself
 
 router
   .route('/') //Instead of repeating the HTTP verb for every single route, we define a common HTTP verb from which multiple HTTP methods do share

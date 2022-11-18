@@ -46,6 +46,10 @@ const userSchema = new mongoose.Schema({
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date, //define token expiration timeframe for accessing resetToken
+  active: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 //--->MONGOOSE DOCUMENT MIDDLEWARE

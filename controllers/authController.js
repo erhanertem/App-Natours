@@ -26,7 +26,7 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  // const newUser = await User.create(req.body); //VERY IMPORTANT! USING re.body AS AN INPUT ENTAILS SECURITY PROBLEM.
+  // const newUser = await User.create(req.body); //VERY IMPORTANT! USING req.body AS AN INPUT ENTAILS SECURITY PROBLEM.
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,

@@ -45,8 +45,14 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   //   JSON.parse(JSON.stringify({ name, email, photo }))
   // );
   const filteredReqBody = filterObj(req.body, 'name', 'email'); //Allow only name and email to be passed onto user data for updating
+  //->#1.Alternate code
   const user = Object.assign(req.user, filteredReqBody);
   await user.save({ validateModifiedOnly: true }); //save with validators with no exceptions
+  // //->#2.Alternate code
+  // const user = await User.findByIdAndUpdate(req.user.id, filteredReqBody, {
+  //   new: true, //return the modified document
+  //   runValidators: true,
+  // });
   // console.log('🎀', req.user, '🎁', req.body);
   //SEND RESPONSE
   res.status(200).json({
@@ -56,6 +62,19 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     },
   });
 }); //Let the user update his own data
+
+exports.deleteMe = catchAsync(async (req, res, next) => {
+  // //->#1.Alternate code
+  // const user = Object.assign(req.user, { active: false });
+  // await user.save({ validateModifiedOnly: true }); //save with validators with no exceptions
+  //->#2.Alternate code
+  await User.findByIdAndUpdate(req.user.id, { active: false });
+
+  res.status(204).json({
+    status: 'success',
+    data: null, //we send no data when deleting user
+  });
+});
 
 exports.createUser = (req, res) => {
   res
