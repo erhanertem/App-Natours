@@ -45,6 +45,7 @@ app.use(express.json({ limit: '10kb' })); //GLOBAL MIDDLEWARE - USEFULL FOR POST
 app.use(mongoSanitize());
 
 //->DATA SANITIZATION AGAINST XSS
+app.use(xss());
 
 //->SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
