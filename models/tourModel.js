@@ -109,7 +109,7 @@ const tourSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-      },
+      }, //VERY IMPORTANT! GUIDES FIELD IS JUST A CHILD REFERENCING TO ACTUAL DATA IN USER MODEL (ONLY CONTAINS THE REFERENCE)
     ], //For User, we wouldnt even need a module import..
     //Alternatingly, guides: [{ type: mongoose.Types.ObjectId, ref: 'User' }] OR guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
   }, //SCHEMA DEFINITIONS
