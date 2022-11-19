@@ -17,9 +17,7 @@ mongoose.connect(DB).then(() => {
 });
 
 //--->READ JSON FILE AND PARSE TO JS OBJECT
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8')
-); // we have to convert the JSON file content to javascipt object (array) to call in our JS code.
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8')); // we have to convert the JSON file content to javascipt object (array) to call in our JS code.
 
 //--->IMPORT DATA INTO DB
 const importData = async () => {
