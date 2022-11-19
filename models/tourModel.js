@@ -4,7 +4,7 @@ const slugify = require('slugify');
 const validator = require('validator');
 
 //-->IMPORT 3RD PARTY MODULES
-const User = require('./userModel');
+// const User = require('./userModel');
 
 //->CREATE A BASIC MONGOOSE SCHEMA
 const tourSchema = new mongoose.Schema(
@@ -105,7 +105,8 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    guides: Array, // guides: [],
+    guides: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], //For User, we wouldnt even need a module import..
+    //Alternatingly, guides: [{ type: mongoose.Types.ObjectId, ref: 'User' }]
   }, //SCHEMA DEFINITIONS
   {
     toJSON: { virtuals: true }, //allows virtuals to be visible to JSON convert
@@ -127,13 +128,13 @@ tourSchema.pre('save', function (next) {
   next(); //WE WOULD NEED THIS TO MOVE ON WITH THE NEXT MIDDLEWARE
 });
 
-tourSchema.pre('save', async function (next) {
-  const guidesPromises = this.guides.map(
-    async userId => await User.findById(userId)
-  );
-  this.guides = await Promise.all(guidesPromises);
-  next();
-});
+// tourSchema.pre('save', async function (next) {
+//   const guidesPromises = this.guides.map(
+//     async userId => await User.findById(userId)
+//   );
+//   this.guides = await Promise.all(guidesPromises);
+//   next();
+// });
 
 // tourSchema.pre('save', function (next) {
 //   console.log('Will save document...');
