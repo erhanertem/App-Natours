@@ -177,6 +177,16 @@ tourSchema.post(/^find/, function (docs, next) {
   // console.log(docs);
   next();
 });
+//-->MONGOOSE PREFIND QUERRY MIDDLEWARE/HOOK for populating child references in the Tour schema in order to make it available for getAlltours and getTour querry middlewares
+tourSchema.pre(/^find/, function (next) {
+  // this.populate('guides'); //VERY IMPORTANT: BY POPULATING 'GUIDES' FIELD IN A TOUR, THE REFERENCED DATA IS ACTUALLY FILLED IN BY USING THE REFERENCE IN THE TOUR SCHEMA
+  this.populate({
+    path: 'guides', //use guides field for fillup
+    select: '-__v -passwordChangedAt', //get rid of excess info on the returned response
+    match: { role: 'guide' }, //filter only peep with 'guide role...extra step!😊
+  }); //mongoose document.prototype.populate()
+  next();
+});
 
 //--->MONGOOSE AGGREGATION MIDDLEWARE
 //NOTE: We wanted to exclude the secretTour from the aggregation pipeline..The aggregate pipeline method returns an array object. So we add to the front of the array out extra line of match pieline stage that eliminates the data that bears secretTour true
