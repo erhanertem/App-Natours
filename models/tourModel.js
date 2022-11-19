@@ -105,8 +105,13 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    guides: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }], //For User, we wouldnt even need a module import..
-    //Alternatingly, guides: [{ type: mongoose.Types.ObjectId, ref: 'User' }]
+    guides: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ], //For User, we wouldnt even need a module import..
+    //Alternatingly, guides: [{ type: mongoose.Types.ObjectId, ref: 'User' }] OR guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
   }, //SCHEMA DEFINITIONS
   {
     toJSON: { virtuals: true }, //allows virtuals to be visible to JSON convert

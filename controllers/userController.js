@@ -5,7 +5,7 @@ const AppError = require('../utils/appError');
 
 //-->#2.HELPER FUNCTIONS
 const filterObj = (reqBody, ...allowedFields) => {
-  const newObj = new Object();
+  const newObj = {};
   Object.keys(reqBody).forEach(el => {
     if (allowedFields.includes(el)) newObj[el] = reqBody[el];
   });
