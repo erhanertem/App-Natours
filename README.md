@@ -21,24 +21,25 @@
 <details>
 <summary>Installed NPM packages and utilized APIs:</summary>
 
-| Package command              | Package link                                         | Description                                                                                                 |
-| ---------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| npm i -g nodemon             | https://www.npmjs.com/package/nodemon                | Nodemon is a helper tool for developing Node.js based applications.                                         |
-| npm i -g win-node-env        | https://www.npmjs.com/package/win-node-env           | Run npm scripts on Windows (package.JSON) that set (common) environment variables.                          |
-| npm i -g ndb                 | https://www.npmjs.com/package/ndb                    | An improved debugging experience for Node.js thru ChromeDevTools                                            |
-| npm i dotenv                 | https://www.npmjs.com/package/dotenv                 | Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env       |
-| npm i express                | https://www.npmjs.com/package/express                | Fast, unopinionated, minimalist web framework for Node.js                                                   |
-| npm i morgan                 | https://www.npmjs.com/package/morgan                 | HTTP request logger middleware for node terminal.js                                                         |
-| npm i mongoose               | https://www.npmjs.com/package/mongoose               | Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment (MongoDB driver) |
-| npm i slugify                | https://www.npmjs.com/package/slugify                | Slugifies the strings                                                                                       |
-| npm i validator              | https://www.npmjs.com/package/validator              | A library of string validators and sanitizers                                                               |
-| npm i bcryptjs               | https://github.com/dcodeIO/bcrypt.js                 | Optimized bcrypt in JavaScript with zero dependencies                                                       |
-| npm i jsonwebtoken           | https://www.npmjs.com/package/jsonwebtoken           | An implementation of JSON Web Tokens                                                                        |
-| npm i nodemailer             | https://nodemailer.com/about/                        | Send emails from Node.js                                                                                    |
-| npm i express-rate-limit     | https://www.npmjs.com/package/express-rate-limit     | Basic rate-limiting middleware for Express. (Security measure for DOS or Bruteforce attacks)                |
-| npm i helmet                 | https://www.npmjs.com/package/helmet                 | Helps you secure your Express apps by setting various HTTP headers. (Secure HTTP Headers)                   |
-| npm i express-mongo-sanitize | https://www.npmjs.com/package/express-mongo-sanitize | Sanitizes user-supplied data to prevent MongoDB Operator Injection.                                         |
-| npm i xss-clean              | https://www.npmjs.com/package/xss-clean              | Node.js Connect middleware to sanitize user input coming from POST body, GET queries, and url params.       |
+| Package command              | Package link                                         | Description                                                                                                     |
+| ---------------------------- | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| npm i -g nodemon             | https://www.npmjs.com/package/nodemon                | Nodemon is a helper tool for developing Node.js based applications.                                             |
+| npm i -g win-node-env        | https://www.npmjs.com/package/win-node-env           | Run npm scripts on Windows (package.JSON) that set (common) environment variables.                              |
+| npm i -g ndb                 | https://www.npmjs.com/package/ndb                    | An improved debugging experience for Node.js thru ChromeDevTools                                                |
+| npm i dotenv                 | https://www.npmjs.com/package/dotenv                 | Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env           |
+| npm i express                | https://www.npmjs.com/package/express                | Fast, unopinionated, minimalist web framework for Node.js                                                       |
+| npm i morgan                 | https://www.npmjs.com/package/morgan                 | HTTP request logger middleware for node terminal.js                                                             |
+| npm i mongoose               | https://www.npmjs.com/package/mongoose               | Mongoose is a MongoDB object modeling tool designed to work in an asynchronous environment (MongoDB driver)     |
+| npm i slugify                | https://www.npmjs.com/package/slugify                | Slugifies the strings                                                                                           |
+| npm i validator              | https://www.npmjs.com/package/validator              | A library of string validators and sanitizers                                                                   |
+| npm i bcryptjs               | https://github.com/dcodeIO/bcrypt.js                 | Optimized bcrypt in JavaScript with zero dependencies                                                           |
+| npm i jsonwebtoken           | https://www.npmjs.com/package/jsonwebtoken           | An implementation of JSON Web Tokens                                                                            |
+| npm i nodemailer             | https://nodemailer.com/about/                        | Send emails from Node.js                                                                                        |
+| npm i express-rate-limit     | https://www.npmjs.com/package/express-rate-limit     | Security: Basic rate-limiting middleware for Express. (Security measure for DOS or Bruteforce attacks)          |
+| npm i helmet                 | https://www.npmjs.com/package/helmet                 | Security: Helps you secure your Express apps by setting various HTTP headers. (Secure HTTP Headers)             |
+| npm i express-mongo-sanitize | https://www.npmjs.com/package/express-mongo-sanitize | Security: Sanitizes user-supplied data to prevent MongoDB Operator Injection.                                   |
+| npm i xss-clean              | https://www.npmjs.com/package/xss-clean              | Security: Node.js Connect middleware to sanitize user input coming from POST body, GET queries, and url params. |
+| npm i hpp                    | https://www.npmjs.com/package/hpp                    | Security: Express middleware to protect against HTTP Parameter Pollution attacks.                               |
 
 </details>
 

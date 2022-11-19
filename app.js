@@ -7,6 +7,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const hpp = require('hpp');
 
 //-->IMPORT CUSTOM MODULES
 const AppError = require('./utils/appError');
@@ -46,7 +47,22 @@ app.use(express.json({ limit: '10kb' })); //GLOBAL MIDDLEWARE - USEFULL FOR POST
 app.use(mongoSanitize());
 
 //->DATA SANITIZATION AGAINST XSS
-app.use(xss());
+app.use(xss()); //Against code injections thru input fields....
+
+//->PREVENT PARAMETER POLLUTION
+//NOTE: Express populates HTTP requests params with the same name in an array, and attacker can intentianally pollute request params to exploit this mechanism, which may allow bypassing the input validation or even result in DOS. HPP puts array parameters in req.query and/or req.body aside and just selects the last parameter value. However there are params that we would like to use side by side which could be whitelisted to narrow the scope of the hpp().
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingQuantity',
+      'ratingAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price',
+    ],
+  })
+); //this should be used by the end as it clears up query strings
 
 //->SERVING STATIC FILES
 app.use(express.static(`${__dirname}/public`));
