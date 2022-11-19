@@ -42,7 +42,12 @@ exports.getTour = catchAsync(async (req, res, next) => {
   // const tour = await Tour.findOne({ _id: req.params.id });
   //->findbyId() mongoose shorthand method
   const tour = await Tour.findById(req.params.id) //@tourRoutes we had .route('/:id') which should be matched by req.params.id here....If it was name then this should print name too...params is an express.js method for responding named route mapping
-    .populate('guides'); //VERY IMPORTANT: BY POPULATING 'GUIDES' FIELD IN A TOUR, THE REFERENCED DATA IS ACTUALLY FILLED IN BY USING THE REFERENCE IN THE TOUR SCHEMA
+    // .populate('guides'); //VERY IMPORTANT: BY POPULATING 'GUIDES' FIELD IN A TOUR, THE REFERENCED DATA IS ACTUALLY FILLED IN BY USING THE REFERENCE IN THE TOUR SCHEMA
+    .populate({
+      path: 'guides', //use guides field for fillup
+      select: '-__v -passwordChangedAt', //get rid of excess info on the returned response
+      match: { role: 'guide' }, //filter only peep with 'guide role...extra step!😊
+    }); //mongoose document.prototype.populate()
 
   //GUARD CLAUSE
   if (!tour) {
