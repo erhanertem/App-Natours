@@ -105,13 +105,14 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
+    //REFERENCE FIELD TO BE POPULATED DURING A QUERY
     guides: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: mongoose.ObjectId,
+        ref: 'User', //inline referencing
       }, //VERY IMPORTANT! GUIDES FIELD IS JUST A CHILD REFERENCING TO ACTUAL DATA IN USER MODEL (ONLY CONTAINS THE REFERENCE)
     ], //For User, we wouldnt even need a module import..
-    //Alternatingly, guides: [{ type: mongoose.Types.ObjectId, ref: 'User' }] OR guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }]
+    //Alternatingly, guides: [{ type: mongoose.Types.ObjectId, ref: 'User' }] OR guides: [{ type: mongoose.Schema.ObjectId, ref: 'User' }] OR guides: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
   }, //SCHEMA DEFINITIONS
   {
     toJSON: { virtuals: true }, //allows virtuals to be visible to JSON convert
