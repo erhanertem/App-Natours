@@ -27,7 +27,7 @@ const reviewSchema = new mongoose.Schema(
       required: [true, 'Review must belong to a tour'],
     },
     //PARENT REFERENCING FIELD TO USER
-    reviewer: {
+    user: {
       type: mongoose.ObjectId,
       ref: 'User', //inline referencing
       required: [true, 'Review must belong to a user'],
