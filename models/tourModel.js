@@ -105,7 +105,7 @@ const tourSchema = new mongoose.Schema(
         day: Number,
       },
     ],
-    //REFERENCE FIELD TO BE POPULATED DURING A QUERY
+    //CHILD REFERENCING FIELD TO BE POPULATED DURING A TOUR QUERY
     guides: [
       {
         type: mongoose.ObjectId,
