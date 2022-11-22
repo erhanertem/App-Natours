@@ -190,7 +190,7 @@ tourSchema.pre(/^find/, function (next) {
 });
 
 //--->MONGOOSE AGGREGATION MIDDLEWARE
-//NOTE: We wanted to exclude the secretTour from the aggregation pipeline..The aggregate pipeline method returns an array object. So we add to the front of the array out extra line of match pieline stage that eliminates the data that bears secretTour true
+//NOTE: We wanted to exclude the secretTour from the aggregation pipeline..The aggregate pipeline method returns an array object. So we add to the front of the array our extra line of match pipeline stage that eliminates the data that bears secretTour true
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
   console.log(this.pipeline()); //<this> points out to aggregation object
