@@ -143,7 +143,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //GRANT ACCESS TO THE PROTECTED ROUTE
   req.user = currentUser;
-  console.log('🧤', req.user);
+  // console.log('🧤', req.user);
   next();
 });
 
