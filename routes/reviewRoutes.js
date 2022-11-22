@@ -15,7 +15,7 @@ router
   .post(
     authController.protect,
     authController.restrictTo('user'),
-    reviewController.createReviews
+    reviewController.createReview
   );
 
 //-->#4.EXPORT MODULE

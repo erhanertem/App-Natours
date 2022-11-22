@@ -4,6 +4,7 @@ const express = require('express');
 //-->#1.IMPORT CUSTOM MODULES
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
+const reviewController = require('../controllers/reviewController');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
@@ -33,6 +34,18 @@ router
     authController.protect, //check for correct token with matching user and password, clear out security
     authController.restrictTo('admin', 'lead-guide'), //restrict the deletion of tour to admin or lead-guide middleware call
     tourController.deleteTour
+  );
+
+//NESTED ROUTES
+//POST  /tour/234fad4/reviews
+//GET  /tour/234fad4/reviews
+//GET  /tour/234fad4/reviews/04848784
+router
+  .route('/:tourId/reviews')
+  .post(
+    authController.protect,
+    authController.restrictTo('user'),
+    reviewController.createReview
   );
 
 //-->#4.EXPORT MODULE

@@ -2,11 +2,12 @@
 const crypto = require('crypto'); //built-in node.js module
 const { promisify } = require('util'); //We would only need the promisify function from the util module. // const util = require('util');
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
+
+//-->IMPORT CUSTOM MODULES
 const catchAsync = require('../utils/catchAsync');
+const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const sendEmail = require('../utils/email');
-const { nextTick } = require('process');
 
 //-->HELPER FUNCTIONS
 const signToken = id =>
@@ -142,6 +143,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //GRANT ACCESS TO THE PROTECTED ROUTE
   req.user = currentUser;
+  console.log('🧤', req.user);
   next();
 });
 
@@ -236,7 +238,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   //->#1.Get user from the database with its password
-  console.log('🩳', req, req.user);
+  // console.log('🩳', req, req.user);
   const user = await User.findById(req.user.id).select('+password');
 
   //->#2.Check if POSTed current password is correct
