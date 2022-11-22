@@ -42,9 +42,6 @@ const reviewSchema = new mongoose.Schema(
 //-->MONGOOSE PREFIND QUERRY MIDDLEWARE/HOOK for populating parent references in the Review schema in order to make it available for getAllreviews middleware
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
-    path: 'tour',
-    select: 'name photo',
-  }).populate({
     path: 'user',
     select: 'name photo',
   });
@@ -54,3 +51,7 @@ reviewSchema.pre(/^find/, function (next) {
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
+
+//POST  /tour/234fad4/reviews
+//GET  /tour/234fad4/reviews
+//GET  /tour/234fad4/reviews/04848784
