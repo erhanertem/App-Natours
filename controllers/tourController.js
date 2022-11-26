@@ -3,8 +3,6 @@
 
 //-->#1.IMPORT CUSTOM MODULES
 const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
-const APIFeatures = require('../utils/apiFeatures');
-// const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
@@ -19,25 +17,26 @@ exports.aliasTopTours = (req, res, next) => {
   next();
 };
 
-exports.getAllTours = catchAsync(async (req, res, next) => {
-  //EXECUTE QUERY
-  const features = new APIFeatures(Tour.find(), req.query) //(query object, express query string)
-    .filter()
-    .sort()
-    .limitFields()
-    .paginate(); //create an instance of APIFeatures class
-  const tours = await features.query;
+exports.getAllTours = factory.getAll(Tour);
+// exports.getAllTours = catchAsync(async (req, res, next) => {
+//   //EXECUTE QUERY
+//   const features = new APIFeatures(Tour.find(), req.query) //(query object, express query string)
+//     .filter()
+//     .sort()
+//     .limitFields()
+//     .paginate(); //create an instance of APIFeatures class
+//   const tours = await features.query;
 
-  //SEND SUCCESS RESPONSE
-  res.status(200).json({
-    status: 'success',
-    requestedAt: req.requestTime,
-    results: tours.length,
-    data: {
-      tours,
-    },
-  });
-});
+//   //SEND SUCCESS RESPONSE
+//   res.status(200).json({
+//     status: 'success',
+//     requestedAt: req.requestTime,
+//     results: tours.length,
+//     data: {
+//       tours,
+//     },
+//   });
+// });
 
 exports.getTour = factory.getOne(Tour, { path: 'reviews' });
 // exports.getTour = factory.getOne(Tour, 'reviews'); //Alternate if only one populate option

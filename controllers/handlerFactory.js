@@ -1,6 +1,7 @@
 //-->#1.IMPORT CUSTOM MODULES
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const APIFeatures = require('../utils/apiFeatures');
 
 //->A GENERALIZED VERSION OF DELETE FOR ANY DOCUMENT
 exports.deleteOne = Model =>
@@ -52,6 +53,32 @@ exports.createOne = Model =>
     const document = await Model.create(req.body); //save the returned promise in the newTour variable from the request data which is req.body
     //SUCCESS RESPONSE
     res.status(201).json({ status: 'success', data: { data: document } });
+  });
+
+//->A GENERALIZED VERSION OF GETALL FOR ANY DOCUMENT
+exports.getAll = Model =>
+  catchAsync(async (req, res, next) => {
+    //Get all reviews - To allow for nested GET reviews on tour
+    let filter = {};
+    if (req.params.tourId) filter = { tour: req.params.tourId }; //APPLIES FILTER IF REVIEWROUTER CATCHES ANY MERGED PARAMS FROM TOURROUTER - GET ALLREVIEWS FOR A TOUR ROUTE
+
+    //EXECUTE QUERY
+    const features = new APIFeatures(Model.find(filter), req.query) //(query object, express query string)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate(); //create an instance of APIFeatures class
+    const document = await features.query;
+
+    //SEND SUCCESS RESPONSE
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: document.length,
+      data: {
+        data: document,
+      },
+    });
   });
 
 //->A GENERALIZED VERSION OF GET FOR ANY DOCUMENT
