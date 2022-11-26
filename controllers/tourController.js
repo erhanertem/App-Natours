@@ -6,6 +6,7 @@ const Tour = require('../models/tourModel'); //Mongoose tour model needs to be i
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const factory = require('./handlerFactory');
 
 //-->#1.ROUTE HANDLERS
 
@@ -94,21 +95,22 @@ exports.updateTour = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.deleteTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.findByIdAndRemove(req.params.id);
+exports.deleteTour = factory.deleteOne(Tour);
+// exports.deleteTour = catchAsync(async (req, res, next) => {
+//   const tour = await Tour.findByIdAndRemove(req.params.id);
 
-  //GUARD CLAUSE
-  if (!tour) {
-    return next(new AppError('No tour found with that ID', 404));
-  } //if tour returns null value, create a new error object with a message and err code
-  //We use return here so that we can terminate immediately otherwise the code will run along.
+//   //GUARD CLAUSE
+//   if (!tour) {
+//     return next(new AppError('No tour found with that ID', 404));
+//   } //if tour returns null value, create a new error object with a message and err code
+//   //We use return here so that we can terminate immediately otherwise the code will run along.
 
-  //DELETE RESPONSE
-  res.status(204).json({
-    status: 'success',
-    data: null,
-  });
-});
+//   //DELETE RESPONSE
+//   res.status(204).json({
+//     status: 'success',
+//     data: null,
+//   });
+// });
 
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
