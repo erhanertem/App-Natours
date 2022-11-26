@@ -17,20 +17,29 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createReview = catchAsync(async (req, res, next) => {
+exports.setTourUserIds = (req, res, next) => {
   //Allow Nested Routes - User can manually specify
   if (!req.body.tour) req.body.tour = req.params.tourId;
   req.body.user = req.user._id; //retrieved from authController.protect
+  next();
+};
 
-  const newReview = await Review.create(req.body);
+exports.createReview = factory.createOne(Review);
+// exports.createReview = catchAsync(async (req, res, next) => {
+//   //NOTE: We take this out and put it in another middleware in order to use handlerfactory version of create
+//   // //Allow Nested Routes - User can manually specify
+//   // if (!req.body.tour) req.body.tour = req.params.tourId;
+//   // req.body.user = req.user._id; //retrieved from authController.protect
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      review: newReview,
-    },
-  });
-});
+//   const newReview = await Review.create(req.body);
+
+//   res.status(201).json({
+//     status: 'success',
+//     data: {
+//       review: newReview,
+//     },
+//   });
+// });
 
 exports.updateReview = factory.updateOne(Review);
 
