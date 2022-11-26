@@ -53,3 +53,35 @@ exports.createOne = Model =>
     //SUCCESS RESPONSE
     res.status(201).json({ status: 'success', data: { data: document } });
   });
+
+//->A GENERALIZED VERSION OF GET FOR ANY DOCUMENT
+exports.getOne = (Model, populateOptions) =>
+  catchAsync(async (req, res, next) => {
+    //Check if populateOptions does exist - if not push in bare query else add populate options to get genberal coverage
+    let query = Model.findById(req.params.id);
+    if (populateOptions) query = query.populate(populateOptions);
+
+    //->findOne() mongoose method
+    // const tour = await Tour.findOne({ _id: req.params.id });
+    //->findbyId() mongoose shorthand method
+    const document = await query; //@tourRoutes we had .route('/:id') which should be matched by req.params.id here....If it was name then this should print name too...params is an express.js method for responding named route mapping
+    // // .populate('guides'); //VERY IMPORTANT: BY POPULATING 'GUIDES' FIELD IN A TOUR, THE REFERENCED DATA IS ACTUALLY FILLED IN BY USING THE REFERENCE IN THE TOUR SCHEMA
+    // .populate({
+    //   path: 'guides', //use guides field for fillup
+    //   select: '-__v -passwordChangedAt', //get rid of excess info on the returned response
+    //   match: { role: 'guide' }, //filter only peep with 'guide role...extra step!😊
+    // }); //mongoose document.prototype.populate() //NOTE: WE MOVED ALL STUFF INTO TOURMODEL QUERRY MIDDLEWARE
+    // .populate(populateOptions); //points to tourschema virtual 'reviews' for virtual populate
+
+    //GUARD CLAUSE
+    if (!document) {
+      return next(new AppError('No document found with that ID', 404));
+    } //if tour returns null value, create a new error object with a message and err code.
+    //We use return here so that we can terminate immediately otherwise the code will run along.
+
+    //SUCCESS RESPONSE
+    res.status(200).json({
+      status: 'success',
+      data: { data: document },
+    });
+  });
