@@ -1,10 +1,10 @@
 //-->#0.IMPORT CORE MODULES
-const { query } = require('express');
+// const { query } = require('express');
 
 //-->#1.IMPORT CUSTOM MODULES
 const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
 const APIFeatures = require('../utils/apiFeatures');
-const AppError = require('../utils/appError');
+// const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
 
