@@ -40,3 +40,16 @@ exports.updateOne = Model =>
       data: { data: document },
     });
   });
+
+//->A GENERALIZED VERSION OF CREATE FOR ANY DOCUMENT
+exports.createOne = Model =>
+  catchAsync(async (req, res, next) => {
+    // //->First way - indirect of creating mongoose document from the instance of the model obj via save() method
+    // const newTour = new Tour({})
+    // newTour.save()
+    //->Second way - direct way of creating mongoose document from the model obj via create() method
+    // Tour.create({}).then(); //promise then.... however we can go about the other way which is async..await...
+    const document = await Model.create(req.body); //save the returned promise in the newTour variable from the request data which is req.body
+    //SUCCESS RESPONSE
+    res.status(201).json({ status: 'success', data: { data: document } });
+  });

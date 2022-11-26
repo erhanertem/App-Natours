@@ -65,16 +65,17 @@ exports.getTour = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createTour = catchAsync(async (req, res, next) => {
-  // //->First way - indirect of creating mongoose document from the instance of the model obj via save() method
-  // const newTour = new Tour({})
-  // newTour.save()
-  //->Second way - direct way of creating mongoose document from the model obj via create() method
-  // Tour.create({}).then(); //promise then.... however we can go about the other way which is async..await...
-  const newTour = await Tour.create(req.body); //save the returned promise in the newTour variable from the request data which is req.body
-  //SUCCESS RESPONSE
-  res.status(201).json({ status: 'success', data: { tour: newTour } });
-});
+exports.createTour = factory.createOne(Tour);
+// exports.createTour = catchAsync(async (req, res, next) => {
+//   // //->First way - indirect of creating mongoose document from the instance of the model obj via save() method
+//   // const newTour = new Tour({})
+//   // newTour.save()
+//   //->Second way - direct way of creating mongoose document from the model obj via create() method
+//   // Tour.create({}).then(); //promise then.... however we can go about the other way which is async..await...
+//   const newTour = await Tour.create(req.body); //save the returned promise in the newTour variable from the request data which is req.body
+//   //SUCCESS RESPONSE
+//   res.status(201).json({ status: 'success', data: { tour: newTour } });
+// });
 
 exports.updateTour = factory.updateOne(Tour);
 // exports.updateTour = catchAsync(async (req, res, next) => {
