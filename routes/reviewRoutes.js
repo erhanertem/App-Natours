@@ -23,10 +23,7 @@ router
     reviewController.createReview
   );
 
-router
-  .route('/:id')
-  .patch(reviewController.updateReview)
-  .delete(reviewController.deleteReview);
+router.route('/:id').delete(reviewController.deleteReview);
 
 //-->#4.EXPORT MODULE
 module.exports = router;
