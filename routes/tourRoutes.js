@@ -24,7 +24,8 @@ const router = express.Router();
 //     reviewController.createReview
 //   );
 
-router.use('/:tourId/reviews', reviewRouter); //Router mounting - Whenever a route is used initiate reviewRouter middleware. By doing so instead of solving a review related issue in a tour route, we pass onto the most relevant place where it needs to get handled.
+//REDIRECTING NESTED ROUTE STARTING WITH TOUR TO REVIEWS ROUTER
+router.use('/:tourId/reviews', reviewRouter); //Router mounting - Whenever a tours route is used with a tourid/review initiate reviewRouter middleware. By doing so instead of solving a review related issue in a tour route, we pass onto the most relevant place where it needs to get handled.
 
 //-->#3.DEFINE ROUTES
 router

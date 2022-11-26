@@ -125,11 +125,11 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7; //we got to use a regular function declaration as we would need this keyword to point to tourSchema upon which we called Schema.prototype.virtual() method to declare a temporary field on the mongoose schema object.
 }); //In queries the virtuals could not be used...as they re not part of the real database....They are runtime data...
 
-//VIRTUAL POPULATE: IN RESPONSE TO REVIEWMODEL BEARING PARENT REFERENCING TO THIS MODEL - Multiple reviews pointing to the same tour
+//IMPORTANT VIRTUAL POPULATE: IN RESPONSE TO REVIEWMODEL BEARING PARENT REFERENCING TO THIS MODEL - Multiple reviews pointing to the same tour
 tourSchema.virtual('reviews', {
   ref: 'Review', //connect to Review model - inline referencing
   foreignField: 'tour', //'tour' is the 'tour' field in reviewModel.js
-  localField: '_id', //stored in the tour schema as _id field under reviews array..
+  localField: '_id', // NOTE: What we are referring to tour field in the review model is referred here in this model with tour _id...
 });
 
 //--->MONGOOSE DOCUMENT MIDDLEWARE

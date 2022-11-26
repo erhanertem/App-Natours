@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 
 exports.getAllReviews = catchAsync(async (req, res, next) => {
   let filter = {};
-  if (req.params.tourId) filter = { tour: req.params.tourId };
+  if (req.params.tourId) filter = { tour: req.params.tourId }; //APPLIES FILTER IF REVIEWROUTER CATCHES ANY MERGED PARAMS FROM TOURROUTER - GET ALLREVIEWS FOR A TOUR ROUTE
 
   const reviews = await Review.find(filter);
 
