@@ -30,8 +30,12 @@ router.use('/:tourId/reviews', reviewRouter); //Router mounting - Whenever a tou
 //-->#3.DEFINE ROUTES
 router
   .route('/')
-  .get(authController.protect, tourController.getAllTours) //first we require the user to login via autController.protect middleware then we abuse getAllTours handler middleware
-  .post(tourController.createTour); //Middleware chaining - First precheck inputs and later crete tour
+  .get(tourController.getAllTours) //open API to public so any site can grap information from our API
+  .post(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
+    tourController.createTour
+  ); //Middleware chaining - First let the user get authorized, then check if the loggedin is admin or lead-guide, then crete tour
 
 router
   .route('/top-5-cheap') //Route aliasing --> Responding to 127.0.0.1:3000/api/v1/tours/top-5-cheap route request from postman
@@ -44,7 +48,11 @@ router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
 router
   .route('/:id')
   .get(tourController.getTour)
-  .patch(tourController.updateTour)
+  .patch(
+    authController.protect,
+    authController.restrictTo('admin', 'lead-guide'),
+    tourController.updateTour
+  )
   .delete(
     authController.protect, //check for correct token with matching user and password, clear out security
     authController.restrictTo('admin', 'lead-guide'), //restrict the deletion of tour to admin or lead-guide middleware call
