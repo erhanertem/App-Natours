@@ -22,6 +22,12 @@ router.patch(
   authController.updatePassword
 ); //Update password of logged in user
 
+router.get(
+  '/me',
+  authController.protect,
+  userController.getMe,
+  userController.getUser
+);
 router.patch('/updateMe', authController.protect, userController.updateMe); //Let the user update his own data
 router.delete('/deleteMe', authController.protect, userController.deleteMe); //Let the user delete himself
 
