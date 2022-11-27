@@ -10,14 +10,17 @@ const router = express.Router();
 
 //-->#3.DEFINE ROUTES
 
+//--->COMMON ROUTES
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword); //resetpassword with the temp passtoken
 
-router.use(authController.protect); //ONCE WE STARTR USING AUTHCONTROLLER.PROTECT, IT WOULD APPLY TO ANYTHING BELOW...
+//PROTECT ALL ROUTES AFTER THIS MIDDLEWARE
+router.use(authController.protect); //ONCE WE START USING AUTHCONTROLLER.PROTECT, IT WOULD APPLY TO ANYTHING BELOW...
 
+//--->USER ROUTES
 router.patch(
   '/updateMyPassword',
   // authController.protect,
@@ -40,6 +43,10 @@ router.delete(
   // authController.protect,
   userController.deleteMe
 ); //Let the user delete himself
+
+//--->ADMIN ROUTES
+//ACCESS TO ALL ROUTES BELOW IS EXCLUSIVE TO ADMIN ONLY
+router.use(authController.restrictTo('admin'));
 
 router
   //THIS ROUTE OPERATIONS ARE PROTECTED BY router.use(authController.protect);
