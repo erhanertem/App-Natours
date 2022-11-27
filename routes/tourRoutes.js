@@ -28,6 +28,7 @@ const router = express.Router();
 router.use('/:tourId/reviews', reviewRouter); //Router mounting - Whenever a tours route is used with a tourid/review initiate reviewRouter middleware. By doing so instead of solving a review related issue in a tour route, we pass onto the most relevant place where it needs to get handled.
 
 //-->#3.DEFINE ROUTES
+//--->UNPROTECTED ROUTES
 router
   .route('/')
   .get(tourController.getAllTours) //open API to public so any site can grap information from our API
@@ -43,6 +44,7 @@ router
 
 router.route('/tour-stats').get(tourController.getTourStats);
 
+//--->PROTECTED ROUTES
 router
   .route('/monthly-plan/:year')
   .get(
