@@ -69,6 +69,7 @@ exports.getAll = Model =>
       .limitFields()
       .paginate(); //create an instance of APIFeatures class
     const document = await features.query;
+    // const document = await features.query.explain(); //query.explain() method is a verbose mode which yields some statistics, and returns the query as well.
 
     //SEND SUCCESS RESPONSE
     res.status(200).json({

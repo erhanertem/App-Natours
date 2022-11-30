@@ -1,7 +1,7 @@
 //-->IMPORT CORE MODULES
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
+// const validator = require('validator');
 
 //-->IMPORT 3RD PARTY MODULES
 // const User = require('./userModel');
@@ -119,6 +119,11 @@ const tourSchema = new mongoose.Schema(
     toObject: { virtuals: true }, //allows virtuals to be visible to console.log
   } //SCHEMA OPTIONS for VIRTUALS -> //IMPORTANT By default, Mongoose does not include virtuals when you convert a document to JSON. Here it has to be specified by options object whether to disclose them in JSON response or console.log...
 );
+
+//ESTABLISHING CUSTOM COMPOUND INDEX FOR THE TOUR MODEL - DEALS with individual fields or all together
+//NOTE: INDEXING DECIISONS ARE BASED ON USER QUERY FRENQUNECY TYPES...
+tourSchema.index({ price: 1, ratingsAverage: -1 }); //name of the index price 1 stands for ASC order, -1 stands for DESC order...
+tourSchema.index({ slug: 1 });
 
 // IMPORTANT VIRTUAL PROPERTIES ARE NOT SAVED TO DATABASE TO SAVE SPACE....
 tourSchema.virtual('durationWeeks').get(function () {
