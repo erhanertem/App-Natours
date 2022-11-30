@@ -4,7 +4,6 @@ const express = require('express');
 //-->#1.IMPORT CUSTOM MODULES
 const reviewController = require('../controllers/reviewController');
 const authController = require('../controllers/authController');
-const { Router } = require('express');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router({ mergeParams: true }); //we would need mergeParams as router.use('/:tourId/reviews', reviewRouter); @tourRoutes.js calls this module for routing and this module has no access to tourId.. So basically, :tourId is merged into this module...
@@ -15,7 +14,7 @@ const router = express.Router({ mergeParams: true }); //we would need mergeParam
 //IMPORTANT! Due to mergeParams all redirected to route below...
 
 //-->#3.DEFINE ROUTES
-//PROTECT ALL ROUTES AFTER THIS MIDDLEWARE
+//IMPORTANT! PROTECT ALL ROUTES AFTER THIS MIDDLEWARE
 router.use(authController.protect);
 
 //--->USER ONLY ROUTES

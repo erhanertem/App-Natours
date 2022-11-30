@@ -10,14 +10,14 @@ const router = express.Router();
 
 //-->#3.DEFINE ROUTES
 
-//--->COMMON ROUTES
+//--->COMMON ROUTES OPEN TO EVERYONE
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword); //resetpassword with the temp passtoken
 
-//PROTECT ALL ROUTES AFTER THIS MIDDLEWARE
+//IMPORTANT! PROTECT ALL ROUTES AFTER THIS MIDDLEWARE
 router.use(authController.protect); //ONCE WE START USING AUTHCONTROLLER.PROTECT, IT WOULD APPLY TO ANYTHING BELOW...
 
 //--->USER ROUTES
@@ -45,7 +45,7 @@ router.delete(
 ); //Let the user delete himself
 
 //--->ADMIN ROUTES
-//ACCESS TO ALL ROUTES BELOW IS EXCLUSIVE TO ADMIN ONLY
+//IMPORTANT! ACCESS TO ALL ROUTES BELOW IS EXCLUSIVE TO ADMIN ACCESS ONLY BESIDES BEING PROTECTED
 router.use(authController.restrictTo('admin'));
 
 router
