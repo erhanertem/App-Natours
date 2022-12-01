@@ -48,6 +48,31 @@ reviewSchema.pre(/^find/, function (next) {
   next();
 });
 
+//WE CREATE THE STATIC METHOD AND CALL IT LATER
+reviewSchema.statics.calcAverageRatings = async function (tourId) {
+  const stats = await this.aggregate([
+    //this points to current Model due to statics method...
+    {
+      $match: { tour: tourId },
+    }, //select the tour we want to update
+    {
+      $group: {
+        _id: '$tour',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      }, //group by tourid, ...
+    },
+  ]);
+  console.log(stats);
+};
+reviewSchema.post('save', function () {
+  //this points to current review
+  // Review.calcAverageRatings(this.tourId); //VERY IMPORTANT! Problem with this is mongoose model is not created yet. If we locate this after Review is modelled then it wouldnt be included in the schema. Therefore, ( https://stackoverflow.com/questions/29664499/mongoose-static-methods-vs-instance-methods ), we refer to Model via this.constructor which exists in instance documents as well.
+  // console.log('🎈', this.constructor, this, '🎈');
+  //this.constructor = Review
+  this.constructor.calcAverageRatings(this.tour);
+});
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
