@@ -1,6 +1,9 @@
 //-->IMPORT CORE MODULES
 const mongoose = require('mongoose');
 
+//-->#1.IMPORT CUSTOM MODULES
+const Tour = require('./tourModel'); //Mongoose tour model needs to be imported here to persist the Review static method output to TourModel.
+
 //->CREATE A BASIC MONGOOSE SCHEMA
 const reviewSchema = new mongoose.Schema(
   {
@@ -64,6 +67,11 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
     },
   ]);
   console.log(stats);
+
+  Tour.findByIdAndUpdate(tourId, {
+    ratingsQuantity: stats[0].nRating,
+    ratingsAverage: stats[0].avgRating,
+  });
 };
 reviewSchema.post('save', function () {
   //this points to current review

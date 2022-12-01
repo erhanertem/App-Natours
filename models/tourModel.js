@@ -39,13 +39,13 @@ const tourSchema = new mongoose.Schema(
         message: 'Diffuculty is either: easy, medium,difficult',
       }, //its a built-in validator available on strings for limiting options with an array of strings
     },
-    ratingAverage: {
+    ratingsAverage: {
       type: Number,
       default: 4.5,
       min: [1, 'Rating must be above 1.0'], //its a built-in validator available on both numbers and dates
       max: [5, 'Rating must be below 5.0'],
     },
-    ratingQuantity: { type: Number, default: 0 },
+    ratingsQuantity: { type: Number, default: 0 },
     price: { type: Number, required: [true, 'A tour must have a price'] },
     priceDiscount: {
       type: Number,

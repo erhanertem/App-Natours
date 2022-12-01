@@ -116,17 +116,17 @@ exports.deleteTour = factory.deleteOne(Tour);
 exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
-      $match: { ratingAverage: { $gte: 4.5 } },
+      $match: { ratingsAverage: { $gte: 4.5 } },
     }, //match pipeline stage
     {
       $group: {
         // _id: null,
         // _id: '$difficulty', //group by difficulty field types
         _id: { $toUpper: '$difficulty' }, //group by difficulty field types with uppercase operator
-        // _id: '$ratingAverage', //group by difficulty field types
+        // _id: '$ratingsAverage', //group by difficulty field types
         numTours: { $sum: 1 }, //for each count 1 added
-        numRatings: { $sum: '$ratingQuantity' },
-        avgRating: { $avg: '$ratingAverage' }, //i.e. groups by no specific field (_id: null) [this got to be mentioned first in $group method] - Lets assign a new field which takes the average of ratingsAverage field of the documents and more if needed....
+        numRatings: { $sum: '$ratingsQuantity' },
+        avgRating: { $avg: '$ratingsAverage' }, //i.e. groups by no specific field (_id: null) [this got to be mentioned first in $group method] - Lets assign a new field which takes the average of ratingsAverage field of the documents and more if needed....
         avgPrice: { $avg: '$price' },
         minPrice: { $min: '$price' },
         maxPrice: { $max: '$price' },
