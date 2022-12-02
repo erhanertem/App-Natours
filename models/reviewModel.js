@@ -67,12 +67,22 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
       }, //group by tourid, ...
     },
   ]);
-  console.log(stats);
+  // console.log(stats);
 
-  await Tour.findByIdAndUpdate(tourId, {
-    ratingsQuantity: stats[0].nRating,
-    ratingsAverage: stats[0].avgRating,
-  }); //we await the promise from mongoose
+  //->IF THERE ARE REVIEWS ASSIGN QUANTITY AND AVG RATINGS
+  if (stats.length > 0) {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    }); //we await the promise from mongoose
+  }
+  //->IF THERE ARE NO REVIEWS LEFT AFTER DELETE ASSIGN THE DEFAULTS
+  else {
+    await Tour.findByIdAndUpdate(tourId, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
 };
 //->COVERS ONLY ACTIONS OF SAVING A REVIEW
 reviewSchema.post('save', doc => {
