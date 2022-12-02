@@ -51,6 +51,7 @@ reviewSchema.pre(/^find/, function (next) {
   next();
 });
 
+////////////////////////////////////////////////
 //WE CREATE THE STATIC METHOD AND CALL IT LATER
 reviewSchema.statics.calcAverageRatings = async function (tourId) {
   const stats = await this.aggregate([
@@ -66,20 +67,20 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
       }, //group by tourid, ...
     },
   ]);
-  console.log(stats);
+  // console.log(stats);
 
   await Tour.findByIdAndUpdate(tourId, {
     ratingsQuantity: stats[0].nRating,
     ratingsAverage: stats[0].avgRating,
-  });
+  }); //we await the promise from mongoose
 };
-
 reviewSchema.post('save', function () {
   //this points to current review
-  // Review.calcAverageRatings(this.tourId); //VERY IMPORTANT! Problem with this is mongoose model is not created yet. If we locate this after Review is modelled then it wouldnt be included in the schema. Therefore, ( https://stackoverflow.com/questions/29664499/mongoose-static-methods-vs-instance-methods ), we refer to Model via this.constructor which exists in instance documents as well.
-  console.log('🎈', this.constructor, this.tour, '🎈');
+  // Review.calcAverageRatings(this.tourId); //VERY IMPORTANT! Problem with this is mongoose model is not created yet. If we locate this snippet after Review is modelled then it wouldnt be included in the schema. Therefore, ( https://stackoverflow.com/questions/29664499/mongoose-static-methods-vs-instance-methods ), we refer to Model via this.constructor which exists in instance documents as well.
+  // console.log('🎈', this.constructor, this.tour, '🎈');
   this.constructor.calcAverageRatings(this.tour);
 });
+////////////////////////////////////////////////////
 
 const Review = mongoose.model('Review', reviewSchema);
 
