@@ -50,11 +50,16 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////DISABLE FOR DEV FILE UPLOAD//////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 //--->MONGOOSE DOCUMENT MIDDLEWARE
 //->MONGOOSE PRESAVE DOCUMENT MIDDLEWARE/HOOK - IT RUNS BEFORE .save() and .create() commands..
 //ENCRYPT THE PASSWORD BEFORE SAVING PASSWORD TO DATABASE - PLAIN PASSWORDS SHOULDNT BE STORED IN THE DATABASE
 userSchema.pre('save', async function (next) {
-  //->Only run this function only if password was actually modified
+  //->Only run this function if password was actually modified
   if (!this.isModified('password')) return next(); //WE WOULD NEED NEXT TO MOVE ON WITH THE NEXT MIDDLEWARE.. THIS REFERS TO THE CURRENT USER WE ARE CREATING, ISMODIFIED() IS A MONGOOSE DOCUMENT BOOLEAN FLAG THAT KEEPS TRACK OF CHANGES TO DOC - //VERY IMPORTANT WE DO THIS SO ANY ENCRYPTED PASSWORD DO NOT GET RE-ENCRYPTED!!!!
   //->Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
@@ -69,6 +74,11 @@ userSchema.pre('save', function (next) {
   this.passwordChangedAt = Date.now() - 1000; //ISSUING JWT TAKES SHORTER THAN SAVING TO DATABASE. IN ORDER TO AVOID INVALID TOKEN DUE TO TIMESTAMP DELAY, WE DIRTY FIX IT BY SUBSTRACTING 1s
   next();
 });
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////DISABLE FOR DEV FILE UPLOAD//////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 
 userSchema.pre(/^find/, function (next) {
   //this points to the current query
