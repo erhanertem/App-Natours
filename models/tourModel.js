@@ -45,7 +45,10 @@ const tourSchema = new mongoose.Schema(
       min: [1, 'Rating must be above 1.0'], //its a built-in validator available on both numbers and dates
       max: [5, 'Rating must be below 5.0'],
     },
-    ratingsQuantity: { type: Number, default: 0 },
+    ratingsQuantity: {
+      type: Number,
+      default: 0,
+    },
     price: { type: Number, required: [true, 'A tour must have a price'] },
     priceDiscount: {
       type: Number,
@@ -108,7 +111,7 @@ const tourSchema = new mongoose.Schema(
     //CHILD REFERENCING FIELD TO BE POPULATED DURING A TOUR QUERY
     guides: [
       {
-        type: mongoose.ObjectId,
+        type: mongoose.ObjectId, // same as type: mongoose.Schema.ObjectId,
         ref: 'User', //inline referencing
       }, //VERY IMPORTANT! GUIDES FIELD IS JUST A CHILD REFERENCING TO ACTUAL DATA IN USER MODEL (ONLY CONTAINS THE REFERENCE)
     ], //For User, we wouldnt even need a module import..

@@ -3,8 +3,6 @@ const crypto = require('crypto'); //built-in node.js module
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const { nextTick } = require('process');
-const { runInThisContext } = require('vm');
 
 //->CREATE A BASIC MONGOOSE SCHEMA FOR USERS
 const userSchema = new mongoose.Schema({

@@ -10,14 +10,14 @@ const reviewSchema = new mongoose.Schema(
     review: {
       type: String,
       required: [true, 'An empty review is not valid'],
-      trim: true,
-      maxlength: [500, 'A review must have less or equal to 500 characters'],
-      minlength: [10, 'A review must have more or equal to 10 characters'],
+      // trim: true,
+      // maxlength: [500, 'A review must have less or equal to 500 characters'],
+      // minlength: [10, 'A review must have more or equal to 10 characters'],
     },
     rating: {
       type: Number,
       min: 1,
-      max: 10,
+      max: 5,
     },
     createdAt: {
       type: Date,
@@ -25,13 +25,13 @@ const reviewSchema = new mongoose.Schema(
     },
     //PARENT REFERENCING FIELD TO TOUR
     tour: {
-      type: mongoose.ObjectId,
+      type: mongoose.ObjectId, // same as type: mongoose.Schema.ObjectId,
       ref: 'Tour', //inline referencing
       required: [true, 'Review must belong to a tour'],
     },
     //PARENT REFERENCING FIELD TO USER
     user: {
-      type: mongoose.ObjectId,
+      type: mongoose.ObjectId, // same as type: mongoose.Schema.ObjectId,
       ref: 'User', //inline referencing
       required: [true, 'Review must belong to a user'],
     },
@@ -56,7 +56,7 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
   const stats = await this.aggregate([
     //this points to current Model due to statics method...
     {
-      $match: { tour: tourId },
+      $match: { tour: { $eq: tourId } },
     }, //select the tour we want to update
     {
       $group: {
@@ -68,16 +68,16 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
   ]);
   console.log(stats);
 
-  Tour.findByIdAndUpdate(tourId, {
+  await Tour.findByIdAndUpdate(tourId, {
     ratingsQuantity: stats[0].nRating,
     ratingsAverage: stats[0].avgRating,
   });
 };
+
 reviewSchema.post('save', function () {
   //this points to current review
   // Review.calcAverageRatings(this.tourId); //VERY IMPORTANT! Problem with this is mongoose model is not created yet. If we locate this after Review is modelled then it wouldnt be included in the schema. Therefore, ( https://stackoverflow.com/questions/29664499/mongoose-static-methods-vs-instance-methods ), we refer to Model via this.constructor which exists in instance documents as well.
-  // console.log('🎈', this.constructor, this, '🎈');
-  //this.constructor = Review
+  console.log('🎈', this.constructor, this.tour, '🎈');
   this.constructor.calcAverageRatings(this.tour);
 });
 

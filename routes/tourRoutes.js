@@ -4,7 +4,7 @@ const express = require('express');
 //-->#1.IMPORT CUSTOM MODULES
 const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
-const reviewRouter = require('./reviewRoutes');
+const reviewRouter = require('../routes/reviewRoutes');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
