@@ -67,19 +67,30 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
       }, //group by tourid, ...
     },
   ]);
-  // console.log(stats);
+  console.log(stats);
 
   await Tour.findByIdAndUpdate(tourId, {
     ratingsQuantity: stats[0].nRating,
     ratingsAverage: stats[0].avgRating,
   }); //we await the promise from mongoose
 };
-reviewSchema.post('save', function () {
+//->COVERS ONLY ACTIONS OF SAVING A REVIEW
+reviewSchema.post('save', doc => {
+  //IT MAKERS TO USE POST AND SAVE AS CALCAVERAGERATINGS FUNCTION IS APPLIED RIGHT AFTER THE DOCUMENT IS SAVED
+  // reviewSchema.post('save', function () {
   //this points to current review
   // Review.calcAverageRatings(this.tourId); //VERY IMPORTANT! Problem with this is mongoose model is not created yet. If we locate this snippet after Review is modelled then it wouldnt be included in the schema. Therefore, ( https://stackoverflow.com/questions/29664499/mongoose-static-methods-vs-instance-methods ), we refer to Model via this.constructor which exists in instance documents as well.
   // console.log('🎈', this.constructor, this.tour, '🎈');
-  this.constructor.calcAverageRatings(this.tour);
+  // this.constructor.calcAverageRatings(this.tour);
+  doc.constructor.calcAverageRatings(doc.tour);
 });
+//->COVERS ACTIONS OF UPDATING OR DELETING A REVIEW - FINDONEANDUPDATE/FINDBYIDANDUPDATE OR FINDONEONEANDDELETE/FINDBYIDANDDELETE....
+reviewSchema.post(/^findOneAnd/, doc => {
+  //IT MAKERS TO USE POST AND SAVE AS CALCAVERAGERATINGS FUNCTION IS APPLIED RIGHT AFTER THE DOCUMENT IS DELETED OR UPDATED
+  doc.constructor.calcAverageRatings(doc.tour);
+});
+
+//VERY IMPORTANT! If there are two post-save hooks and one needs to initiate one after another, then we use async/await callback function or (doc,next) as inputs to make them async operations.Here, we do not have two similar post-save hooks and no logic order is essential so async holds no gorund here!
 ////////////////////////////////////////////////////
 
 const Review = mongoose.model('Review', reviewSchema);
