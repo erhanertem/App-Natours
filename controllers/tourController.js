@@ -218,3 +218,45 @@ exports.getToursWithin = catchAsync(async (req, res, next) => {
     },
   });
 });
+
+exports.getDistances = catchAsync(async (req, res, next) => {
+  const { latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+  // console.log(typeof lat, typeof lng);
+
+  const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide latitude or longitude in the format lat,lng',
+        400
+      )
+    );
+  }
+
+  // Outputs documents in the order of nearest to farthest from a specified point.
+  const distances = await Tour.aggregate([
+    {
+      $geoNear: {
+        near: { type: 'Point', coordinates: [lng * 1, lat * 1] }, //*1 revert strings to numbers trick!!
+        distanceField: 'distance', //MEASURES IN METERS BY DEFAULT FOR SPHERICAL RADS
+        distanceMultiplier: multiplier, //option to change it to kilometers/miles
+      },
+    },
+    {
+      $project: {
+        //include only distance and name information
+        distance: 1,
+        name: 1,
+      },
+    },
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      data: distances,
+    },
+  });
+});
