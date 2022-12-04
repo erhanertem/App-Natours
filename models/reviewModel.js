@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 //-->#1.IMPORT CUSTOM MODULES
 const Tour = require('./tourModel'); //Mongoose tour model needs to be imported here to persist the Review static method output to TourModel.
+const AppError = require('../utils/appError');
 
 //->CREATE A BASIC MONGOOSE SCHEMA
 const reviewSchema = new mongoose.Schema(
@@ -53,6 +54,16 @@ reviewSchema.pre(/^find/, function (next) {
     select: 'name photo',
   });
   next();
+});
+
+//-->CHECK IF YOU ARE TRING TO REGISTER A REVIEW TO A NON-EXISTING TOURID
+reviewSchema.pre('save', async next => {
+  const doc = await Tour.findById(this.tour);
+  if (!doc) {
+    return next(
+      new AppError(`Can't create a review for a non-existing tour`, 404)
+    );
+  }
 });
 
 ////////////////////////////////////////////////
