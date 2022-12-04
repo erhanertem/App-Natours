@@ -42,6 +42,10 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
+//ESTABLISHING CUSTOM COMPOUND INDEX FOR THE REVIEW MODEL
+//Avoids duplicate user review entry for a tour combination
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 //-->MONGOOSE PREFIND QUERRY MIDDLEWARE/HOOK for populating parent references in the Review schema in order to make it available for getAllreviews middleware
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
