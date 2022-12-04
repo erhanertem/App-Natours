@@ -4,6 +4,7 @@
 //-->#1.IMPORT CUSTOM MODULES
 const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
 const catchAsync = require('../utils/catchAsync');
+const AppError = require('../utils/appError');
 const factory = require('./handlerFactory');
 
 //-->#1.ROUTE HANDLERS
@@ -185,4 +186,35 @@ exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
   ]);
 
   res.status(200).json({ status: 'success', data: { plan } });
+});
+
+// when tourroute is tours-within/distance / 233 / center / -40, 25 / unit / mi
+//www.mongodb.com/docs/manual/reference/operator/query/
+exports.getToursWithin = catchAsync(async (req, res, next) => {
+  const { distance, latlng, unit } = req.params;
+  const [lat, lng] = latlng.split(',');
+
+  const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+  if (!lat || !lng) {
+    next(
+      new AppError(
+        'Please provide latitude or longitude in the format lat,lng',
+        400
+      )
+    );
+  }
+
+  // console.log(distance, lat, lng, unit);
+  const tours = await Tour.find({
+    startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+  });
+
+  res.status(200).json({
+    status: 'success',
+    results: tours.length,
+    data: {
+      data: tours,
+    },
+  });
 });

@@ -44,6 +44,15 @@ router
 
 router.route('/tour-stats').get(tourController.getTourStats);
 
+/*
+/tours-within/distance / 233 / center / -40, 25 / unit / mi 
+similarly to 
+/tours-within?distance=233&center=-40,25&unit=mi 
+*/
+router
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(tourController.getToursWithin);
+
 //--->PROTECTED ROUTES
 router
   .route('/monthly-plan/:year')
