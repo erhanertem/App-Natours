@@ -2,17 +2,39 @@
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
+const Review = require('../models/reviewModel');
 
 //->A GENERALIZED VERSION OF DELETE FOR ANY DOCUMENT
-exports.deleteOne = Model =>
+exports.deleteOne = (Model, deleteOption) =>
   catchAsync(async (req, res, next) => {
     const document = await Model.findByIdAndRemove(req.params.id);
+    // const document = await Model.findById(req.params.id);
 
     //GUARD CLAUSE
     if (!document) {
       return next(new AppError('No document found with that ID', 404));
     } //if document returns null value, create a new error object with a message and err code
     //NOTE: We use return here so that we can terminate immediately otherwise the code will run along.
+    /*
+
+Moreover on this issue, it would be logical to implement two scenarios: 
+1. Deleting reviews pertinent to a DELETED user.
+If the reviews of a user are not deleted the user field of review is tagged null. 
+2. Deleting reviews pertinent to a DELETED tour.
+
+*/
+    if (deleteOption === 'deleteTour_Reviews') {
+      const doc = await Review.deleteMany({
+        tour: { $eq: req.params.id },
+      });
+      console.log(doc);
+    }
+    if (deleteOption === 'deleteUser_Reviews') {
+      const doc = await Review.deleteMany({
+        user: { _id: req.params.id },
+      });
+      console.log(doc);
+    }
 
     //DELETE RESPONSE
     res.status(204).json({

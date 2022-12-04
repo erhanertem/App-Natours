@@ -57,7 +57,7 @@ reviewSchema.pre(/^find/, function (next) {
 });
 
 //-->CHECK IF YOU ARE TRING TO REGISTER A REVIEW TO A NON-EXISTING TOURID
-reviewSchema.pre('save', async next => {
+reviewSchema.pre('save', async function (next) {
   const doc = await Tour.findById(this.tour);
   if (!doc) {
     return next(

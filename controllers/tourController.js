@@ -96,7 +96,7 @@ exports.updateTour = factory.updateOne(Tour);
 //   });
 // });
 
-exports.deleteTour = factory.deleteOne(Tour);
+exports.deleteTour = factory.deleteOne(Tour, 'deleteTour_Reviews');
 // exports.deleteTour = catchAsync(async (req, res, next) => {
 //   const tour = await Tour.findByIdAndRemove(req.params.id);
 
