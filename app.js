@@ -91,12 +91,19 @@ app.use((req, res, next) => {
 });
 
 //-->#2.MOUNT ROUTES
-app.use('/', (req, res) => {
+app.get('/', (req, res) => {
   res.status(200).render('base', {
     tour: 'The Forest Hiker',
     user: 'Jonas',
   });
-}); //Let express define (app.use()) route for '/' from which in the event of a successful response, pug will render(app.render()) file called "base" inside the specified views folder.
+}); //Let express define (app.get()) route for '/' from which in the event of a successful response, pug will render(app.render()) file called "base" inside the specified views folder.
+// IMPORTANT! app.get() vs app.use() - since all routes start with / using app.use() would ovcerride the consequent routes. For that we use app.get() to only allow for / route and not the ones starting with /.
+app.get('/overview', (req, res) => {
+  res.status(200).render('overview', { title: 'All tours' });
+});
+app.get('/tour', (req, res) => {
+  res.status(200).render('tour', { title: 'The Forest Hiker Tour' });
+});
 
 app.use('/api/v1/tours', tourRouter); //watch for this route
 app.use('/api/v1/users', userRouter); //watch for this route

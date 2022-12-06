@@ -10,7 +10,7 @@ html
   head 
     meta(charset='UTF-8')
     meta(name='viewport' content='width=device-width, initial-scale=1.0')
-    title Natours | Exciting tours for adventurous people
+    title Natours | #{title}
     //- title Natours #{tour} --> #{...} is used as template literals in pug
     //- SERVING STATIC FILES in public folder by express middleware @ app.js tells where css and img folders are
     link(rel='stylesheet' href='css/style.css')
@@ -20,7 +20,9 @@ html
   body
     // HEADER
     include _header
+    //- imports the code from the reference file. 
     // CONTENT
-    include _content
+    block content
+      h1 This is a placeholder heading
     //FOOTER
     include _footer
