@@ -16,6 +16,7 @@ const errorController = require('./controllers/errorController'); //global error
 const tourRouter = require('./routes/tourRoutes'); //for require, ${__dirname} is not necessary
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 
 //-->START EXPRESS.JS
 const app = express(); //Call express function to use its functions
@@ -91,20 +92,7 @@ app.use((req, res, next) => {
 });
 
 //-->#2.MOUNT ROUTES
-app.get('/', (req, res) => {
-  res.status(200).render('base', {
-    tour: 'The Forest Hiker',
-    user: 'Jonas',
-  });
-}); //Let express define (app.get()) route for '/' from which in the event of a successful response, pug will render(app.render()) file called "base" inside the specified views folder.
-// IMPORTANT! app.get() vs app.use() - since all routes start with / using app.use() would ovcerride the consequent routes. For that we use app.get() to only allow for / route and not the ones starting with /.
-app.get('/overview', (req, res) => {
-  res.status(200).render('overview', { title: 'All tours' });
-});
-app.get('/tour', (req, res) => {
-  res.status(200).render('tour', { title: 'The Forest Hiker Tour' });
-});
-
+app.use('/', viewRouter); //watch for this route
 app.use('/api/v1/tours', tourRouter); //watch for this route
 app.use('/api/v1/users', userRouter); //watch for this route
 app.use('/api/v1/reviews', reviewRouter); //watch for this route
