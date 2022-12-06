@@ -1,24 +1,26 @@
 //- pug is indentation sensitive
 //- Pug can also understand HTML code here we show PUG syntax to get familiar with
+//- pug syntax representation of html syntax <h1>The Park Camper</h1>
+//- This kind of commenting appears on the output code
+//- Buffered commenting: This kind of commenting do not appear on the final code. 
 
 doctype html
+//- html(lang='en') 
 html 
   head 
-    title Natours #{tour}
-    //-#{...} is used as template literals in pug to unite strings with variables...
-    //- <link rel="stylesheet" href="css/style.css"/>
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title Natours | Exciting tours for adventurous people
+    //- title Natours #{tour} --> #{...} is used as template literals in pug
     //- SERVING STATIC FILES in public folder by express middleware @ app.js tells where css and img folders are
-    link(rel="stylesheet" href="css/style.css")
-    link(rel="shortcut icon" type="image/png" href="img/favicon.png")
+    link(rel='stylesheet' href='css/style.css')
+    link(rel='shortcut icon' type='image/png' href='img/favicon.png')
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,300i,700')
 
-  body 
-    h1= tour //Javascripot only expressions
-    h2= user.toUpperCase()
-    h1 The Park Camper  
-    //- pug syntax representation of html syntax <h1>The Park Camper</h1>
-    // This kind of commenting appears on the output code
-    //- Buffered commenting: This kind of commenting do not appear on the final code. 
-
-    - const x =9; //Buffered code
-    h2= 2*x
-    p This is just some text
+  body
+    // HEADER
+    include _header
+    // CONTENT
+    include _content
+    //FOOTER
+    include _footer
