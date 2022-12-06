@@ -1,2 +1,24 @@
-h1 The Park Camper 
-//- <h1>The Park Camper</h1>
+//- pug is indentation sensitive
+//- Pug can also understand HTML code here we show PUG syntax to get familiar with
+
+doctype html
+html 
+  head 
+    title Natours #{tour}
+    //-#{...} is used as template literals in pug to unite strings with variables...
+    //- <link rel="stylesheet" href="css/style.css"/>
+    //- SERVING STATIC FILES in public folder by express middleware @ app.js tells where css and img folders are
+    link(rel="stylesheet" href="css/style.css")
+    link(rel="shortcut icon" type="image/png" href="img/favicon.png")
+
+  body 
+    h1= tour //Javascripot only expressions
+    h2= user.toUpperCase()
+    h1 The Park Camper  
+    //- pug syntax representation of html syntax <h1>The Park Camper</h1>
+    // This kind of commenting appears on the output code
+    //- Buffered commenting: This kind of commenting do not appear on the final code. 
+
+    - const x =9; //Buffered code
+    h2= 2*x
+    p This is just some text
