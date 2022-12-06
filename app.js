@@ -1,6 +1,7 @@
 //NOTE: ITS A GOOD PRACTICE TO ISOLATE CODES. HERE LAYS EVERYTHING RELATED TO EXPRESS
 
 //-->IMPORT CORE MODULES
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -19,7 +20,17 @@ const reviewRouter = require('./routes/reviewRoutes');
 //-->START EXPRESS.JS
 const app = express(); //Call express function to use its functions
 
+//-->SET VIEW ENGINE (PUG) FOR NODE.JS
+app.set('view engine', 'pug'); //NOTE: Express.js - A template engine enables you to use static template files in your application. At runtime, the template engine replaces variables in a template file with actual values, and transforms the template into an HTML file sent to the client. While by default, it is set to Jade there are some popular template engines that work with Express namely Pug, Mustache, Dust,and EJS. The template engine files are provided under views folder. In this case as *.pug extentions. In the run time, these static pages with variables inside automatically rendered as HTML pages as an output.
+// console.log(__dirname); //__dirname is a npm environment variable that tells you the absolute path of the directory containing the currently executing file.
+// console.log(process.cwd()); //It tells the current working directory
+app.set('views', path.join(__dirname, 'views')); //Lets tell where the 'views' folder is.
+//NOTE: The path.join() method joins all given path segments together using the platform-specific separator as a delimiter, then normalizes the resulting path. Basically, makes the path descriptors OS independent.
+
 //-->#1.GLOBAL MIDDLEWARES
+//->SERVING STATIC FILES
+// app.use(express.static(`${__dirname}/public`));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //->SET SECURITY HTTP HEADERS MIDDLEWARE
 app.use(helmet()); //GOT TO BE THE FIRST GLOBAL MIDDLEWARE TO EXECUTE FOR SECURITY
@@ -64,9 +75,6 @@ app.use(
     ],
   })
 ); //this should be used by the end as it clears up query strings
-
-//->SERVING STATIC FILES
-app.use(express.static(`${__dirname}/public`));
 
 //->TEST MIDDLEWARE
 app.use((req, res, next) => {
