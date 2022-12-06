@@ -91,6 +91,10 @@ app.use((req, res, next) => {
 });
 
 //-->#2.MOUNT ROUTES
+app.use('/', (req, res) => {
+  res.status(200).render('base');
+}); //Let express define (app.use()) route for '/' from which in the event of a successful response, pug will render(app.render()) file called "base" inside the specified views folder.
+
 app.use('/api/v1/tours', tourRouter); //watch for this route
 app.use('/api/v1/users', userRouter); //watch for this route
 app.use('/api/v1/reviews', reviewRouter); //watch for this route

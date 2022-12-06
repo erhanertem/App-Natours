@@ -40,6 +40,7 @@
 | npm i express-mongo-sanitize | https://www.npmjs.com/package/express-mongo-sanitize | Security: Sanitizes user-supplied data to prevent MongoDB Operator Injection.                                   |
 | npm i xss-clean              | https://www.npmjs.com/package/xss-clean              | Security: Node.js Connect middleware to sanitize user input coming from POST body, GET queries, and url params. |
 | npm i hpp                    | https://www.npmjs.com/package/hpp                    | Security: Express middleware to protect against HTTP Parameter Pollution attacks.                               |
+| npm i pug                    | https://www.npmjs.com/package/pug                    | Pug is a high performance template engine.                                                                      |
 
 </details>
 
