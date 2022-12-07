@@ -1,6 +1,5 @@
 const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
-const { getAllReviews } = require('./reviewController');
 
 exports.getOverview = catchAsync(async (req, res) => {
   //Step#1 Get tour data from collection
@@ -22,7 +21,7 @@ exports.getTour = catchAsync(async (req, res) => {
   //Step#2 Build template
   //Step#3 Render template using the data from Step#1
   res.status(200).render('tour', {
-    title: 'The Forest Hiker Tour',
+    title: 'The Forest Hiker Tour', //browser tab title
     tour, // same as tour: tour, for ES6
   });
 });
