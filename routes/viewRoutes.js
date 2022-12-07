@@ -16,7 +16,7 @@ const router = express.Router();
 // }); //Let express define (router.get()) route for '/' from which in the event of a successful response, pug will render(router.render()) file called "base" inside the specified views folder.
 // IMPORTANT! router.get() vs router.use() - since all routes start with / using router.use() would ovcerride the consequent routes. For that we use router.get() to only allow for / route and not the ones starting with /.
 
-router.get('/overview', viewsController.getOverview);
+router.get('/', viewsController.getOverview);
 router.get('/tour', viewsController.getTour);
 
 //-->#4.EXPORT MODULE
