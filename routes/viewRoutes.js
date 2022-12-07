@@ -17,7 +17,7 @@ const router = express.Router();
 // IMPORTANT! router.get() vs router.use() - since all routes start with / using router.use() would ovcerride the consequent routes. For that we use router.get() to only allow for / route and not the ones starting with /.
 
 router.get('/', viewsController.getOverview);
-router.get('/tour', viewsController.getTour);
+router.get('/tour/:slug', viewsController.getTour);
 
 //-->#4.EXPORT MODULE
 module.exports = router;
