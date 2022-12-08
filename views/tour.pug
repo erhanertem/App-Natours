@@ -3,6 +3,10 @@ extends base
 //- Externally reference a mixin located in a seperate file
 include _reviewCard
 
+//-Without apending the original block head @ base.pug, this adds additional code inside the head - NOTE: PUG ALLOWS TWO TYPES OF ADDITIONS. PREPEND & APEND. PREND ADDS TO THE BEGINNING AND APEND ADDS TO THE END OF THE CODE BLOCK
+block append head
+  script(src='/js/mapbox.js')
+
 //- For repetitive code we creater a PUG MIXIN similar to SASS mixins
 mixin overviewBox(icon, label, text)
   .overview-box__detail
