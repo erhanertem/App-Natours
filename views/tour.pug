@@ -100,6 +100,7 @@ block content
 
   section.section-pictures
     //-PUG LOOP for looping thru the tour images
+    //-i stands for index as a second variable in a PUG LOOP 
     each img, i in tour.images
       .picture-box
         img.picture-box__img(src=`/img/tours/${img}`, alt=`${tour.name} ${i+1}`, class=`picture-box__img--${i+1}`)
