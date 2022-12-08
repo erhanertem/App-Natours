@@ -34,7 +34,8 @@ app.set('views', path.join(__dirname, 'views')); //Lets tell where the 'views' f
 app.use(express.static(path.join(__dirname, 'public')));
 
 //->SET SECURITY HTTP HEADERS MIDDLEWARE
-app.use(helmet()); //GOT TO BE THE FIRST GLOBAL MIDDLEWARE TO EXECUTE FOR SECURITY
+// app.use(helmet()); //GOT TO BE THE FIRST GLOBAL MIDDLEWARE TO EXECUTE FOR SECURITY
+app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' })); //#1. Fix for the mapbox to work without throwing securitry error..
 
 //->DEVELOPMENT LOGGING MIDDLEWARE
 // console.log(process.env.NODE_ENV);
