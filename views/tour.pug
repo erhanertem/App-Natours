@@ -7,6 +7,7 @@ include _reviewCard
 block append head
   script(src='https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.js')
   link(href='https://api.mapbox.com/mapbox-gl-js/v2.11.0/mapbox-gl.css' rel='stylesheet')
+  script(defer src='/js/mapbox.js')
 
 //- For repetitive code we creater a PUG MIXIN similar to SASS mixins
 mixin overviewBox(icon, label, text)
