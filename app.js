@@ -25,7 +25,7 @@ const app = express(); //Call express function to use its functions
 app.set('view engine', 'pug'); //NOTE: Express.js - A template engine enables you to use static template files in your application. At runtime, the template engine replaces variables in a template file with actual values, and transforms the template into an HTML file sent to the client. While by default, it is set to Jade there are some popular template engines that work with Express namely Pug, Mustache, Dust,and EJS. The template engine files are provided under views folder. In this case as *.pug extentions. In the run time, these static pages with variables inside automatically rendered as HTML pages as an output.
 // console.log(__dirname); //__dirname is a npm environment variable that tells you the absolute path of the directory containing the currently executing file.
 // console.log(process.cwd()); //It tells the current working directory
-app.set('views', path.join(__dirname, 'views')); //Lets tell where the 'views' folder is.
+app.set('views', path.join(__dirname, 'views')); //Lets tell express.js where the 'views' folder is.
 //NOTE: The path.join() method joins all given path segments together using the platform-specific separator as a delimiter, then normalizes the resulting path. Basically, makes the path descriptors OS independent.
 
 //-->#1.GLOBAL MIDDLEWARES
