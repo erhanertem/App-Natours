@@ -4,3 +4,5 @@ vscode
 .parcel-cache
 dist
 config.env
+.parcel-cache
+.cache

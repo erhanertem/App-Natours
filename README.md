@@ -43,6 +43,7 @@
 | npm i pug                             | https://www.npmjs.com/package/pug                                                                             | Pug is a high performance template engine.                                                                      |
 | npm i axios OR via script referencing | https://www.npmjs.com/package/axios OR https://cdnjs.com/libraries/axios OR https://axios-http.com/docs/intro | Axios is a promise-based HTTP Client for node.js and the browser.                                               |
 | npm i cookie-parser                   | https://www.npmjs.com/package/cookie-parser                                                                   | Parse Cookie header and populate req.cookies with an object keyed by the cookie names.                          |
+| npm i parcel-bundler --save-dev       | https://www.npmjs.com/package/parcel-bundler                                                                  | Web application bundler                                                                                         |
 
 </details>
 
