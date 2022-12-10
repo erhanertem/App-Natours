@@ -149,6 +149,32 @@ exports.protect = catchAsync(async (req, res, next) => {
   next();
 });
 
+//-->PROTECTED VIEW ACCESS MIDDLEWARE: BEWARE - This middleware does not protect routes but the rendered pages so there will be no errors in this middleware. axios>cookie-parser>protected-VIEW-entry
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    //->1.Verify Token
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    //->2.Check if the user still exists(not deleted)
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    } //IF TRUE (NO USER EXISTS) GET OUT OF THIS MIDDLEWARE AND MOVEON WITH THE NEXT()
+    //->3.Check if user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    } //IF TRUE (PASSWORD CHANGED) GET OUT OF THIS MIDDLEWARE AND MOVEON WITH THE NEXT()
+
+    //->GRANT ACCESS TO THE PROTECTED VIEW
+    res.locals.user = currentUser; //VERY IMPORTANT! Each and every pug template will have access to res.locals. So whatever variable defiend thru locals is accessible by PUG files.
+    // console.log('🧤', req.user);
+    return next();
+  }
+  next(); //IF THERE IS NO RES.COOKIE THEN GET OUT OF THIS MIDDLEWARE AND MOVEON WITH THE NEXT()
+});
+
 exports.restrictTo =
   (...roles) =>
   (req, res, next) => {

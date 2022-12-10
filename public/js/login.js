@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 const login = async (email, password) => {
-  console.log(email, password);
+  // console.log(email, password);
   //Note: In order to make HTTP requests to our API from the frontend we use axios library which seamlessly works between front-end and back-end HTTP requests. (KInda like POSTMAN inside our front-end code)
   try {
     const res = await axios({
@@ -14,9 +14,15 @@ const login = async (email, password) => {
       },
     });
     console.log(res);
+    if (res.data.status === 'success') {
+      alert('Logged in succesfully!');
+      window.setTimeout(() => {
+        location.assign('/');
+      }, 1500);
+    }
   } catch (err) {
     // console.log(err);
-    console.log(err.response.data.message); //axios error
+    alert(err.response.data.message); //axios error
   }
 };
 

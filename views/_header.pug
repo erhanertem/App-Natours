@@ -11,10 +11,14 @@ header.header
   .header__logo
     img(src='/img/logo-white.png' alt='Natours logo')
   nav.nav.nav--user
-    //- a.nav__el(href='#') My bookings
-    //- a.nav__el(href='#') 
-    //-   img.nav__user-img(src='img/user.jpg' alt='User photo')
-    //-   span Jonas
-    a.nav__el(href='/login') Log in
-    a.nav__el.nav__el--cta(href='#') Sign up 
-    //-Sign up process is similar to login process
+    //-@authContoller.js snippet- res.locals.user = currentUser; allows pug files get assigned variables - this is how we got user
+    if user
+      a.nav__el.nav__el--logout Log out
+      a.nav__el(href='#') 
+        img.nav__user-img(src=`/img/users/${user.photo}` alt=`Photo of ${user.name}`)
+        span= user.name.split(' ')[0] 
+          //-Get the first name only
+    else
+      a.nav__el(href='/login') Log in
+      a.nav__el.nav__el--cta(href='#') Sign up 
+        //-While Sign up process is similar to login process in the scope of this course it won't be coded.
