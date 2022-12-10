@@ -11,5 +11,12 @@ block content
         .form__group.ma-bt-md
           label.form__label(for='password') Password
           input#password.form__input(type='password', pattern='.{8,}', placeholder='••••••••', required, minlength='8')
+        //- BUG!!! WITHOUT HARDCODED REGX PATTERNS HTML5 NATIVE TYPE CONTROLLERS DO NOT WORK. WHY??
+        //- .form__group
+        //-   label.form__label(for='email') Email address
+        //-   input#email.form__input(type='email', placeholder='you@example.com', required)
+        //- .form__group.ma-bt-md
+        //-   label.form__label(for='password') Password
+        //-   input#password.form__input(type='password', placeholder='••••••••', minlength='8', required)
         .form__group
           button.btn.btn--green Login

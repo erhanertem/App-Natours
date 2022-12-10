@@ -27,5 +27,12 @@ html
       h1 This is a placeholder heading
     //FOOTER
     include _footer
-    //- //JS SCRIPT REFERENCE
-    //- script(src='/js/mapbox.js')
+    //JS SCRIPT REFERENCE
+    //- Alt#1 per https://cdnjs.com/libraries/axios 
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js') 
+    //-Alt#2 per https://axios-http.com/docs/intro
+    //- script(src='https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js') 
+    //-Alt#3 per https://axios-http.com/docs/intro
+    //- script(src='https://unpkg.com/axios/dist/axios.min.js') 
+    script(src='/js/mapbox.js')
+    script(src='/js/login.js')

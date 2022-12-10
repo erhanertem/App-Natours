@@ -111,10 +111,12 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1]; //We strip Bearer from the actual JWToken string..
-  }
-  // console.log(token);
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
+  } // req coming from front-end side axios>cookie-parser>protected-route-entry
 
   if (!token) {
+    // console.log(token);
     return next(
       new AppError('You are not logged in! Please login to get access', 401)
     ); //We stop the user to proceed further if he is missing a token first... Token created @ login...

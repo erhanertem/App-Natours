@@ -3,6 +3,7 @@ const express = require('express');
 
 //-->#1.IMPORT CUSTOM MODULE
 const viewsController = require('../controllers/viewController');
+const authController = require('../controllers/authController');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
@@ -17,7 +18,8 @@ const router = express.Router();
 // IMPORTANT! router.get() vs router.use() - since all routes start with / using router.use() would ovcerride the consequent routes. For that we use router.get() to only allow for / route and not the ones starting with /.
 
 router.get('/', viewsController.getOverview);
-router.get('/tour/:slug', viewsController.getTour);
+// router.get('/tour/:slug', viewsController.getTour);
+router.get('/tour/:slug', authController.protect, viewsController.getTour); //Testing axios>cookie-parser>protected-route-entry scenario
 router.get('/login', viewsController.getLoginForm);
 
 //-->#4.EXPORT MODULE

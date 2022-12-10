@@ -9,6 +9,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 //-->IMPORT CUSTOM MODULES
 const AppError = require('./utils/appError');
@@ -57,6 +58,9 @@ app.use('/api', limiter); //WE APPLY THIS MIDDLEWARE WHICH EFFECTS ALL ROUTES ST
 //->BODY PARSER, READING DATA FROM BODY INTO REQ.BODY
 app.use(express.json({ limit: '10kb' })); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING. Anything larger than 10kb is not be accepted.
 
+//->COOKIE PARSER, READING DATA FROM THE COOKIE INTO REQ.BODY
+app.use(cookieParser());
+
 //->DATA SANITIZATION AGAINST NOSQL QUERY INJECTIONS
 app.use(mongoSanitize());
 
@@ -89,6 +93,7 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   // console.log(x); //Create an unexceptional error for testing
   // console.log(req.headers); //WEB HTTP API
+  console.log(req.cookies);
   next();
 });
 
