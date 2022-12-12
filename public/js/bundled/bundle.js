@@ -20566,7 +20566,33 @@ exports.isCancel = isCancel;
 exports.CanceledError = CanceledError;
 exports.AxiosError = AxiosError;
 exports.Axios = Axios;
-},{"./lib/axios.js":"../../node_modules/axios/lib/axios.js"}],"login.js":[function(require,module,exports) {
+},{"./lib/axios.js":"../../node_modules/axios/lib/axios.js"}],"alerts.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.showAlert = exports.hideAlert = void 0;
+/* eslint-disable */
+
+const hideAlert = () => {
+  const el = document.querySelector('.alert');
+  if (el) el.parentElement.removeChild(el);
+};
+
+// type is 'success' or 'error' per CSS setup
+exports.hideAlert = hideAlert;
+const showAlert = (type, msg) => {
+  //1.Lets make sure all alerts are hidden before we create a new alert
+  hideAlert();
+  //2.Create an alert
+  const markup = `<div class="alert alert--${type}">${msg}</div>`;
+  document.querySelector('body').insertAdjacentHTML('afterbegin', markup);
+  //3.Hide the alert after 5 secs
+  window.setTimeout(hideAlert, 5000);
+};
+exports.showAlert = showAlert;
+},{}],"login.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -20574,6 +20600,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.login = void 0;
 var _axios = _interopRequireDefault(require("axios"));
+var _alerts = require("./alerts");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 /* eslint-disable */
 
@@ -20618,18 +20645,18 @@ const login = async (email, password) => {
 
     console.log(res);
     if (res.data.status === 'success') {
-      alert('Logged in succesfully!');
+      (0, _alerts.showAlert)('success', 'Logged in succesfully!'); //first var for CSS, second for the message - refer to alerts.js
       window.setTimeout(() => {
         location.assign('/');
       }, 1500);
     }
   } catch (err) {
     // console.log(err);
-    alert(err.response.data.message); //axios error
+    (0, _alerts.showAlert)('error', err.response.data.message); //axios error
   }
 };
 exports.login = login;
-},{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("core-js/stable");
