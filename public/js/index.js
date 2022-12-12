@@ -2,6 +2,7 @@
 
 // console.log('Hello from parser!');
 import 'core-js/stable'; // <- at the top of your entry point - polyfill only stable features - ES and web standards:
+import 'regenerator-runtime';
 
 import { displayMap } from './mapbox';
 import { login } from './login';
