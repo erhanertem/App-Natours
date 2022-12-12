@@ -6,3 +6,4 @@ dist
 config.env
 .parcel-cache
 .cache
+public/js/bundled

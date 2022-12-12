@@ -23,6 +23,7 @@ Axios “GET” call can have body Content	Fetch “GET” call cannot have body
 
 //Since we have disabled CDN script loading for axios in the base pug file, we would install npm package for axios locally and import directly from here.
 import axios from 'axios';
+import { showAlert } from './alerts';
 
 export const login = async (email, password) => {
   console.log(email, password);
@@ -39,13 +40,13 @@ export const login = async (email, password) => {
     });
     console.log(res);
     if (res.data.status === 'success') {
-      alert('Logged in succesfully!');
+      showAlert('success', 'Logged in succesfully!'); //first var for CSS, second for the message - refer to alerts.js
       window.setTimeout(() => {
         location.assign('/');
       }, 1500);
     }
   } catch (err) {
     // console.log(err);
-    alert(err.response.data.message); //axios error
+    showAlert('error', err.response.data.message); //axios error
   }
 };
