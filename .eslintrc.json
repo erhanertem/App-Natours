@@ -1,4 +1,10 @@
 {
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true,
+    "ecmaFeatures": { "jsx": true },
+    "ecmaVersion": "latest"
+  },
   "extends": ["airbnb", "prettier", "plugin:node/recommended"],
   "plugins": ["prettier"],
   "rules": {

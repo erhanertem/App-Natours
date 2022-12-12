@@ -43,7 +43,9 @@
 | npm i pug                             | https://www.npmjs.com/package/pug                                                                             | Pug is a high performance template engine.                                                                      |
 | npm i axios OR via script referencing | https://www.npmjs.com/package/axios OR https://cdnjs.com/libraries/axios OR https://axios-http.com/docs/intro | Axios is a promise-based HTTP Client for node.js and the browser.                                               |
 | npm i cookie-parser                   | https://www.npmjs.com/package/cookie-parser                                                                   | Parse Cookie header and populate req.cookies with an object keyed by the cookie names.                          |
-| npm i parcel-bundler --save-dev       | https://www.npmjs.com/package/parcel-bundler                                                                  | Web application bundler                                                                                         |
+| npm i parcel-bundler --save-dev       | https://www.npmjs.com/package/parcel-bundler OR https://parceljs.org/getting-started/migration/               | Web application bundler                                                                                         |
+| npm i core-js                         | https://www.npmjs.com/package/core-js                                                                         | Polyfilling support for older browsers                                                                          |
+| npm i --save mapbox-gl                | https://www.npmjs.com/package/mapbox-gl OR https://docs.mapbox.com/mapbox-gl-js/guides/install/               | Mapbox library                                                                                                  |
 
 </details>
 

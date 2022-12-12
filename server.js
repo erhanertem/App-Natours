@@ -2,6 +2,8 @@
 //-->IMPORT 3RD PARTY MODULE
 const mongoose = require('mongoose');
 
+mongoose.set('strictQuery', false);
+
 const dotenv = require('dotenv'); //FIRST CONFIGURE THE ENVIRONMENT
 
 dotenv.config({ path: './config.env' }); //dotenv module acquires env data from the config.env file and assings them to process.env

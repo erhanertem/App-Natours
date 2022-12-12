@@ -37,6 +37,55 @@ app.use(express.static(path.join(__dirname, 'public')));
 //->SET SECURITY HTTP HEADERS MIDDLEWARE
 // app.use(helmet()); //GOT TO BE THE FIRST GLOBAL MIDDLEWARE TO EXECUTE FOR SECURITY
 app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' })); //#1. Fix for the mapbox to work without throwing securitry error..
+// Set security HTTP headers
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: {
+//       directives: {
+//         defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
+//         baseUri: ["'self'"],
+//         fontSrc: ["'self'", 'https:', 'data:'],
+//         scriptSrc: [
+//           "'self'",
+//           'https:',
+//           'http:',
+//           'blob:',
+//           'https://*.mapbox.com',
+//           'https://js.stripe.com',
+//           'https://m.stripe.network',
+//           'https://*.cloudflare.com',
+//         ],
+//         frameSrc: ["'self'", 'https://js.stripe.com'],
+//         objectSrc: ["'none'"],
+//         styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+//         workerSrc: [
+//           "'self'",
+//           'data:',
+//           'blob:',
+//           'https://*.tiles.mapbox.com',
+//           'https://api.mapbox.com',
+//           'https://events.mapbox.com',
+//           'https://m.stripe.network',
+//         ],
+//         childSrc: ["'self'", 'blob:'],
+//         imgSrc: ["'self'", 'data:', 'blob:'],
+//         formAction: ["'self'"],
+//         connectSrc: [
+//           "'self'",
+//           "'unsafe-inline'",
+//           'data:',
+//           'blob:',
+//           'https://*.stripe.com',
+//           'https://*.mapbox.com',
+//           'https://*.cloudflare.com/',
+//           'https://bundle.js:*',
+//           'ws://127.0.0.1:*/',
+//         ],
+//         upgradeInsecureRequests: [],
+//       },
+//     },
+//   })
+// );
 
 //->DEVELOPMENT LOGGING MIDDLEWARE
 // console.log(process.env.NODE_ENV);
@@ -119,7 +168,7 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   // console.log(x); //Create an unexceptional error for testing
   // console.log(req.headers); //WEB HTTP API
-  console.log(req.cookies);
+  console.log('🩳', req.cookies);
   next();
 });
 

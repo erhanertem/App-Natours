@@ -21,8 +21,11 @@ Axios “GET” call can have body Content	Fetch “GET” call cannot have body
 
 */
 
-const login = async (email, password) => {
-  // console.log(email, password);
+//Since we have disabled CDN script loading for axios in the base pug file, we would install npm package for axios locally and import directly from here.
+import axios from 'axios';
+
+export const login = async (email, password) => {
+  console.log(email, password);
   //Note: In order to make HTTP requests to our API from the frontend we use axios library which seamlessly works between front-end and back-end HTTP requests. (KInda like POSTMAN inside our front-end code)
   try {
     const res = await axios({
@@ -46,12 +49,3 @@ const login = async (email, password) => {
     alert(err.response.data.message); //axios error
   }
 };
-
-document.querySelector('.form').addEventListener('submit', event => {
-  event.preventDefault(); //this prevents the form from loading any other page
-  const email = document.getElementById('email').value;
-  //Refer to input#email fields @ login.pug
-  const password = document.getElementById('password').value;
-  //Refer to input#password fields @ login.pug
-  login(email, password);
-});
