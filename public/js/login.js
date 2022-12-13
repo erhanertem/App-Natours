@@ -42,11 +42,26 @@ export const login = async (email, password) => {
     if (res.data.status === 'success') {
       showAlert('success', 'Logged in succesfully!'); //first var for CSS, second for the message - refer to alerts.js
       window.setTimeout(() => {
-        location.assign('/');
+        location.assign('/'); //it will help us to keep browser history even page redirected. If location.replace() method the current page will not be saved in session history, meaning the user won't be able to use the Back button to navigate to it.
       }, 1500);
     }
   } catch (err) {
     // console.log(err);
     showAlert('error', err.response.data.message); //axios error
+  }
+};
+
+export const logout = async () => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: 'http://127.0.0.1:3000/api/v1/users/logout',
+    });
+
+    //Reload the page after logout to refresh the login condition
+    if ((res.data.status = 'success')) location.reload(true); //reloads from the server and the page content (same as pressign the reload button of the browser) - not from the cache which would have been the same page if it did so
+  } catch (err) {
+    console.log('🎋', err.response);
+    showAlert('error', 'Error logging out! Try again.');
   }
 };

@@ -5,11 +5,12 @@ import 'core-js/stable'; // <- at the top of your entry point - polyfill only st
 // import 'regenerator-runtime';
 
 import { displayMap } from './mapbox';
-import { login } from './login';
+import { login, logout } from './login';
 
 //DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form');
+const logOutBtn = document.querySelector('.nav__el--logout');
 
 //DELEGATION
 if (mapBox) {
@@ -25,4 +26,7 @@ if (loginForm) {
     console.log(email, password);
     login(email, password);
   });
+}
+if (logOutBtn) {
+  logOutBtn.addEventListener('click', logout);
 }

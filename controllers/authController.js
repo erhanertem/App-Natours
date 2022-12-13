@@ -27,7 +27,7 @@ const createSendToken = (user, statusCode, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ), //COOKIE EXPIRES IN 90 DAYS FROM THE DAY ITS ISSUED
     // secure: true, //cookie is only sent tru https connection
-    httpOnly: true, //cookie could not be accessed or changed via browser in any way SUCH AS CROSS-SITE SCRIPT ATTACKS
+    httpOnly: true, //cookie could not be accessed or changed via browser in any way SUCH AS CROSS-SITE SCRIPT ATTACKS - THIS IS ALSO A PROBLEM AS WE CANT DELETE THE COOKIE SO THAT THE USER GETS LOGGED OUT. HOWEVER, THERE IS A WORKAROUND FOR LOGGING OUT WHICH IS SIMPLY REISSUING THE USER WITH AN EMPTY JWT AND SHORT EXP TIME SO THAT THE NEXT TIME WE WOULD CLICK THE LINK, HE WOULDNT HAVE ACCESS TO PROTECTED ROUTES.
   };
 
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true; //cookie is only sent tru https connection
@@ -101,6 +101,14 @@ exports.login = catchAsync(async (req, res, next) => {
   // res.status(200).json({ status: 'success', token });
 });
 
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   //->1.Check if we have a token for access
   //NOTE: req.headers is a Web HTTP API. The headers may carry token information in either GET or POST operations. You can send the token in the body if you want, there's nothing preventing you from doing that. However, GET requests don't have a body and so the only way to send the token there is via a header or a query parameter and now on the server you'd have to check the body and the header separately depending on the route. It's better to just keep it consistent and send the token in the header.
@@ -151,6 +159,9 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 //-->PROTECTED VIEW ACCESS MIDDLEWARE: BEWARE - This middleware does not protect routes but the rendered pages so there will be no errors in this middleware. axios>cookie-parser>protected-VIEW-entry
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt === 'loggedout') {
+    return next();
+  }
   if (req.cookies.jwt) {
     //->1.Verify Token
     const decoded = await promisify(jwt.verify)(
