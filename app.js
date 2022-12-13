@@ -35,77 +35,78 @@ app.set('views', path.join(__dirname, 'views')); //Lets tell express.js where th
 app.use(express.static(path.join(__dirname, 'public')));
 
 //->SET SECURITY HTTP HEADERS MIDDLEWARE
-// app.use(helmet()); //GOT TO BE THE FIRST GLOBAL MIDDLEWARE TO EXECUTE FOR SECURITY
-app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' })); //#1. Fix for the mapbox to work without throwing securitry error..
-// Set security HTTP headers - Further HELMET configuration for Security Policy (CSP)
+//GOT TO BE THE FIRST GLOBAL MIDDLEWARE TO EXECUTE FOR SECURITY
+// app.use(helmet());
 app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: [
-        "'self'",
-        'data:',
-        'blob:',
-        'https:',
-        'ws:',
-        'https://*.mapbox.com',
-        'https://*.stripe.com',
-      ],
-      baseUri: ["'self'"],
-      fontSrc: [
-        "'self'",
-        'https:',
-        'data:',
-        'fonts.googleapis.com',
-        'fonts.gstatic.com',
-      ],
-      scriptSrc: [
-        "'self'",
-        'https:',
-        'http:',
-        'blob:',
-        'https://unpkg.com/',
-        'https://tile.openstreetmap.org',
-        'https://js.stripe.com',
-        'https://m.stripe.network',
-        'https://*.cloudflare.com',
-        'https://*.mapbox.com',
-      ],
-      frameSrc: ["'self'", 'https://js.stripe.com'],
-      objectSrc: ["'none'"],
-      styleSrc: [
-        "'self'",
-        'https:',
-        "'unsafe-inline'",
-        'https://unpkg.com/',
-        'https://tile.openstreetmap.org',
-        'https://fonts.googleapis.com/',
-      ],
-      workerSrc: [
-        "'self'",
-        'data:',
-        'blob:',
-        'https://*.tiles.mapbox.com',
-        'https://api.mapbox.com',
-        'https://events.mapbox.com',
-        'https://m.stripe.network',
-      ],
-      childSrc: ["'self'", 'blob:'],
-      imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
-      formAction: ["'self'"],
-      connectSrc: [
-        "'self'",
-        "'unsafe-inline'",
-        'data:',
-        'blob:',
-        'https://unpkg.com',
-        'https://tile.openstreetmap.org',
-        'https://*.mapbox.com',
-        'https://*.cloudflare.com/',
-        'https://*.stripe.com',
-        'https://bundle.js:*',
-        'ws://127.0.0.1:*/',
-      ],
-      upgradeInsecureRequests: [],
+  helmet({
+    crossOriginEmbedderPolicy: false,
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+    contentSecurityPolicy: {
+      directives: {
+        baseUri: ["'self'"],
+        connectSrc: [
+          "'self'",
+          'data:',
+          'blob:',
+          // 'https://unpkg.com',
+          // 'https://tile.openstreetmap.org',
+          'https://*.tiles.mapbox.com',
+          'https://api.mapbox.com',
+          'https://events.mapbox.com',
+          'https://*.stripe.com',
+          'https://*.cloudflare.com/',
+          'https://bundle.js:*',
+          'ws://127.0.0.1:*/',
+        ],
+        defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
+        fontSrc: [
+          "'self'",
+          'https:',
+          'data:',
+          'fonts.googleapis.com',
+          'fonts.gstatic.com',
+        ],
+        formAction: ["'self'"],
+        frameSrc: ["'self'", 'https://js.stripe.com'],
+        scriptSrc: [
+          "'self'",
+          'https:',
+          'http:',
+          'blob:',
+          'https://js.stripe.com',
+          'https://m.stripe.network',
+          'https://*.cloudflare.com',
+          // 'https://unpkg.com/',
+          // 'https://tile.openstreetmap.org',
+          // 'https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js',
+          // 'ajax.googleapis.com *',
+        ],
+        styleSrc: [
+          "'self'",
+          'https:',
+          'w3.org/*',
+          'https://fonts.googleapis.com/',
+          // 'https://unpkg.com/',
+          // 'https://tile.openstreetmap.org',
+        ],
+        workerSrc: [
+          "'self'",
+          'data:',
+          'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+          'https://m.stripe.network',
+        ],
+        objectSrc: ["'none'"],
+        childSrc: [
+          "'self'",
+          'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+        ],
+        imgSrc: [
+          "'self'",
+          'data:',
+          'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+        ],
+        upgradeInsecureRequests: [],
+      },
     },
   })
 );

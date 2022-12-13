@@ -6,7 +6,7 @@
   "targets": {
     "main": false
   },
-  "browserslist": "last 2 versions",
+  "browserslist": "last 2 Firefox versions, last 2 Chrome versions, last 2 Edge versions, last 2 Safari versions",
   "engines": {
     "node": ">=14.16"
   },

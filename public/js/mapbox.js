@@ -1,9 +1,9 @@
 /* eslint-disable */
 
-// console.log('hello from the client side');
+console.log('hello from mapbox');
 
-// import 'mapbox-gl/dist/mapbox-gl.css'; //import mapbox's css
-// import mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-gl');"
+import 'mapbox-gl/dist/mapbox-gl.css'; //import mapbox's css
+import mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-gl');"
 
 export const displayMap = locations => {
   mapboxgl.accessToken =
