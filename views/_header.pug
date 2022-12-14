@@ -14,7 +14,7 @@ header.header
     //-@authContoller.js snippet- res.locals.user = currentUser; allows pug files get assigned variables - this is how we got user
     if user
       a.nav__el.nav__el--logout Log out
-      a.nav__el(href='#') 
+      a.nav__el(href='/me') 
         img.nav__user-img(src=`/img/users/${user.photo}` alt=`Photo of ${user.name}`)
         span= user.name.split(' ')[0] 
           //-Get the first name only

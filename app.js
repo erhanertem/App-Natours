@@ -192,7 +192,7 @@ app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   // console.log(x); //Create an unexceptional error for testing
   // console.log(req.headers); //WEB HTTP API
-  console.log('🩳', req.cookies);
+  // console.log('🩳', req.cookies);
   next();
 });
 
