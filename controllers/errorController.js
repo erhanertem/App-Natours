@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const AppError = require('../utils/appError');
 
 const handleCastErrorDB = error => {
@@ -22,34 +23,65 @@ const handleJWTError = () =>
 const handleJWTExpiredError = () =>
   new AppError('Your token has expired. Please login again!', 401);
 
-const sendErrorDev = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
-    error: err,
-    message: err.message,
-    stack: err.stack,
-  });
+const sendErrorDev = (err, req, res) => {
+  //-->A.API - BACKEND ERR
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(err.statusCode).json({
+      //return is required so that we do not proceed down below.
+      status: err.status,
+      error: err,
+      message: err.message,
+      stack: err.stack,
+    });
+  }
+  //-->B.RENDERED WEBSITE - FRONTEND ERR
+  //1.Log the err to the console
+  console.log('ERROR 💥', err);
+  //2.Send a generic message
+  return res //return is required so that we do not proceed down below. (gets rid off if-else)
+    .status(err.statusCode)
+    .render('error', { title: 'Something went wrong!', msg: err.message }); //We need to create erro.pug for render()
 };
 
-const sendErrorProd = (err, res) => {
-  //->Operational, trusted error: send message to the client
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-      operational: err.isOperational,
-    });
-
-    //->Programming or other unknown errors details shouldn't be leaked to the client
-  } else {
+const sendErrorProd = (err, req, res) => {
+  //-->A.API - BACKEND ERR
+  if (req.originalUrl.startsWith('/api')) {
+    //->A.1.Operational, trusted error: send message to the client
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        //return is required so that we do not proceed down below.
+        status: err.status,
+        message: err.message,
+        operational: err.isOperational,
+      });
+    }
+    //->A.2.Programming or other unknown errors details shouldn't be leaked to the client
     //1.Log the err to the console
     console.log('ERROR 💥', err);
     //2.Send a generic message
-    res.status(500).json({
+    return res.status(500).json({
+      //return is required so that we do not proceed down below. (gets rid off if-else)
       status: 'error',
       message: 'Something went very wrong!',
     });
   }
+  //-->B.RENDERED WEBSITE - FRONTEND ERR
+  //->B.1.Operational, trusted error: send message to the client
+  if (err.isOperational) {
+    return res //return is required so that we do not proceed down below.
+      .status(err.statusCode)
+      .render('error', { title: 'Something went wrong!', msg: err.message }); //We need to create erro.pug for render()
+  }
+  //->Programming or other unknown errors details shouldn't be leaked to the client
+  //1.Log the err to the console
+  console.log('ERROR 💥', err);
+  //2.Send a generic message
+  return res //return is required so that we do not proceed down below.
+    .status(err.statusCode)
+    .render('error', {
+      title: 'Something went wrong!',
+      msg: 'Please try again later',
+    }); //We need to create erro.pug for render()
 };
 
 module.exports = (err, req, res, next) => {
@@ -58,7 +90,8 @@ module.exports = (err, req, res, next) => {
 
   //NOTE: WE WOULD LIKE TO SEND AS MINIMAL ERRORS AS POSSIBLE TO THE CLIENT IN PRODUCTION MODE AND SEND AS MUCH ERRORS AS WE CAN IN DEVELOPMENT PHASE SO WE NEED TO ESTABLISH CONDITIONS FOR BOTH PROCESS ENVIROMENTS
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDev(err, res);
+    console.log(err);
+    sendErrorDev(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     //->HANDLE BAD GET TOUR NAME ERR
     //1. 127.0.0.1:3000/api/v1/tours/wwww creates an invalid id GET req which causes internal mongoose error which we need to respond in production
@@ -77,6 +110,6 @@ module.exports = (err, req, res, next) => {
     // if (err.name === 'TokenExpiredError') error = handleJWTExpiredError(err); //err if token is not valid anymore
     if (err.name === 'TokenExpiredError') error = handleJWTExpiredError(); //err if token is not valid anymore
 
-    sendErrorProd(error, res); //send custom err in production
+    sendErrorProd(error, req, res); //send custom err in production
   }
 };

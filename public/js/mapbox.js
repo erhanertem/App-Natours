@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-console.log('hello from mapbox');
+// console.log('hello from mapbox');
 
 import 'mapbox-gl/dist/mapbox-gl.css'; //import mapbox's css
 import mapboxgl from 'mapbox-gl'; // or "const mapboxgl = require('mapbox-gl');"
