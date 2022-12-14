@@ -61,7 +61,7 @@ export const logout = async () => {
     //Reload the page after logout to refresh the login condition
     if ((res.data.status = 'success')) location.reload(true); //reloads from the server and the page content (same as pressign the reload button of the browser) - not from the cache which would have been the same page if it did so
   } catch (err) {
-    console.log('🎋', err.response);
+    // console.log('🎋', err.response);
     showAlert('error', 'Error logging out! Try again.');
   }
 };

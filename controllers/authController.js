@@ -11,7 +11,7 @@ const sendEmail = require('../utils/email');
 
 //-->HELPER FUNCTIONS
 const signToken = id =>
-  // jwt.sign({ id: id }, process.env.JWT_SECRET, {
+  // jsonwebtoken npm package - jwt.sign({ id: id }, process.env.JWT_SECRET, {
   jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   }); //payload,secretkey,{option}
@@ -104,7 +104,8 @@ exports.login = catchAsync(async (req, res, next) => {
 exports.logout = (req, res) => {
   res.cookie('jwt', 'loggedout', {
     expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true,
+    httpOnly: true, //disables JS resding the value sent within the cookie. If you want to use in your code send from the server, httpOnly should be marked as false.
+    //NOTE: For a site running in HTTPS only, secure: true SHALL BE jot down as well.
   });
   res.status(200).json({ status: 'success' });
 };
