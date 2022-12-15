@@ -6,20 +6,22 @@ import 'core-js/stable'; // <- at the top of your entry point - polyfill only st
 
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
-import { updateData } from './updateSettings';
+import { updateSettings } from './updateSettings';
 
 //DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
+const userPasswordForm = document.querySelector('.form-user-password');
 
 //DELEGATION
 if (mapBox) {
   const locations = JSON.parse(mapBox.dataset.locations); // console.log(locations); //JSON parse returns an array output
   displayMap(locations);
 }
-if (loginForm) {
+
+if (loginForm)
   loginForm.addEventListener('submit', event => {
     event.preventDefault(); //prevents the form from loading any other page
     //VALUES
@@ -28,16 +30,22 @@ if (loginForm) {
     console.log(email, password);
     login(email, password);
   });
-}
-if (logOutBtn) {
-  logOutBtn.addEventListener('click', logout);
-}
 
-if (userDataForm) {
+if (logOutBtn) logOutBtn.addEventListener('click', logout);
+
+if (userDataForm)
   userDataForm.addEventListener('submit', event => {
     event.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
-    updateData(name, email);
+    updateSettings({ name, email }, 'data');
   });
-}
+
+if (userPasswordForm)
+  userPasswordForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const passwordCurrent = document.getElementById('password-current').value; //variables per API
+    const password = document.getElementById('password').value; //variables per API
+    const passwordConfirm = document.getElementById('password-confirm').value; //variables per API
+    updateSettings({ passwordCurrent, password, passwordConfirm }, 'password');
+  });
