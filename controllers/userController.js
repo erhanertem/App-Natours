@@ -20,6 +20,9 @@ exports.getMe = (req, res, next) => {
 }; //We manually assign the log in id and assign as params id to be used in getUser input
 
 exports.updateMe = catchAsync(async (req, res, next) => {
+  console.log(req.file);
+  console.log(req.body);
+
   //->#1.Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(

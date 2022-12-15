@@ -1,5 +1,6 @@
 //-->#0.IMPORT CORE MODULE
 const express = require('express');
+const multer = require('multer'); //form encoding middleware which is good at handling multi-part form data
 
 //-->#1.IMPORT CUSTOM MODULE
 const userController = require('../controllers/userController');
@@ -7,6 +8,7 @@ const authController = require('../controllers/authController');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
+const upload = multer({ dest: 'public/img/users' }); //calling multer without options would have saved it into the memory - NOTE: body parser can not handle files so we need this middleware to deal with this problem
 
 //-->#3.DEFINE ROUTES
 
@@ -37,6 +39,7 @@ router.get(
 router.patch(
   '/updateMe',
   // authController.protect,
+  upload.single('photo'), //single: as we have a single file to upload | name of the field that it would hold the item - CORRESPONDS TO POST-MAN>PATCH~update current user data>FORM-DATA>name/photo fields...
   userController.updateMe
 ); //Let the user update his own data
 router.delete(
