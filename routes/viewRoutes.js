@@ -25,12 +25,12 @@ router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 router.get('/me', authController.protect, viewsController.getAccount);
 
-//- #1. Traditional HTML5 only POST version
-router.post(
-  '/submit-user-data',
-  authController.protect,
-  viewsController.updateUserData
-);
+// //- #1. Traditional HTML5 only POST version
+// router.post(
+//   '/submit-user-data',
+//   authController.protect,
+//   viewsController.updateUserData
+// );
 
 //-->#4.EXPORT MODULE
 module.exports = router;

@@ -6,11 +6,13 @@ import 'core-js/stable'; // <- at the top of your entry point - polyfill only st
 
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
+import { updateData } from './updateSettings';
 
 //DOM ELEMENTS
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
+const userDataForm = document.querySelector('.form-user-data');
 
 //DELEGATION
 if (mapBox) {
@@ -19,7 +21,7 @@ if (mapBox) {
 }
 if (loginForm) {
   loginForm.addEventListener('submit', event => {
-    event.preventDefault(); //this prevents the form from loading any other page
+    event.preventDefault(); //prevents the form from loading any other page
     //VALUES
     const email = document.getElementById('email').value; //Refer to input#email fields @ login.pug
     const password = document.getElementById('password').value; //Refer to input#password fields @ login.pug
@@ -29,4 +31,13 @@ if (loginForm) {
 }
 if (logOutBtn) {
   logOutBtn.addEventListener('click', logout);
+}
+
+if (userDataForm) {
+  userDataForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    updateData(name, email);
+  });
 }

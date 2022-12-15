@@ -131,7 +131,7 @@ app.use('/api', limiter); //WE APPLY THIS MIDDLEWARE WHICH EFFECTS ALL ROUTES ST
 //-->PARSER
 //->BODY PARSER, READING DATA FROM BODY INTO REQ.BODY
 app.use(express.json({ limit: '10kb' })); //GLOBAL MIDDLEWARE - USEFULL FOR POST REQ JSON HANDLING. Anything larger than 10kb is not be accepted.
-app.use(express.urlencoded({ extended: true, limit: '10kb' })); //GLOBAL MIDDLEWARE - USEFULL FOR INLINE HTML POST REQ HANDLING.
+// app.use(express.urlencoded({ extended: true, limit: '10kb' })); //GLOBAL MIDDLEWARE - USEFULL FOR INLINE HTML POST REQ HANDLING.
 //->COOKIE PARSER, READING DATA FROM THE COOKIE INTO REQ.BODY
 app.use(cookieParser());
 /* NOTE: If you have observed, every URL follows the format
