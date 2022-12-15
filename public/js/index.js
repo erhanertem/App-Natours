@@ -42,10 +42,20 @@ if (userDataForm)
   });
 
 if (userPasswordForm)
-  userPasswordForm.addEventListener('submit', event => {
+  userPasswordForm.addEventListener('submit', async event => {
     event.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'Updating...';
     const passwordCurrent = document.getElementById('password-current').value; //variables per API
     const password = document.getElementById('password').value; //variables per API
     const passwordConfirm = document.getElementById('password-confirm').value; //variables per API
-    updateSettings({ passwordCurrent, password, passwordConfirm }, 'password');
+    await updateSettings(
+      { passwordCurrent, password, passwordConfirm },
+      'password'
+    ); //its an async fucntion
+
+    //clear the password fields once we have completed updateSettings-password function
+    document.querySelector('.btn--save-password').textContent = 'Save password';
+    document.getElementById('password-current').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
   });
