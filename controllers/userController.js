@@ -54,10 +54,10 @@ exports.getMe = (req, res, next) => {
 }; //We manually assign the log in id and assign as params id to be used in getUser input
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
+  // console.log(req.file);
+  // console.log(req.body);
 
-  //->#1.Create error if user POSTs password data
+  //-->#1.Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
       new AppError(
@@ -66,24 +66,28 @@ exports.updateMe = catchAsync(async (req, res, next) => {
       )
     );
   }
-  //->#2.Update user document
+  //-->#2.Update user document
   // console.log('🎀', req.user, '🎁', req.body);
   // const { name } = req.body;
   // const user = Object.assign(
   //   req.user,
   //   JSON.parse(JSON.stringify({ name, email, photo }))
   // );
+  //->#2.1 Name and email change request thru the form
   const filteredReqBody = filterObj(req.body, 'name', 'email'); //Allow only name and email to be passed onto user data for updating
+  //->#2.2 Profile image File upload
+  if (req.file) filteredReqBody.photo = req.file.filename; //If multer file upload requested, multer file request filename shall be added to filteredReqBody with a photo field name that matches MongoDB field name data structure in the usermodel which is passed below as a user data and saved onto MongoDB database.
+  //-->Save the changes to MongoDB thru Mongoose
   //->#1.Alternate code
-  const user = Object.assign(req.user, filteredReqBody);
-  await user.save({ validateModifiedOnly: true }); //save with validators with no exceptions
+  const user = Object.assign(req.user, filteredReqBody); //copy filteredobject onto req.user data
+  await user.save({ validateModifiedOnly: true }); //mongoose save with validators for ones that got modified only
   // //->#2.Alternate code
   // const user = await User.findByIdAndUpdate(req.user.id, filteredReqBody, {
   //   new: true, //return the modified document
   //   runValidators: true,
   // });
   // console.log('🎀', req.user, '🎁', req.body);
-  //SEND RESPONSE
+  //-->Send Response
   res.status(200).json({
     status: 'success',
     data: {
