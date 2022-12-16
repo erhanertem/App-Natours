@@ -168,7 +168,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
   // if (req.cookies.jwt === 'loggedout') {
   if (req.cookies.jwt === null) {
-    return next;
+    return next();
   }
   if (req.cookies.jwt) {
     //->1.Verify Token
