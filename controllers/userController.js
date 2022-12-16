@@ -1,8 +1,42 @@
-//-->#1.IMPORT CORE MODULE
+/* eslint-disable no-console */
+
+//-->#0.IMPORT CORE MODULE
+const multer = require('multer'); //form encoding middleware which is good at handling multi-part form data
+
+//-->#1.IMPORT CUSTOM MODULE
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const factory = require('./handlerFactory');
+
+//--->IMAGE UPLOAD////////////////////////
+//Multer disk storage engine - {set destination, set filename (in our case we want to name like user-userId-currentTimestamp)}
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/img/users');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1]; //image/jpeg
+    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true); //no error , proceed - true
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false); //err-throw one, do not proceed - false
+  }
+}; //NOTE: For common mimetypes refer to https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+// const upload = multer({ dest: 'public/img/users' }); //calling multer without options would have saved it into the memory - NOTE: body parser can not handle files so we need this middleware to deal with this problem
+
+exports.uploadUserPhoto = upload.single('photo'); //single: as we have a single file to upload | name of the field that it would hold the item/ MONGOdb ..ALSO CORRESPONDS TO POST-MAN>PATCH~update current user data>FORM-DATA>name/photo fields...
+//--->IMAGE UPLOAD/////////////////////////////
 
 //-->#2.HELPER FUNCTIONS
 const filterObj = (reqBody, ...allowedFields) => {
