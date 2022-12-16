@@ -102,11 +102,15 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
-  res.cookie('jwt', 'loggedout', {
-    expires: new Date(Date.now() + 10 * 1000),
-    httpOnly: true, //disables JS resding the value sent within the cookie. If you want to use in your code send from the server, httpOnly should be marked as false.
-    //NOTE: For a site running in HTTPS only, secure: true SHALL BE jot down as well.
-  });
+  // //->#1.Hacky way - Replacing cookie value
+  // res.cookie('jwt', 'loggedout', {
+  //   expires: new Date(Date.now() + 10 * 1000),
+  //   httpOnly: true, //disables JS resding the value sent within the cookie. If you want to use in your code send from the server, httpOnly should be marked as false.
+  //   //NOTE: For a site running in HTTPS only, secure: true SHALL BE jot down as well.
+  // });
+  //->#2.Express.js Documentation way - clearing the cookie value via built-in express function
+  res.clearCookie('jwt');
+
   res.status(200).json({ status: 'success' });
 };
 
@@ -120,15 +124,16 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1]; //We strip Bearer from the actual JWToken string..
+    // } else if (req.cookies.jwt && req.cookies.jwt !== 'loggedout') {
   } else if (req.cookies.jwt) {
     token = req.cookies.jwt;
   } // req coming from front-end side axios>cookie-parser>protected-route-entry
 
   if (!token) {
-    // console.log(token);
-    return next(
-      new AppError('You are not logged in! Please login to get access', 401)
-    ); //We stop the user to proceed further if he is missing a token first... Token created @ login...
+    return res.redirect('/'); //fix the issue of logging out when the user is on the /me account settings page and when logged out, it throws an error of jwt malformed because of clearign the jwt token after clicking logout button.
+    // return next(
+    //   new AppError('You are not logged in! Please login to get access', 401)
+    // ); //We stop the user to proceed further if he is missing a token first... Token created @ login...
   }
 
   //->2.Verify token
@@ -161,8 +166,9 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 //-->PROTECTED VIEW ACCESS MIDDLEWARE: BEWARE - This middleware does not protect routes but the rendered pages so there will be no errors in this middleware. axios>cookie-parser>protected-VIEW-entry
 exports.isLoggedIn = catchAsync(async (req, res, next) => {
-  if (req.cookies.jwt === 'loggedout') {
-    return next();
+  // if (req.cookies.jwt === 'loggedout') {
+  if (req.cookies.jwt === null) {
+    return next;
   }
   if (req.cookies.jwt) {
     //->1.Verify Token
