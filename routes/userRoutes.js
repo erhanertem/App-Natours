@@ -38,6 +38,7 @@ router.patch(
   '/updateMe',
   // authController.protect,
   userController.uploadUserPhoto,
+  userController.resizeUserPhoto,
   userController.updateMe
 ); //Let the user update his own data
 router.delete(

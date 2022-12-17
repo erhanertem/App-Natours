@@ -2,6 +2,7 @@
 
 //-->#0.IMPORT CORE MODULE
 const multer = require('multer'); //form encoding middleware which is good at handling multi-part form data
+const sharp = require('sharp'); // for resizing or reformatting images
 
 //-->#1.IMPORT CUSTOM MODULE
 const User = require('../models/userModel');
@@ -10,16 +11,18 @@ const AppError = require('../utils/appError');
 const factory = require('./handlerFactory');
 
 //--->IMAGE UPLOAD////////////////////////
-//Multer disk storage engine - {set destination, set filename (in our case we want to name like user-userId-currentTimestamp)}
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/img/users');
-  },
-  filename: (req, file, cb) => {
-    const ext = file.mimetype.split('/')[1]; //image/jpeg
-    cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
-  },
-});
+// //Multer disk storage engine - {set destination, set filename (in our case we want to name like user-userId-currentTimestamp)}
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'public/img/users');
+//   },
+//   filename: (req, file, cb) => {
+//     const ext = file.mimetype.split('/')[1]; //image/jpeg
+//     cb(null, `user-${req.user.id}-${Date.now()}.${ext}`);
+//   },
+// });
+// NOTE: Since we are trying to resize/reformat image via Sharp library, we do not want to save the image to the hard drive. Instead we nered to get it on the memory, make proper amendments via sharp and then we need to send it to save the final image.
+const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith('image')) {
@@ -36,6 +39,21 @@ const upload = multer({
 // const upload = multer({ dest: 'public/img/users' }); //calling multer without options would have saved it into the memory - NOTE: body parser can not handle files so we need this middleware to deal with this problem
 
 exports.uploadUserPhoto = upload.single('photo'); //single: as we have a single file to upload | name of the field that it would hold the item/ MONGOdb ..ALSO CORRESPONDS TO POST-MAN>PATCH~update current user data>FORM-DATA>name/photo fields...
+
+exports.resizeUserPhoto = (req, res, next) => {
+  if (!req.file) return next(); //multer adds file or files object to the request object. If there is no file object on the request, proceed with the next middleware
+
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
+  sharp(req.file.buffer) //Per multer API, <buffer> key is only available in req.file for memorystorage(). Its the file information kept in the memory by multer
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
+  next(); //shoots to the next -> userController.updateMe
+};
+
 //--->IMAGE UPLOAD/////////////////////////////
 
 //-->#2.HELPER FUNCTIONS
