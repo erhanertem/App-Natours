@@ -36,9 +36,18 @@ if (logOutBtn) logOutBtn.addEventListener('click', logout);
 if (userDataForm)
   userDataForm.addEventListener('submit', event => {
     event.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    updateSettings({ name, email }, 'data');
+
+    //Form Data Web API @ https://developer.mozilla.org/en-US/docs/Web/API/FormData
+    //Note: The FormData interface provides a way to easily construct a set of key/value pairs representing form fields and their values, which can then be easily sent using the fetch() or XMLHttpRequest.send() method. It uses the same format a form would use if the encoding type were set to "multipart/form-data".
+    const form = new FormData();
+    // const name = document.getElementById('name').value;
+    // const email = document.getElementById('email').value;
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').value);
+
+    // updateSettings({ name, email }, 'data');
+    updateSettings(form, 'data');
   });
 
 if (userPasswordForm)
