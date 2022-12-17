@@ -14,6 +14,8 @@ const loginForm = document.querySelector('.form--login');
 const logOutBtn = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
+const userPhotoCurrent = document.querySelector('.form__user-photo');
+const userPhotoIconCurrent = document.querySelector('.nav__user-img');
 
 //DELEGATION
 if (mapBox) {
@@ -33,8 +35,8 @@ if (loginForm)
 
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
-if (userDataForm)
-  userDataForm.addEventListener('submit', event => {
+if (userDataForm) {
+  userDataForm.addEventListener('submit', async event => {
     event.preventDefault();
 
     //Form Data Web API @ https://developer.mozilla.org/en-US/docs/Web/API/FormData
@@ -45,11 +47,28 @@ if (userDataForm)
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    // console.log(form);
-
     // updateSettings({ name, email }, 'data');
-    updateSettings(form, 'data');
+    await updateSettings(form, 'data');
+
+    const userUploadedFile = form.get('photo');
+
+    if (userUploadedFile.type === 'image/jpeg') {
+      userPhotoCurrent.setAttribute(
+        'src',
+        `img/users/${userUploadedFile.name}`
+      );
+      userPhotoIconCurrent.setAttribute(
+        'src',
+        `img/users/${userUploadedFile.name}`
+      );
+      console.log(
+        '👛',
+        userUploadedFile,
+        'You have changed your profile picture'
+      );
+    }
   });
+}
 
 if (userPasswordForm)
   userPasswordForm.addEventListener('submit', async event => {

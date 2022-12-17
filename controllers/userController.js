@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 //-->#0.IMPORT CORE MODULE
+const fs = require('fs');
 const multer = require('multer'); //form encoding middleware which is good at handling multi-part form data
 const sharp = require('sharp'); // for resizing or reformatting images
 
@@ -65,6 +66,18 @@ const filterObj = (reqBody, ...allowedFields) => {
   return newObj;
 };
 
+const deleteOldPhotoFromServer = async fileName => {
+  //GUARD CLAUSE
+  if (fileName.startWith('default')) return;
+
+  const path = `${__dirname}/../public/img/users/${fileName}`;
+  console.log('🩰', path);
+  fs.unlink(path, err => {
+    if (err) return console.log(err);
+    console.log('Previous photo was deleted!');
+  });
+};
+
 //-->#3.ROUTE HANDLERS
 exports.getMe = (req, res, next) => {
   req.params.id = req.user.id;
@@ -85,7 +98,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
   //-->#2.Update user document
-  // console.log('🎀', req.user, '🎁', req.body);
+  console.log('🎀', req.user.photo, '🎁', req.body);
   // const { name } = req.body;
   // const user = Object.assign(
   //   req.user,
@@ -93,8 +106,14 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // );
   //->#2.1 Name and email change request thru the form
   const filteredReqBody = filterObj(req.body, 'name', 'email'); //Allow only name and email to be passed onto user data for updating
-  //->#2.2 Profile image File upload
-  if (req.file) filteredReqBody.photo = req.file.filename; //If multer file upload requested, multer file request filename shall be added to filteredReqBody with a photo field name that matches MongoDB field name data structure in the usermodel which is passed below as a user data and saved onto MongoDB database.
+  //->#2.2 if uploading a new file....
+  //->#2.2.1 Assign the new profile image
+  if (req.file) {
+    filteredReqBody.photo = req.file.filename; //If multer file upload requested, multer file request filename shall be added to filteredReqBody with a photo field name that matches MongoDB field name data structure in the usermodel which is passed below as a user data and saved onto MongoDB database.
+    //->#2.2.2 Delete the old one from the server
+    await deleteOldPhotoFromServer(req.user.photo);
+  }
+
   //-->Save the changes to MongoDB thru Mongoose
   //->#1.Alternate code
   const user = Object.assign(req.user, filteredReqBody); //copy filteredobject onto req.user data
@@ -105,6 +124,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   //   runValidators: true,
   // });
   // console.log('🎀', req.user, '🎁', req.body);
+
   //-->Send Response
   res.status(200).json({
     status: 'success',
