@@ -71,7 +71,8 @@ block content
           h2.heading-secondary.ma-bt-md Your account settings
           
           //- WITHOUT API #1. Traditional HTML5 only POST version
-          //- form.form.form-user-data(action='/submit-user-data' method='POST')
+          //- form.form.form-user-data(action='/submit-user-data' method='POST' enctype='multipart/form-data') --> enctype is for sending files thru traditional way
+
           //- WITH API
           form.form.form-user-data
             .form__group
@@ -84,7 +85,12 @@ block content
               //- name defines the field name <email> to be submitted with the POST method thru /submit-....
             .form__group.form__photo-upload
               img.form__user-photo(src=`img/users/${user.photo}`, alt=`Photo of ${user.name}`)
-              a.btn-text(href='') Choose new photo
+
+              //- a.btn-text(href='') Choose new photo -> this was a placeholder code
+              //- input accepts image files with any mimetype extension, id with phto so we can select with JS, and the name of the field is photo which matches mongoDB user document field name or multer is eexpecting  
+              input.form__upload(type='file', accept='image/*', id='photo', name ='photo')
+              label(for='photo') Choose new photo
+
             .form__group.right
               button.btn.btn--small.btn--green Save settings
 
