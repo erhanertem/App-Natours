@@ -67,11 +67,12 @@ const filterObj = (reqBody, ...allowedFields) => {
 };
 
 const deleteOldPhotoFromServer = async fileName => {
+  // console.log('🎪🎪🎪🎪🎪', fileName);
   //GUARD CLAUSE
-  if (fileName.startWith('default')) return;
+  if (fileName.startsWith('default')) return;
 
   const path = `${__dirname}/../public/img/users/${fileName}`;
-  console.log('🩰', path);
+  // console.log('🎈🎈🎈🎈🎈🎈', path);
   fs.unlink(path, err => {
     if (err) return console.log(err);
     console.log('Previous photo was deleted!');
