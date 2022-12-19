@@ -41,19 +41,19 @@ const upload = multer({
 
 exports.uploadUserPhoto = upload.single('photo'); //single: as we have a single file to upload | name of the field that it would hold the item/ MONGOdb ..ALSO CORRESPONDS TO POST-MAN>PATCH~update current user data>FORM-DATA>name/photo fields...
 
-exports.resizeUserPhoto = (req, res, next) => {
+exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next(); //multer adds file or files object to the request object. If there is no file object on the request, proceed with the next middleware
 
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
-  sharp(req.file.buffer) //Per multer API, <buffer> key is only available in req.file for memorystorage(). Its the file information kept in the memory by multer
+  await sharp(req.file.buffer) //Per multer API, <buffer> key is only available in req.file for memorystorage(). Its the file information kept in the memory by multer
     .resize(500, 500)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(`public/img/users/${req.file.filename}`);
 
   next(); //shoots to the next -> userController.updateMe
-};
+});
 
 //--->IMAGE UPLOAD/////////////////////////////
 
