@@ -37,6 +37,28 @@ if (loginForm)
 
 if (logOutBtn) logOutBtn.addEventListener('click', logout);
 
+//Temporarily preview the selected picture on the user photo PRIOR TO userDataForm UPLOAD
+const readURL = picture => {
+  if (picture.files && picture.files[0]) {
+    console.log('🎄🎄🎄🎄🎄', picture.files);
+    const reader = new FileReader();
+
+    reader.addEventListener('load', event => {
+      console.log('🎄🎄🎄🎄🎄🎈🎈🎈', event);
+      userPhotoCurrent.setAttribute('src', event.target.result);
+    });
+
+    reader.readAsDataURL(picture.files[0]);
+  }
+};
+
+if (userPhotoUpload && userPhotoCurrent) {
+  userPhotoUpload.addEventListener('change', function () {
+    readURL(this);
+  });
+}
+///////////////////////////////////////////////////////////
+
 if (userDataForm) {
   userDataForm.addEventListener('submit', async event => {
     event.preventDefault();
@@ -50,9 +72,11 @@ if (userDataForm) {
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
     // updateSettings({ name, email }, 'data');
+
     await updateSettings(form, 'data');
 
     const userUploadedFile = form.get('photo');
+    console.log(userUploadedFile);
 
     if (userUploadedFile.type === 'image/jpeg') {
       userPhotoCurrent.setAttribute(
