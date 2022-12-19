@@ -1,11 +1,79 @@
 //-->#0.IMPORT CORE MODULES
 // const { query } = require('express');
+const multer = require('multer'); //form encoding middleware which is good at handling multi-part form data
+const sharp = require('sharp'); // for resizing or reformatting images
 
 //-->#1.IMPORT CUSTOM MODULES
 const Tour = require('../models/tourModel'); //Mongoose tour model needs to be imported here for tour controller operations.
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const factory = require('./handlerFactory');
+
+//--->IMAGE UPLOAD////////////////////////
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true); //no error , proceed - true
+  } else {
+    cb(new AppError('Not an image! Please upload only images.', 400), false); //err-throw one, do not proceed - false
+  }
+}; //NOTE: For common mimetypes refer to https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadTourImages = upload.fields([
+  { name: 'imageCover', maxCount: 1 },
+  { name: 'images', maxCount: 3 },
+]); //NOTE: Multer provides either .array() or .fields() methods for uploading multiple files on contrary to .single() for single uploads. Difference between array() and fields() methods is array() takes in array of same kind files, and fields for accepting a mix of array files of different group.
+//upload.single('image') --> produces req.file
+//upload.array('images',5) --> produces req.files
+//upload.fields([{...}, {...}]) --> produces req.files
+
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+  console.log(req.files);
+
+  //GUARD CLAUSE
+  if (!req.files.imageCover && !req.files.images) return next();
+
+  //->Cover image
+  if (req.files.imageCover) {
+    req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+    await sharp(req.files.imageCover[0].buffer) //Per multer API, <buffer> key is only available in req.file for memorystorage(). Its the file information kept in the memory by multer
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`public/img/tours/${req.body.imageCover}`);
+  }
+
+  //->Tour Images - Loop the array of images
+  if (req.files.images) {
+    req.body.images = [];
+
+    await Promise.all(
+      req.files.images.map(async (file, index) => {
+        //map() creates a new array of async operations which each yields a promise and in order to get all the promises, promise.all() is required. Promise.all() is a final promise we got to wait on
+        const filename = `tour-${req.params.id}-${Date.now()}-${
+          index + 1
+        }.jpeg`;
+        await sharp(file.buffer) //Per multer API, <buffer> key is only available in req.file for memorystorage(). Its the file information kept in the memory by multer
+          .resize(2000, 1333)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`public/img/tours/${filename}`);
+
+        req.body.images.push(filename);
+      })
+    );
+  }
+
+  next(); //--> req.body.image got sends to updateTour>factory.updateOne...to update MongoDB image field of the tour with corresponding tour.id
+});
+//--->IMAGE UPLOAD/////////////////////////////
 
 //-->#1.ROUTE HANDLERS
 

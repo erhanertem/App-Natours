@@ -40,11 +40,11 @@ if (logOutBtn) logOutBtn.addEventListener('click', logout);
 //Temporarily preview the selected picture on the user photo PRIOR TO userDataForm UPLOAD
 const readURL = picture => {
   if (picture.files && picture.files[0]) {
-    console.log('🎄🎄🎄🎄🎄', picture.files);
+    // console.log('🎄🎄🎄🎄🎄', picture.files);
     const reader = new FileReader();
 
     reader.addEventListener('load', event => {
-      console.log('🎄🎄🎄🎄🎄🎈🎈🎈', event);
+      // console.log('🎄🎄🎄🎄🎄🎈🎈🎈', event);
       userPhotoCurrent.setAttribute('src', event.target.result);
     });
 
