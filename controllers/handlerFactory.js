@@ -1,3 +1,6 @@
+//-->#0.IMPORT CORE MODULES
+// const fs = require('fs');
+
 //-->#1.IMPORT CUSTOM MODULES
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
@@ -46,6 +49,7 @@ If the reviews of a user are not deleted the user field of review is tagged null
 //->A GENERALIZED VERSION OF UPDATE FOR ANY DOCUMENT
 exports.updateOne = Model =>
   catchAsync(async (req, res, next) => {
+    //-->#1.Update the tour document
     const document = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true, //if the replacement document is any different than the original document. go ahed and replace it
       runValidators: true, // IMPORTANT We tell that the validators should be run again as prescribed in the tourmodel.js (tourschema). Any incompliant data would trigger err.
@@ -56,8 +60,9 @@ exports.updateOne = Model =>
       return next(new AppError('No document found with that ID', 404));
     } //if tour returns null value, create a new error object with a message and err code
     //We use return here so that we can terminate immediately otherwise the code will run along.
+    // console.log('🎁🎁🎁🎁🎁🎁🎁🎁', req.body);
 
-    //PATCH RESPONSE
+    //-->#2.Send response
     res.status(200).json({
       status: 'success',
       data: { data: document },

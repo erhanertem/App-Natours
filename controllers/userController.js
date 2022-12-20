@@ -99,7 +99,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
   //-->#2.Update user document
-  console.log('🎀', req.user.photo, '🎁', req.body);
+  // console.log('🎀', req.user.photo, '🎁', req.body);
   // const { name } = req.body;
   // const user = Object.assign(
   //   req.user,

@@ -1,4 +1,5 @@
 //-->#0.IMPORT CORE MODULES
+const fs = require('fs');
 // const { query } = require('express');
 const multer = require('multer'); //form encoding middleware which is good at handling multi-part form data
 const sharp = require('sharp'); // for resizing or reformatting images
@@ -39,6 +40,20 @@ exports.resizeTourImages = catchAsync(async (req, res, next) => {
 
   //GUARD CLAUSE
   if (!req.files.imageCover && !req.files.images) return next();
+
+  //->Deleting the old tour images
+  const tour = await Tour.findById(req.params.id);
+  if (
+    tour.images.length > 0 &&
+    fs.existsSync(`public/img/tours/${tour.images[0]}`)
+  ) {
+    tour.images.forEach(image => {
+      fs.unlinkSync(`public/img/tours/${image}`);
+    });
+  }
+  if (tour.imageCover && fs.existsSync(`public/img/tours/${tour.imageCover}`)) {
+    fs.unlinkSync(`public/img/tours/${tour.imageCover}`);
+  }
 
   //->Cover image
   if (req.files.imageCover) {
