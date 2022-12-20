@@ -50,6 +50,7 @@
 | npm i mapbox-gl                       | https://www.npmjs.com/package/mapbox-gl OR https://docs.mapbox.com/mapbox-gl-js/guides/install/               | Mapbox library                                                                                                                                                                               |
 | npm i multer                          | https://github.com/expressjs/multer#readme                                                                    | Multer is a node.js middleware for handling multipart/form-data, which is primarily used for uploading files. Multer will not process any form which is not multipart (multipart/form-data). |
 | npm i sharp                           | https://www.npmjs.com/package/sharp OR https://sharp.pixelplumbing.com/                                       | Resize, reformat images                                                                                                                                                                      |
+| npm i html-to-text                    | https://www.npmjs.com/package/html-to-text                                                                    | Parses HTML and returns beautiful text                                                                                                                                                       |
 
 </details>
 
