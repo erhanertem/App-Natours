@@ -214,19 +214,15 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateModifiedOnly: true }); //Temporarily  bypass all the validators except for the one modified before saving the data - MONGOOSE document SAVE() method async to save all changes and get it updated on the database
 
   //->#3.Send it to user's email
-  //Create a resetURL hyperlink with
-  const resetURL = `${req.protocol}://${req.get(
-    'host'
-  )}/api/v1/users/resetPassword/${resetToken}`; //IMPORTANT! Its safe to send the resetToken before encryption. But we storted the hashed version of the token in our database to check against it.
-
-  const message = `Forgot your password? Submit a PATCH request with your new password and passwordConfirm to: ${resetURL} \nIf you didn't forget your password, please ignore this email.`;
 
   try {
-    // await sendEmail({
-    //   email: user.email, //email:req.body.email -- same as --
-    //   subject: 'Your password reset token (valid for 10 min)',
-    //   message,
-    // });
+    //Create a resetURL hyperlink with
+    const resetURL = `${req.protocol}://${req.get(
+      'host'
+    )}/api/v1/users/resetPassword/${resetToken}`; //IMPORTANT! Its safe to send the resetToken before encryption. But we storted the hashed version of the token in our database to check against it.
+
+    await new Email(user, resetURL).sendPasswordReset();
+
     res
       .status(200)
       .json({ status: 'success', message: 'Token sent to email!' }); //NOTE: Response does not necessarily need to be here as all we are interested was to throw a custom error to deal with unsuccessfull email error...
