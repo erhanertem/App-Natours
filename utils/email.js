@@ -15,8 +15,16 @@ module.exports = class Email {
   newTransport() {
     //->#1 Create a transporter for 'production'
     if (process.env.NODE_ENV === 'production') {
-      //Sendgrid
-      return 1;
+      //Sendgrid OR SendinBlue
+      return nodemailer.createTransport({
+        service: 'SendinBlue', // either provide service name or host, port info
+        // host: process.env.SENDINBLUE_HOST,
+        // port: process.env.SENDINBLUE_PORT,
+        auth: {
+          user: process.env.SENDINBLUE_USERNAME,
+          pass: process.env.SENDINBLUE_PASSWORD,
+        },
+      });
     }
 
     //->#2 Create a transporter for 'developement'

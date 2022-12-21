@@ -214,11 +214,10 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
   await user.save({ validateModifiedOnly: true }); //Temporarily  bypass all the validators except for the one modified before saving the data - MONGOOSE document SAVE() method async to save all changes and get it updated on the database
 
   //->#3.Send it to user's email
-
   try {
     //Create a resetURL hyperlink with
     const resetURL = `${req.protocol}://${req.get(
-      'host'
+      'host' //next.js way of getting the protocol and the host
     )}/api/v1/users/resetPassword/${resetToken}`; //IMPORTANT! Its safe to send the resetToken before encryption. But we storted the hashed version of the token in our database to check against it.
 
     await new Email(user, resetURL).sendPasswordReset();
