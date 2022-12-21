@@ -18,6 +18,7 @@ const tourRouter = require('./routes/tourRoutes'); //for require, ${__dirname} i
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 
 //-->START EXPRESS.JS
 const app = express(); //Call express function to use its functions
@@ -202,6 +203,7 @@ app.use('/', viewRouter); //watch for this route
 app.use('/api/v1/tours', tourRouter); //watch for this route
 app.use('/api/v1/users', userRouter); //watch for this route
 app.use('/api/v1/reviews', reviewRouter); //watch for this route
+app.use('/api/v1/bookings', bookingRouter); //watch for this route
 
 //If all above routes not matched then apply to rest of the HTTP routes with this callback function....
 app.all('*', (req, res, next) => {
