@@ -20,7 +20,6 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
   const session = await stripe.checkout.sessions.create({
     //->Information about the session
-    expand: ['line_items'],
     payment_method_types: ['card'],
     success_url: `${process.env.SERVER_URL}/`,
     cancel_url: `${process.env.SERVER_URL}/tour/${tour.slug}`,
