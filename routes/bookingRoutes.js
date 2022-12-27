@@ -9,9 +9,11 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 
 //-->#3.DEFINE ROUTES
+// #1.way
 // router
-//   .route('/checkout-session/:tourID')
+//   .route('/checkout-session/:tourId')
 //   .get(authController.protect, bookingController.getCheckoutSession);
+// #2.way
 router.get(
   '/checkout-session/:tourId',
   authController.protect,

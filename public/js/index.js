@@ -7,6 +7,7 @@ import 'core-js/stable'; // <- at the top of your entry point - polyfill only st
 import { displayMap } from './mapbox';
 import { login, logout } from './login';
 import { updateSettings } from './updateSettings';
+import { bookTour } from './stripe';
 
 //DOM ELEMENTS
 const mapBox = document.getElementById('map');
@@ -18,6 +19,8 @@ const userPasswordForm = document.querySelector('.form-user-password');
 const userPhotoUpload = document.querySelector('#photo');
 const userPhotoCurrent = document.querySelector('.form__user-photo');
 const userPhotoIconCurrent = document.querySelector('.nav__user-img');
+
+const bookBtn = document.getElementById('book-tour');
 
 //DELEGATION
 if (mapBox) {
@@ -113,4 +116,12 @@ if (userPasswordForm)
     document.getElementById('password-current').value = '';
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
+  });
+
+if (bookBtn)
+  bookBtn.addEventListener('click', e => {
+    e.target.textContent = 'Processing...';
+    // const tourId = e.target.dataset.tourId; // Same as below ES6
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
   });

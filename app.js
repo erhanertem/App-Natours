@@ -51,42 +51,53 @@ app.use(
           'blob:',
           // 'https://unpkg.com',
           // 'https://tile.openstreetmap.org',
-          'https://*.tiles.mapbox.com',
-          'https://api.mapbox.com',
-          'https://events.mapbox.com',
-          'https://*.stripe.com',
-          'https://*.cloudflare.com/',
-          'https://bundle.js:*',
+          'https://*.tiles.mapbox.com', // per CSP instructions @ https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+          'https://api.mapbox.com', // per CSP instructions @ https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+          'https://events.mapbox.com', // per CSP instructions @ https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+          'https://checkout.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          'https://api.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          'https://maps.googleapis.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          // 'https://*.stripe.com',
+          // 'https://*.cloudflare.com/',
+          // 'https://bundle.js:*',
           'ws://127.0.0.1:*/',
         ],
         defaultSrc: ["'self'", 'data:', 'blob:', 'https:', 'ws:'],
         fontSrc: [
-          "'self'",
-          'https:',
-          'data:',
-          'fonts.googleapis.com',
-          'fonts.gstatic.com',
+          "'self'", // Default helmet()
+          'https:', // Default helmet()
+          'data:', // Default helmet()
+          'fonts.gstatic.com', // per CSP instructions @ https://content-security-policy.com/examples/google-fonts/
+          // 'fonts.googleapis.com', //?
         ],
         formAction: ["'self'"],
-        frameSrc: ["'self'", 'https://js.stripe.com'],
+        frameSrc: [
+          "'self'", //?
+          'https://js.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          'https://checkout.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          'https://hooks.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+        ],
         scriptSrc: [
-          "'self'",
-          'https:',
-          'http:',
-          'blob:',
-          'https://js.stripe.com',
-          'https://m.stripe.network',
-          'https://*.cloudflare.com',
+          "'self'", // Default helmet()
+          'https:', //?
+          // 'http:', //?
+          'blob:', //?
+          'https://checkout.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          'https://js.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          'https://maps.googleapis.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          // 'https://m.stripe.network',
+          // 'https://*.cloudflare.com',
           // 'https://unpkg.com/',
           // 'https://tile.openstreetmap.org',
           // 'https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js',
           // 'ajax.googleapis.com *',
         ],
         styleSrc: [
-          "'self'",
-          'https:',
+          "'self'", // Default helmet()
+          'https:', // Default helmet()
+          "'unsafe-inline'", // Default helmet()
           'w3.org/*',
-          'https://fonts.googleapis.com/',
+          'https://fonts.googleapis.com/', // per CSP instructions @ https://content-security-policy.com/examples/google-fonts/
           // 'https://unpkg.com/',
           // 'https://tile.openstreetmap.org',
         ],
@@ -94,16 +105,17 @@ app.use(
           "'self'",
           'data:',
           'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
-          'https://m.stripe.network',
+          'https://m.stripe.network', //?
         ],
         objectSrc: ["'none'"],
         childSrc: [
-          "'self'",
-          'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+          // "'self'", //?
+          'blob:', //per CSP instructions @ https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
         ],
         imgSrc: [
-          "'self'",
-          'data:',
+          "'self'", // Default helmet()
+          'data:', // Default helmet() & per CSP instructions @ https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
+          'https://*.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
           'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
         ],
         upgradeInsecureRequests: [],
