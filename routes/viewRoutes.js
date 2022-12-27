@@ -4,6 +4,7 @@ const express = require('express');
 //-->#1.IMPORT CUSTOM MODULE
 const viewsController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
+const bookingController = require('../controllers/bookingController');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
@@ -19,7 +20,12 @@ const router = express.Router();
 
 // router.use(authController.isLoggedIn); //Below this line all routes uses this middleware for protected views
 
-router.get('/', authController.isLoggedIn, viewsController.getOverview);
+router.get(
+  '/', //this is the route that will be hit when a successfull checkout occurs...
+  bookingController.createBookingCheckout,
+  authController.isLoggedIn,
+  viewsController.getOverview
+);
 router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
 // router.get('/tour/:slug', authController.protect, viewsController.getTour); //Testing axios>cookie-parser>protected-route-entry scenario
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
