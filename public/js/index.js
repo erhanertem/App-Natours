@@ -34,7 +34,7 @@ if (loginForm)
     //VALUES
     const email = document.getElementById('email').value; //Refer to input#email fields @ login.pug
     const password = document.getElementById('password').value; //Refer to input#password fields @ login.pug
-    console.log(email, password);
+    // console.log(email, password);
     login(email, password);
   });
 
@@ -79,7 +79,7 @@ if (userDataForm) {
     await updateSettings(form, 'data');
 
     const userUploadedFile = form.get('photo');
-    console.log(userUploadedFile);
+    // console.log(userUploadedFile);
 
     if (userUploadedFile.type === 'image/jpeg') {
       userPhotoCurrent.setAttribute(
@@ -90,11 +90,11 @@ if (userDataForm) {
         'src',
         `img/users/${userUploadedFile.name}`
       );
-      console.log(
-        '👛',
-        userUploadedFile,
-        'You have changed your profile picture'
-      );
+      // console.log(
+      //   '👛',
+      //   userUploadedFile,
+      //   'You have changed your profile picture'
+      // );
     }
   });
 }

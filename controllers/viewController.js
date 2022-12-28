@@ -67,7 +67,7 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
       return add;
     })
   ); //Per https://betterprogramming.pub/how-to-use-async-await-with-map-in-js-5059043564e0
-  console.log('🎎', tours, '🎎');
+  // console.log('🎎', tours, '🎎');
 
   //This solution by the lecturer does not preserve identical reservations
   // const tours = await Tour.find({ _id: { $in: tourIDs } });

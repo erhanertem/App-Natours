@@ -75,7 +75,7 @@ const deleteOldPhotoFromServer = async fileName => {
   // console.log('🎈🎈🎈🎈🎈🎈', path);
   fs.unlink(path, err => {
     if (err) return console.log(err);
-    console.log('Previous photo was deleted!');
+    // console.log('Previous photo was deleted!');
   });
 };
 

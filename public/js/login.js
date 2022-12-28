@@ -26,7 +26,7 @@ import axios from 'axios';
 import { showAlert } from './alerts';
 
 export const login = async (email, password) => {
-  console.log(email, password);
+  // console.log(email, password);
   //Note: In order to make HTTP requests to our API from the frontend we use axios library which seamlessly works between front-end and back-end HTTP requests. (KInda like POSTMAN inside our front-end code)
   try {
     const res = await axios({
@@ -38,7 +38,7 @@ export const login = async (email, password) => {
         password, //password: password, ES6
       },
     });
-    console.log(res);
+    // console.log(res);
     if (res.data.status === 'success') {
       showAlert('success', 'Logged in succesfully!'); //first var for CSS, second for the message - refer to alerts.js
       window.setTimeout(() => {

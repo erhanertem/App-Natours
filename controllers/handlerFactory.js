@@ -27,16 +27,22 @@ If the reviews of a user are not deleted the user field of review is tagged null
 
 */
     if (deleteOption === 'deleteTour_Reviews') {
-      const doc = await Review.deleteMany({
+      // const doc = await Review.deleteMany({
+      //   tour: { $eq: req.params.id },
+      // });
+      await Review.deleteMany({
         tour: { $eq: req.params.id },
       });
-      console.log(doc);
+      // console.log(doc);
     }
     if (deleteOption === 'deleteUser_Reviews') {
-      const doc = await Review.deleteMany({
+      await Review.deleteMany({
         user: { _id: req.params.id },
       });
-      console.log(doc);
+      // const doc = await Review.deleteMany({
+      //   user: { _id: req.params.id },
+      // });
+      // console.log(doc);
     }
 
     //DELETE RESPONSE
