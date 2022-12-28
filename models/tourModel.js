@@ -188,13 +188,13 @@ tourSchema.pre(/^find/, function (next) {
 //   this.find({ secretTour: { $ne: true } });
 //   next();
 // }); //NOTE THIS MIDDLEWARE APPLIES BEFORE const tours = await features.query; @ tourcontroller.js GETS EXECUTED...WE FILTEROUT A SPECIFIC CRITERIA BEFORE features.query execution...
-//-->MONGOOSE POSTFIND QUERY MIDDLEWARE/HOOK
-tourSchema.post(/^find/, function (docs, next) {
-  console.log(`Query took ${Date.now() - this.start} miliseconds!`);
-  // console.log(this);
-  // console.log(docs);
-  next();
-});
+// //-->MONGOOSE POSTFIND QUERY MIDDLEWARE/HOOK TESTING PURPOSES
+// tourSchema.post(/^find/, function (docs, next) {
+//   console.log(`Query took ${Date.now() - this.start} miliseconds!`);
+//   // console.log(this);
+//   // console.log(docs);
+//   next();
+// });
 //-->MONGOOSE PREFIND QUERRY MIDDLEWARE/HOOK for populating child references in the Tour schema in order to make it available for getAlltours and getTour querry middlewares
 tourSchema.pre(/^find/, function (next) {
   // this.populate('guides'); //VERY IMPORTANT: BY POPULATING 'GUIDES' FIELD IN A TOUR, THE REFERENCED DATA IS ACTUALLY FILLED IN BY USING THE REFERENCE IN THE TOUR SCHEMA
