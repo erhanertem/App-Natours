@@ -5,5 +5,5 @@ dist
 .vscode
 .DS_Store
 .parcel-cache
-.cache
+.cache/
 **/bundled
