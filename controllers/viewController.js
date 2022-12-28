@@ -1,9 +1,8 @@
 const Tour = require('../models/tourModel');
-const Bookings = require('../models/bookingModel');
+const Booking = require('../models/bookingModel');
 // const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const Booking = require('../models/bookingModel');
 
 exports.getOverview = catchAsync(async (req, res, next) => {
   //Step#1 Get tour data from collection
@@ -45,11 +44,35 @@ exports.getAccount = (req, res) => {
 };
 
 exports.getMyTours = catchAsync(async (req, res, next) => {
-  //#1.Find all bookings
+  //#1.Find all bookings of the currently logged in user
   const bookings = await Booking.find({ user: req.user.id });
+  // console.log('🎏', bookings, '🎏');
+
   //#2.Find tours with the returned IDs
-  const tourIDs = bookings.map(el => el.tour); //map() creates a new array of tour IDs
-  const tours = await Tour.find({ _id: { $in: tourIDs } });
+  const tourIDs = bookings.map(el => el.tour.id); //map() creates a new array of tour IDs
+  // console.log('🎀', tourIDs, '🎀');
+
+  //FIX FOR MULTIPLE INSTANCE OF THE IDENTICAL TOUR DISPLAY PROPERLY
+  //#1.for loop solution
+  // let tours = [];
+  // for (let i = 0; i < tourIDs.length; i++) {
+  //   const add = await Tour.find({ _id: { $in: tourIDs[i] } });
+  //   console.log('🩲', add);
+  //   tours.push(...add);
+  // }
+  //#2.promise.all solution
+  const tours = await Promise.all(
+    tourIDs.map(async item => {
+      const [add] = await Tour.find({ _id: item });
+      return add;
+    })
+  ); //Per https://betterprogramming.pub/how-to-use-async-await-with-map-in-js-5059043564e0
+  console.log('🎎', tours, '🎎');
+
+  //This solution by the lecturer does not preserve identical reservations
+  // const tours = await Tour.find({ _id: { $in: tourIDs } });
+  // console.log('🎁', tours);
+
   //#3.Send response
   res.status(200).render('overview', { title: 'My Tours', tours });
 });
