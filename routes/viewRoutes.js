@@ -30,6 +30,7 @@ router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
 // router.get('/tour/:slug', authController.protect, viewsController.getTour); //Testing axios>cookie-parser>protected-route-entry scenario
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 router.get('/me', authController.protect, viewsController.getAccount);
+router.get('/my-tours', authController.protect, viewsController.getMyTours);
 
 // //- #1. Traditional HTML5 only POST version
 // router.post(
