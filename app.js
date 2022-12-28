@@ -10,6 +10,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 //-->IMPORT CUSTOM MODULES
 const AppError = require('./utils/appError');
@@ -194,6 +195,9 @@ app.use(
     ],
   })
 ); //this should be used by the end as it clears up query strings
+
+//->COMPRESS NODE.JS CODE
+app.use(compression());
 
 //->TEST MIDDLEWARE
 app.use((req, res, next) => {
