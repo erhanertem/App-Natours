@@ -31,7 +31,8 @@ export const login = async (email, password) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://127.0.0.1:3000/api/v1/users/login', //By looking at the Postman API Login link...
+      // url: 'http://127.0.0.1:3000/api/v1/users/login', //By looking at the Postman API Login link...@ dev
+      url: '/api/v1/users/login', //By looking at the Postman API Login link...@ prod
       data: {
         //By looking at the login user postman req body...
         email, //email: email, ES6
@@ -55,7 +56,8 @@ export const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: 'http://127.0.0.1:3000/api/v1/users/logout',
+      // url: 'http://127.0.0.1:3000/api/v1/users/logout', //@dev
+      url: '/api/v1/users/logout', //@prod
     });
 
     //Reload the page after logout to refresh the login condition

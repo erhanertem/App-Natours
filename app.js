@@ -196,7 +196,7 @@ app.use(
   })
 ); //this should be used by the end as it clears up query strings
 
-//->COMPRESS NODE.JS CODE
+//->Compress all responses
 app.use(compression());
 
 //->TEST MIDDLEWARE
