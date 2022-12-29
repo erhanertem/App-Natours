@@ -8,10 +8,11 @@
   },
   "browserslist": "last 2 Firefox versions, last 2 Chrome versions, last 2 Edge versions, last 2 Safari versions",
   "engines": {
-    "node": "14.x",
-    "npm": "6.x"
+    "node": "18.x",
+    "npm": "8.x"
   },
   "scripts": {
+    "start": "node server.js",
     "dev": "nodemon server.js",
     "prod": "NODE_ENV=production nodemon server.js",
     "debug": "ndb server.js",

@@ -37,7 +37,7 @@ mongoose.connect(DB).then(() => {
 // }); //mongoose connect returns a promise and we then handle with then to log the promise.
 
 //-->START SERVER
-const port = process.env.PORT || 8000; //Declare port first from process.env.PORT cfg or as a fallback manually set to 3000
+const port = process.env.PORT || 3000; //Declare port first from process.env.PORT cfg or as a fallback manually set to 3000
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
