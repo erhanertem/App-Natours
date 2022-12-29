@@ -11,6 +11,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression');
+const cors = require('cors');
 
 //-->IMPORT CUSTOM MODULES
 const AppError = require('./utils/appError');
@@ -35,6 +36,21 @@ app.set('views', path.join(__dirname, 'views')); //Lets tell express.js where th
 //->SERVING STATIC FILES
 // app.use(express.static(`${__dirname}/public`));
 app.use(express.static(path.join(__dirname, 'public')));
+
+//->IMPLEMENT CORS
+app.use(cors()); //Enable cors()
+//This is a global enabling, allows everyone comsume our API -- Means Access-Control-Allow-Origin * --
+// If we would need cors on certain routes we woudl have called in the middleware stack as ex: app.use('/api/v1/tours', core(), tourRouter);
+// If we needed specific domains to make use of our API, then we would need the code below:
+// app.use(
+//   cors({
+//     origin: 'https://www.natours.com',
+//   })
+// );
+app.options('*', cors()); //Allow cors() on all routes
+// app.options('api/v1/tours/:id', cors()); //Allow on a spoecific route
+
+//Bug!: Why we would need this installed while we have enabled CORS in helmet??
 
 //->SET SECURITY HTTP HEADERS MIDDLEWARE
 //GOT TO BE THE FIRST GLOBAL MIDDLEWARE TO EXECUTE FOR SECURITY

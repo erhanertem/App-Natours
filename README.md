@@ -66,6 +66,7 @@
 | npm i html-to-text                    | <https://www.npmjs.com/package/html-to-text>                                                                        | Parses HTML and returns beautiful text                                                                                                                                                       |
 | npm i stripe                          | <https://www.npmjs.com/package/stripe> OR <https://stripe.com/docs/js>                                              | The Stripe Node library provides convenient access to the Stripe API from applications written in server-side JavaScript                                                                     |
 | npm i compression                     | <https://www.npmjs.com/package/compression>                                                                         | Node.js compression middleware via deflate and gzip coding options                                                                                                                           |
+| npm i cors                            | <https://www.npmjs.com/package/cors>                                                                                | CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options                                                                    |
 
 </details>
 
