@@ -22,7 +22,7 @@
 
 &emsp;
 
-<!-- #### Link to Project &rarr; [Natours-App](https://natours-app-erhan-ertem.heroku.app) -->
+#### Link to Project &rarr; [Natours-App](https://natours-app-erhan-ertem.up.railway.app)
 
 #### Project Preview
 
