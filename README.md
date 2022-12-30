@@ -26,7 +26,7 @@
 
 #### Project Preview
 
-![Screenshot](screenshot.gif)
+![Screenshot](screenshot.webp)
 
 ---
 
