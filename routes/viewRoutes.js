@@ -32,6 +32,7 @@ router.get('/me', authController.protect, viewsController.getAccount);
 router.get(
   '/my-tours',
   // bookingController.createBookingCheckout,
+  bookingController.webhookCheckout,
   authController.protect,
   viewsController.getMyTours
 );

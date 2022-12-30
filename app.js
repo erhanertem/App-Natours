@@ -21,6 +21,7 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const viewRouter = require('./routes/viewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 
 //-->START EXPRESS.JS
 const app = express(); //Call express function to use its functions
@@ -157,6 +158,12 @@ const limiter = rateLimit({
   message: 'Too many requests from this IP, please try again in an hour',
 });
 app.use('/api', limiter); //WE APPLY THIS MIDDLEWARE WHICH EFFECTS ALL ROUTES STARTING WITH /API...
+
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+); //We have to locate this before the body.parser declaration as we would need the data in raw format (as stream) only for the stripe not as JSON.
 
 //-->PARSER
 //->BODY PARSER, READING DATA FROM BODY INTO REQ.BODY
