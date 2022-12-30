@@ -23,27 +23,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // NOTES: https://stripe.com/docs/api/checkout/sessions/create?lang=node
 
   const session = await stripe.checkout.sessions.create({
-    //->Information about the items in the cart
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: `${tour.name} Tour`,
-            description: tour.summary,
-            images: [
-              `${req.protocol}://${req.get('host')}/img/tours/${
-                tour.imageCover
-              }`,
-            ],
-          },
-          unit_amount: tour.price * 100, //amounts in cents to be charged
-        },
-        quantity: 1,
-      }, //individual line item per new API
-    ], //accomodates multiple line items each defined in its own {} curly braces
     //->Information about the session
-    // payment_method_types: ['card'],
+    payment_method_types: ['card'],
     // expand: ['line_items'],
     mode: 'payment', //Checkout has three modes: payment, subscription, or setup. Use payment mode for one-time purchases. Learn more about subscription and setup modes in the docs.
     // success_url: `${process.env.SERVER_URL}/success.html`,
@@ -54,6 +35,25 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
+    //->Information about the items in the cart
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: 'usd',
+          unit_amount: tour.price * 100, //amounts in cents to be charged
+          product_data: {
+            name: `${tour.name} Tour`,
+            description: tour.summary,
+            images: [
+              `${req.protocol}://${req.get('host')}/img/tours/${
+                tour.imageCover
+              }`,
+            ],
+          },
+        },
+      }, //individual line item per new API
+    ], //accomodates multiple line items each defined in its own {} curly braces
   });
   //-->#3.Create session as response
   res.status(200).json({
@@ -77,7 +77,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 const createBookingCheckout = async session => {
   const tour = session.client_reference_id; //defined the tour from the stripe session object
   const price = session.line_items[0].unit_amount / 100; //defined the stripe session object converted to dollars instead of cents
-  const user = await User.findOne({ email: session.customer_email }); //defined the user from the stripe session object
+  const user = (await User.findOne({ email: session.customer_email })).id; //defined the user from the stripe session object
+  console.log(session, '🎎', tour, '🎎', price, '🎎', user);
   await Booking.create({ tour, user, price });
 };
 
