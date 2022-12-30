@@ -42,9 +42,9 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     // expand: ['line_items'],
     mode: 'payment', //Checkout has three modes: payment, subscription, or setup. Use payment mode for one-time purchases. Learn more about subscription and setup modes in the docs.
     // success_url: `${process.env.SERVER_URL}/success.html`,
-    success_url: `${req.protocol}://${req.get('host')}/?tour=${
+    success_url: `${req.protocol}://${req.get('host')}/my-tours/?tour=${
       req.params.tourId
-    }&user=${req.user.id}&price=${tour.price}`, //Temporary url assigment
+    }&user=${req.user.id}&price=${tour.price}`, //Temporary url assignment
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: req.params.tourId,
@@ -68,9 +68,10 @@ exports.createBookingCheckout = catchAsync(async (req, res, next) => {
   res.redirect(req.originalUrl.split('?')[0]);
 });
 
+exports.webhookCheckout = (req, res, next) => {};
+
 exports.createBooking = factory.createOne(Booking);
 exports.getAllBookings = factory.getAll(Booking);
-
 exports.getBooking = factory.getOne(Booking);
 exports.updateBooking = factory.updateOne(Booking);
 exports.deleteBooking = factory.deleteOne(Booking);
