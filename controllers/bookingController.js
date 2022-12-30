@@ -56,19 +56,17 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createBookingCheckout = catchAsync(async (req, res, next) => {
-  //This is only temporary unsecure solution....
-  const { tour, user, price } = req.query;
+// exports.createBookingCheckout = catchAsync(async (req, res, next) => {
+//   //This is only temporary unsecure solution....
+//   const { tour, user, price } = req.query;
 
-  if (!tour && !user && !price) {
-    return next();
-  } //  if booking not checked out, authController.isLoggedIn, ->  viewsController.getOverview;
-  await Booking.create({ tour, user, price });
+//   if (!tour && !user && !price) {
+//     return next();
+//   } //  if booking not checked out, authController.isLoggedIn, ->  viewsController.getOverview;
+//   await Booking.create({ tour, user, price });
 
-  res.redirect(req.originalUrl.split('?')[0]);
-});
-
-exports.webhookCheckout = (req, res, next) => {};
+//   res.redirect(req.originalUrl.split('?')[0]);
+// });
 
 exports.createBooking = factory.createOne(Booking);
 exports.getAllBookings = factory.getAll(Booking);
