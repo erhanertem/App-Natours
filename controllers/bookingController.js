@@ -77,7 +77,8 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 const createBookingCheckout = async eventData => {
   const tour = eventData.client_reference_id; //defined the tour from the stripe event data object
   const price = eventData.amount_total; //defined the price from the stripe event data object
-  const user = await User.findOne({ email: eventData.customer_email })._id; //defined the user from the stripe session object
+  const user = await User.findOne({ email: eventData.customer_email }); //defined the user from the stripe event data object
+  await console.log(user, user.id, user._id);
   await Booking.create({ tour, user, price });
 };
 
