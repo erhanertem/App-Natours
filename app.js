@@ -138,6 +138,7 @@ app.use(
           "'self'", // Default helmet()
           'data:', // Default helmet() & per CSP instructions @ https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
           'https://*.stripe.com', // per CSP insrtructions @ https://stripe.com/docs/security/guide
+          'https://q.stripe.com',
           'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
         ],
         upgradeInsecureRequests: [],
