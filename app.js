@@ -26,7 +26,7 @@ const bookingController = require('./controllers/bookingController');
 //-->START EXPRESS.JS
 const app = express(); //Call express function to use its functions
 
-//-->Hosting @ railway, heroku
+//-->Hosting @ railway, heroku same account serving multiple sites
 app.enable('trust proxy');
 
 //-->SET VIEW ENGINE (PUG) FOR NODE.JS
