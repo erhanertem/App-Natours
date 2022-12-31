@@ -78,7 +78,6 @@ const createBookingCheckout = async session => {
   const tour = session.client_reference_id; //defined the tour from the stripe session object
   const price = session.line_items[0].unit_amount / 100; //defined the stripe session object converted to dollars instead of cents
   const user = (await User.findOne({ email: session.customer_email })).id; //defined the user from the stripe session object
-  console.log(session, '🎎', tour, '🎎', price, '🎎', user);
   await Booking.create({ tour, user, price });
 };
 

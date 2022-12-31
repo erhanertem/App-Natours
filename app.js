@@ -26,6 +26,9 @@ const bookingController = require('./controllers/bookingController');
 //-->START EXPRESS.JS
 const app = express(); //Call express function to use its functions
 
+//-->Hosting @ railway, heroku
+app.enable('trust proxy');
+
 //-->SET VIEW ENGINE (PUG) FOR NODE.JS
 app.set('view engine', 'pug'); //NOTE: Express.js - A template engine enables you to use static template files in your application. At runtime, the template engine replaces variables in a template file with actual values, and transforms the template into an HTML file sent to the client. While by default, it is set to Jade there are some popular template engines that work with Express namely Pug, Mustache, Dust,and EJS. The template engine files are provided under views folder. In this case as *.pug extentions. In the run time, these static pages with variables inside automatically rendered as HTML pages as an output.
 // console.log(__dirname); //__dirname is a npm environment variable that tells you the absolute path of the directory containing the currently executing file.
@@ -116,6 +119,7 @@ app.use(
           "'unsafe-inline'", // Default helmet()
           'w3.org/*',
           'https://fonts.googleapis.com/', // per CSP instructions @ https://content-security-policy.com/examples/google-fonts/
+          'https://m.stripe.network',
           // 'https://unpkg.com/',
           // 'https://tile.openstreetmap.org',
         ],
@@ -123,7 +127,7 @@ app.use(
           "'self'",
           'data:',
           'blob:', //https://docs.mapbox.com/mapbox-gl-js/guides/browsers-and-testing/#csp-directives
-          'https://m.stripe.network', //?
+          // 'https://m.stripe.network', //?
         ],
         objectSrc: ["'none'"],
         childSrc: [
@@ -152,6 +156,7 @@ if (process.env.NODE_ENV === 'development') {
 
 //->LIMIT REQUESTS FROM SAME API
 //IMPORTANT REQUEST LIMITER MIDDLEWARE TO COPE WITH D-O-S AND BRUTEFORCE ATTACKS
+// Limit requests from same API
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000, //60mins
   max: 100, // Limit 100 requests per 60mins
@@ -159,6 +164,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter); //WE APPLY THIS MIDDLEWARE WHICH EFFECTS ALL ROUTES STARTING WITH /API...
 
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
 app.post(
   '/webhook-checkout',
   express.raw({ type: 'application/json' }),
@@ -199,6 +205,7 @@ Neither node.js’s http interface nor express.js parse the COOKIE field for you
 */
 
 //->DATA SANITIZATION AGAINST NOSQL QUERY INJECTIONS
+// Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 
 //->DATA SANITIZATION AGAINST XSS
