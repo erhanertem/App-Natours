@@ -154,7 +154,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
   //GRANT ACCESS TO THE PROTECTED ROUTE
   req.user = currentUser;
-  res.locals.user = currentUser; //VERY IMPORTANT! Each and every pug template will have access to res.locals. So whatever variable defiend thru locals is accessible by PUG files.
+  res.locals.user = currentUser; //VERY IMPORTANT! Each and every pug template will have access to res.locals. So whatever variable defined thru locals is accessible by PUG files.
   // console.log('🧤', req.user);
   next();
 });

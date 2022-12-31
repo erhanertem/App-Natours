@@ -4,7 +4,7 @@ const express = require('express');
 //-->#1.IMPORT CUSTOM MODULE
 const viewsController = require('../controllers/viewController');
 const authController = require('../controllers/authController');
-const bookingController = require('../controllers/bookingController');
+// const bookingController = require('../controllers/bookingController');
 
 //-->#2.CREATE CHILD ROUTER
 const router = express.Router();
@@ -19,6 +19,8 @@ const router = express.Router();
 // IMPORTANT! router.get() vs router.use() - since all routes start with / using router.use() would ovcerride the consequent routes. For that we use router.get() to only allow for / route and not the ones starting with /.
 
 // router.use(authController.isLoggedIn); //Below this line all routes uses this middleware for protected views
+
+router.use(viewsController.alerts); //It runs on each and every route definede below and if it finds a data-alert assigned alert then its triggered
 
 router.get(
   '/', //this is the route that will be hit when a successfull checkout occurs...
