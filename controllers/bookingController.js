@@ -97,11 +97,15 @@ exports.webhookCheckout = (req, res, next) => {
   }
 
   //Handle the event
-  if (event.type === 'checkout.session.completed')
-    createBookingCheckout(event.data.object);
+  if (event.type === 'checkout.session.completed') {
+    console.log('Success', event.data.object);
+    // createBookingCheckout(event.data.object);
+  } else console.log('MISERY');
 
   // Return a 200 response to acknowledge receipt of the event to Stripe
   res.status(200).json({ received: true });
+
+  next();
 }; //this function needs the req.body in raw format so we position webhook @ app.js before the body parser which jsonifies the re.body
 
 exports.createBooking = factory.createOne(Booking);
