@@ -74,11 +74,10 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 //   res.redirect(req.originalUrl.split('?')[0]);
 // });
 
-const createBookingCheckout = async session => {
-  const tour = session.client_reference_id; //defined the tour from the stripe session object
-  // const price = session.line_items[0].price_data.unit_amount / 100; //defined the stripe session object converted to dollars instead of cents
-  const { price } = await Tour.findOne({ _id: tour });
-  const user = await User.findOne({ email: session.customer_email })._id; //defined the user from the stripe session object
+const createBookingCheckout = async eventData => {
+  const tour = eventData.client_reference_id; //defined the tour from the stripe event data object
+  const price = eventData.amount_total; //defined the price from the stripe event data object
+  const user = await User.findOne({ email: eventData.customer_email })._id; //defined the user from the stripe session object
   await Booking.create({ tour, user, price });
 };
 
@@ -97,10 +96,8 @@ exports.webhookCheckout = (req, res, next) => {
   }
 
   //Handle the event
-  if (event.type === 'checkout.session.completed') {
-    console.log('Success', event.data.object);
-    // createBookingCheckout(event.data.object);
-  } else console.log('MISERY');
+  if (event.type === 'checkout.session.completed')
+    createBookingCheckout(event.data.object);
 
   // Return a 200 response to acknowledge receipt of the event to Stripe
   res.status(200).json({ received: true });
